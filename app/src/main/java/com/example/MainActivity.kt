@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.HourglassBottom
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Icon
@@ -53,6 +54,7 @@ import com.example.ui.components.triggerSpiritualHaptic
 import com.example.ui.screens.ChallengesScreen
 import com.example.ui.screens.DivineClockScreen
 import com.example.ui.screens.DivineJournalScreen
+import com.example.ui.screens.JourneyScreen
 import com.example.ui.screens.LifeJourneyVisualizerScreen
 import com.example.ui.screens.SettingsVersesScreen
 import com.example.ui.screens.TemporalConverterScreen
@@ -132,6 +134,7 @@ fun SaatanAppContent(viewModel: MainViewModel) {
 
     val navItems = listOf(
         NavItem(SaatanScreen.DIVINE_CLOCK, AppStrings.navClock(currentLanguage), Icons.Default.HourglassBottom, "nav_clock"),
+        NavItem(SaatanScreen.JOURNEY, AppStrings.navJourney(currentLanguage), Icons.Default.Spa, "nav_journey"),
         NavItem(SaatanScreen.CONVERTER, AppStrings.navConverter(currentLanguage), Icons.Default.SwapVert, "nav_converter"),
         NavItem(SaatanScreen.JOURNAL, AppStrings.navJournal(currentLanguage), Icons.AutoMirrored.Filled.MenuBook, "nav_journal"),
         NavItem(SaatanScreen.IMMERSIVE_LIFE, AppStrings.navVisualizer(currentLanguage), Icons.Default.PlayCircle, "nav_visualizer"),
@@ -218,6 +221,7 @@ fun SaatanAppContent(viewModel: MainViewModel) {
                 ) { screen ->
                     when (screen) {
                         SaatanScreen.DIVINE_CLOCK -> DivineClockScreen(viewModel)
+                        SaatanScreen.JOURNEY -> JourneyScreen(viewModel)
                         SaatanScreen.CONVERTER -> TemporalConverterScreen(viewModel)
                         SaatanScreen.JOURNAL -> DivineJournalScreen(viewModel)
                         SaatanScreen.IMMERSIVE_LIFE -> LifeJourneyVisualizerScreen(viewModel)

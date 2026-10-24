@@ -17,21 +17,21 @@ object AppStrings {
     // ---------------------------------------------------------------------
 
     fun appTitle(lang: AppLanguage): String = when (lang) {
-        AppLanguage.AR -> "سَاعَتَان"
-        AppLanguage.EN -> "SA'ATAN"
-        AppLanguage.FR -> "SA'ATAN"
+        AppLanguage.AR -> "ذَوْق"
+        AppLanguage.EN -> "DHAwQ"
+        AppLanguage.FR -> "DHAwQ"
     }
 
     fun appSubtitle(lang: AppLanguage): String = when (lang) {
-        AppLanguage.AR -> "سَاعَتَان • وَقْتُكَ عِنْدَ اللَّه"
-        AppLanguage.EN -> "SA'ATAN • YOUR TIME WITH ALLAH"
-        AppLanguage.FR -> "سَاعَتَان • TON TEMPS CHEZ ALLAH"
+        AppLanguage.AR -> "ذَوْق • تَذَوُّقُ الصَّلاة"
+        AppLanguage.EN -> "ذَوْق • PRAYER, TASTED"
+        AppLanguage.FR -> "ذَوْق • LA PRIÈRE GOÛTÉE"
     }
 
     fun logoContentDescription(lang: AppLanguage): String = when (lang) {
-        AppLanguage.AR -> "شعار ساعتان"
-        AppLanguage.EN -> "Sa'atan logo"
-        AppLanguage.FR -> "Logo Saatan"
+        AppLanguage.AR -> "شعار ذوق"
+        AppLanguage.EN -> "Dhawq logo"
+        AppLanguage.FR -> "Logo Dhawq"
     }
 
     // ---------------------------------------------------------------------
@@ -2460,6 +2460,62 @@ object AppStrings {
         AppLanguage.AR -> "ساعة الإجابة — الباب مفتوح على مصراعيه"
         AppLanguage.EN -> "Hour of response — the door is wide open"
         AppLanguage.FR -> "Heure d'exaucement — la porte est grande ouverte"
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  LE VOYAGE DE LA PRIÈRE (Saison 1 — les 10 stations)
+    // ─────────────────────────────────────────────────────────────
+
+    /** Bottom navigation label for the Journey screen. */
+    fun navJourney(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الرحلة"
+        AppLanguage.EN -> "Journey"
+        AppLanguage.FR -> "Voyage"
+    }
+
+    fun journeyTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "رحلة الصلاة"
+        AppLanguage.EN -> "The Prayer Journey"
+        AppLanguage.FR -> "Le Voyage de la Prière"
+    }
+
+    fun journeySubtitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "عشر محطات لقلبك قبل جسدك. محطة واحدة قبل كل صلاة — ثم اذهب وصلِّ بلا هاتف."
+        AppLanguage.EN -> "Ten stations for your heart before your body. One station before each prayer — then go and pray without your phone."
+        AppLanguage.FR -> "Dix stations pour ton cœur avant ton corps. Une station avant chaque prière — puis va prier sans ton téléphone."
+    }
+
+    /** "Station 3 of 10" progress label. */
+    fun journeyStationProgress(lang: AppLanguage, index: Int, total: Int): String = when (lang) {
+        AppLanguage.AR -> "المحطة $index من $total"
+        AppLanguage.EN -> "Station $index of $total"
+        AppLanguage.FR -> "Station $index sur $total"
+    }
+
+    fun journeyListen(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "استمع قبل الصلاة"
+        AppLanguage.EN -> "Listen before praying"
+        AppLanguage.FR -> "Écouter avant de prier"
+    }
+
+    fun journeyPause(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إيقاف مؤقت"
+        AppLanguage.EN -> "Pause"
+        AppLanguage.FR -> "Pause"
+    }
+
+    /** Shown when the audio of a station has not been recorded yet. */
+    fun journeyComingSoon(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "التسجيل قريبًا"
+        AppLanguage.EN -> "Recording coming soon"
+        AppLanguage.FR -> "Enregistrement à venir"
+    }
+
+    /** Prefix before the classical source of a station. */
+    fun journeySourcePrefix(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "المصدر"
+        AppLanguage.EN -> "Source"
+        AppLanguage.FR -> "Source"
     }
 }
 

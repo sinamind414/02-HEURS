@@ -31,6 +31,7 @@ import java.util.Calendar
 
 enum class SaatanScreen {
     DIVINE_CLOCK,
+    JOURNEY,
     CONVERTER,
     JOURNAL,
     IMMERSIVE_LIFE,

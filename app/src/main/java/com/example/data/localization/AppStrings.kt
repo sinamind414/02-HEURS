@@ -1164,9 +1164,9 @@ object AppStrings {
     // ---------------------------------------------------------------------
 
     fun dailyReminderNotifTitle(lang: AppLanguage): String = when (lang) {
-        AppLanguage.AR -> "سَاعَتَان • تذكير الوقت الإلهي"
-        AppLanguage.EN -> "SA'ATAN • Divine Lifespan Reminder"
-        AppLanguage.FR -> "SA'ATAN • Ton Rappel Céleste"
+        AppLanguage.AR -> "ذَوْق • تذكير الوقت الإلهي"
+        AppLanguage.EN -> "DHAwQ • Divine Lifespan Reminder"
+        AppLanguage.FR -> "DHAwQ • Ton Rappel Céleste"
     }
 
     fun dailyReminderNotifBody(lang: AppLanguage, divineMinutes: Double): String = when (lang) {

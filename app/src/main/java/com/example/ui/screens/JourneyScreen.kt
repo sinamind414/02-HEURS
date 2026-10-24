@@ -197,10 +197,19 @@ fun JourneyScreen(
                                 }
                             }
 
-                            // Play / pause — or the quiet "coming soon" chip
-                            val audioReady = remember(station.order) {
+                            // Play / pause — or the quiet "coming soon" chip.
+                            // Audio files are per-language: the Arabic track
+                            // keeps the base name (dhawq_station_01), English
+                            // adds "_en", French "_fr". Missing tracks degrade
+                            // gracefully into the "coming soon" chip.
+                            val audioResName = station.audioResName + when (language) {
+                                AppLanguage.AR -> ""
+                                AppLanguage.EN -> "_en"
+                                AppLanguage.FR -> "_fr"
+                            }
+                            val audioReady = remember(station.order, language) {
                                 context.resources.getIdentifier(
-                                    station.audioResName, "raw", context.packageName
+                                    audioResName, "raw", context.packageName
                                 ) != 0
                             }
                             if (audioReady) {
@@ -214,7 +223,7 @@ fun JourneyScreen(
                                             if (isPlayingHere) {
                                                 stationPlayer.pause()
                                             } else {
-                                                val started = stationPlayer.play(context, station.audioResName)
+                                                val started = stationPlayer.play(context, audioResName)
                                                 if (started) activeStationOrder = station.order
                                             }
                                         },

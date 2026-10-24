@@ -202,8 +202,8 @@ Le 4ᵉ serment est nouveau, et il est le **différenciateur absolu** face à l'
 
 | Sprint | Durée | Contenu | Date cible |
 |:---:|:---:|---|---|
-| **0 — Fondations** | 2 sem. | Les 4 correctifs critiques de l'audit (date de naissance, rafraîchissement horaires, rappels après redémarrage, réglages factices), méthode de calcul MWL, nettoyage 1,5 Mo, **renommage Dhawq** (l'`applicationId` devait de toute façon changer — le pivot arrive au moment le moins cher possible : avant publication) | mi-novembre |
-| **1 — Le Cycle** | 3 sem. | Les 5 Rendez-Vous (invitation, « Va. », Minute Précieuse, question du goût), la Colonne ساعتان en filigrane, le 4ᵉ serment (silence pendant la prière) | début décembre |
+| **0 — Fondations** | 2 sem. | Les 4 correctifs critiques de l'audit (date de naissance, rafraîchissement horaires, rappels après redémarrage, réglages factices), méthode de calcul MWL, nettoyage 1,5 Mo, **thème Parchemin & Encre (palette du logo)** — **✅ livré (commit 4b9b83e)** | mi-novembre |
+| **1 — Le Cycle** | 3 sem. | Les 5 Rendez-Vous (invitation, « Va. », Minute Précieuse, question du goût), la Colonne ساعتان en filigrane, le 4ᵉ serment (silence pendant la prière) — **✅ livré** : L'Invitation (carte), Le Vide (overlay « Va. »), La Minute Précieuse (60 s + goût), La Fenêtre d'or (dernier tiers de la nuit), goût persisté (Room v3, jamais agrégé) | début décembre |
 | **2 — La voix** | 3 sem. | Infrastructure audio (Media3), enregistrement S1 (10 stations), **mise en place du comité de validation théologique** (non négociable) | fin décembre |
 | **Beta** | 2 sem. | Test sur appareils réels : RTL arabe, passage à minuit, redémarrage, mode jour | début janvier |
 | **Lancement** | — | Play Store, fiche « inspirée de… », ASO khushu | **mi-janvier 2027** |

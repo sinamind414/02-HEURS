@@ -2355,5 +2355,111 @@ object AppStrings {
             AppLanguage.FR -> "Chaque nuit, ton âme s'échappe un dixième de seconde divine avant de revenir."
         }
     }
+
+    // ─────────────────────────────────────────────────────────────
+    //  LE CYCLE QUOTIDIEN (Dhawq) — L'Invitation, Le Vide,
+    //  La Minute Précieuse, La Question du Goût, La Fenêtre d'or
+    // ─────────────────────────────────────────────────────────────
+
+    /** L'Invitation — the countdown card title. */
+    fun invitationTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إنه يدعوك"
+        AppLanguage.EN -> "He is calling you"
+        AppLanguage.FR -> "Il t'appelle"
+    }
+
+    /** L'Invitation — the countdown card subtitle. */
+    fun rendezVousLabel(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الموعد"
+        AppLanguage.EN -> "The Appointment"
+        AppLanguage.FR -> "Le Rendez-Vous"
+    }
+
+    /** Le Vide — the single word shown while the prayer window is open. */
+    fun leVideWord(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اذهب."
+        AppLanguage.EN -> "Go."
+        AppLanguage.FR -> "Va."
+    }
+
+    /** Le Vide — the quiet line under the word. */
+    fun leVideSubtitle(lang: AppLanguage, prayerFr: String, prayerAr: String): String = when (lang) {
+        AppLanguage.AR -> "بدأ موعد $prayerAr. ينسحب التطبيق خلال صلاتك."
+        AppLanguage.EN -> "The $prayerFr appointment has begun. The app steps aside during your prayer."
+        AppLanguage.FR -> "Le Rendez-Vous de $prayerFr a commencé. L'application se retire pendant ta prière."
+    }
+
+    /** Le Vide — the discreet way back in. */
+    fun leVideLater(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لاحقًا"
+        AppLanguage.EN -> "Later"
+        AppLanguage.FR -> "Plus tard"
+    }
+
+    /** La Minute Précieuse — title (the assise that follows the salam). */
+    fun preciousMinuteTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الدقيقة الثمينة"
+        AppLanguage.EN -> "The Precious Minute"
+        AppLanguage.FR -> "La Minute Précieuse"
+    }
+
+    /** La Minute Précieuse — the invitation to stay seated. */
+    fun preciousMinuteBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لا ترحل بعدُ. ستّون ثانية."
+        AppLanguage.EN -> "Do not leave yet. Sixty seconds."
+        AppLanguage.FR -> "Ne pars pas encore. Soixante secondes."
+    }
+
+    /** La Minute Précieuse — shown when the sixty seconds are over. */
+    fun preciousMinuteDone(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "آمين."
+        AppLanguage.EN -> "Ameen."
+        AppLanguage.FR -> "Amine."
+    }
+
+    /** La Minute Précieuse — discreet skip. */
+    fun preciousMinuteSkip(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "تخطٍّ"
+        AppLanguage.EN -> "Skip"
+        AppLanguage.FR -> "Passer"
+    }
+
+    /** La Question du Goût — asked once the minute is over. */
+    fun tasteQuestion(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "صلاتك اليوم، ما طعمها؟"
+        AppLanguage.EN -> "Today's prayer — what did it taste like?"
+        AppLanguage.FR -> "Ta prière d'aujourd'hui, quel goût ?"
+    }
+
+    fun tasteDouce(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "حلوة"
+        AppLanguage.EN -> "Sweet"
+        AppLanguage.FR -> "Douce"
+    }
+
+    fun tasteLourde(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ثقيلة"
+        AppLanguage.EN -> "Heavy"
+        AppLanguage.FR -> "Lourde"
+    }
+
+    fun tasteAbsente(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "غائبة"
+        AppLanguage.EN -> "Absent"
+        AppLanguage.FR -> "Absente"
+    }
+
+    fun tasteGoutee(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "مُذاقة"
+        AppLanguage.EN -> "Tasted"
+        AppLanguage.FR -> "Goûtée"
+    }
+
+    /** La Fenêtre d'or — the last third of the night. */
+    fun goldenWindowBadge(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ساعة الإجابة — الباب مفتوح على مصراعيه"
+        AppLanguage.EN -> "Hour of response — the door is wide open"
+        AppLanguage.FR -> "Heure d'exaucement — la porte est grande ouverte"
+    }
 }
 

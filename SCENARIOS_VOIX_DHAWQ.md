@@ -3,6 +3,12 @@
 
 *24 octobre 2026 — document de production*
 
+> **✅ ÉTAT : prototype vocal bilingue COMPLET.**
+> - **Arabe : 10/10** pistes générées (TTS, voix masculine choisie) — `res/raw/dhawq_station_01..10.mp3`
+> - **Anglais : 10/10** pistes générées (TTS, voix masculine choisie) — `res/raw/dhawq_station_01..10_en.mp3`
+> - Ces pistes TTS sont des **prototypes fonctionnels** : elles rendent le Voyage jouable dès maintenant. L'enregistrement humain définitif (récitant) remplacera ces fichiers aux mêmes noms, sans toucher au code.
+> - **Français : scripts à rédiger + audition voix** (l'app démarre en FR par défaut — c'est la priorité suivante).
+
 ---
 
 ## 1. Notes de production

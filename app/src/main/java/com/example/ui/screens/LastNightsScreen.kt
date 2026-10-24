@@ -116,7 +116,7 @@ fun LastNightsScreen(
                         fontFamily = AmiriFontFamily,
                         fontSize = 20.sp,
                         lineHeight = 30.sp,
-                        color = TextPrimary
+                        color = if (isDayMode) DawnTextPrimary else TextPrimary
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(

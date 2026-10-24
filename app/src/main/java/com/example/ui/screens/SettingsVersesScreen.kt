@@ -451,7 +451,7 @@ fun SettingsVersesScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "سَاعَتَان • SA'ATAN",
+                        text = AppStrings.appTitle(currentLanguage) + " • " + AppStrings.appSubtitle(currentLanguage),
                         fontFamily = CinzelFontFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,

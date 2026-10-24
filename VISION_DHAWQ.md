@@ -133,12 +133,20 @@ L'horloge de vie de la vision v1 devient la **colonne vertébrale** du Cycle :
 
 La mécanique que Hallow a validée (saisons de 40 jours, contenu calendaire), appliquée à l'enseignement du dhawq. Chaque saison = 10-12 épisodes de 2-4 minutes, **originaux et sourcés** (jamais des copies de la vidéo — voir Condition n°1 et la section 6) :
 
-| Saison | Contenu | Moment |
-|---|---|---|
-| **S1 — Le Voyage** | Les 10 stations de la prière (l'eau, la marche, l'appel, la porte, l'ouverture, le Dialogue, l'inclinaison, la Proximité, le salut, l'assise) | Onboarding — offerte |
-| **S2 — Le Dialogue** | 7 épisodes sur Al-Fatiha : ce que tu dis, ce qu'Il répond (hadith qudsi, Muslim 395) | Contributeur |
-| **S3 — Ils étaient comme nous** | 12 récits des salaf : la prière sous l'éclair des sabres, la immobile d'Ibn al-Zubayr, l'homme de notre époque… | Contributeur |
-| **S4 — Les Dernières Nuits** | Ramadan : 10 nuits d'accompagnement + le climax du 27e Nuit (une nuit = tes 2 heures) | Contributeur |
+| Saison | Adoration (source : série تذوق العبادات, 60,1 M de vues) | Contenu | Moment |
+|---|---|---|---|
+| **S1 — Le Voyage** | الصلاة (39,5 M) | Les 10 stations de la prière | Onboarding — offerte |
+| **S2 — Le Wird** | القرآن (6,0 M) | Goûter une page par jour — pas un lecteur de Coran | Contributeur |
+| **S3 — La Chambre Basse** | الدعاء (6,7 M) | Apprendre à chuchoter à son Seigneur (munajat) | Contributeur |
+| **S4 — Le Chapelet du Cœur** | الذكر (7,9 M) | Le sens avant le compte — « entraîne ton cœur avant ta langue » | Contributeur |
+| **S5 — Les Dernières Nuits** | Ramadan (1,3 M) | 10 nuits d'accompagnement + le climax du 27e Nuit | Contributeur |
+
+*Les récits des salaf (« Ils étaient comme nous ») deviennent le fil transversal de chaque saison — comme dans les épisodes. L'écran Al-Fatiha reste l'artefact de partage gratuit. Analyse complète des sources : `ANALYSE_CHAINE_ALARABI.md`.*
+
+**Trois fonctions nées de l'analyse de l'œuvre** (détail et sources dans `ANALYSE_CHAINE_ALARABI.md`) :
+- **Les Fenêtres (ساعات الإجابة)** — les heures d'exaucement (dernier tiers de la nuit, entre adhan et iqama…) signalées sur l'Horloge : un fin trait doré, « La porte est grande ouverte. » Les apps affichent les heures de *devoir* ; Dhawq affiche aussi les heures de *don*.
+- **La Chambre Basse (المناجاة)** — le journal d'invocation dans ses mots + le livre des exaucements, 100 % local : relire la générosité d'Allah le jour où le cœur ferme.
+- **Le Chapelet du Cœur (ذوق الذكر)** — le tasbih refondu : à chaque cycle, le *sens* de la formule, jamais un score. Le chapelet se ferme sur « Il t'a entendu ».
 
 **S1 est offerte** : elle est l'onboarding — l'utilisateur goûte le format avant de payer. Le rythme de parution (un épisode/jour pendant 10 jours) crée le rendez-vous habituel, exactement comme Pray40 crée l'habitude du Carême.
 
@@ -229,5 +237,5 @@ Sa'atan nous a donné le moteur. Fahem nous a prouvé la faim. Dhawq est la tabl
 
 ---
 
-*Vision v2 — Dhawq ذوق · octobre 2026*
+*Vision v2.1 — Dhawq ذوق · octobre 2026 (v2.1 : saisons alignées sur la série تذوق العبادات + Chambre Basse, Chapelet du Cœur, Fenêtres — voir `ANALYSE_CHAINE_ALARABI.md`)*
 *Précédente itération : `VISION_SAATAN.md` (v1 — dont l'Horloge, le Puits, le Miroir et la Nuit sont absorbés ici) · Analyse de la vidéo fondatrice : `LA_PRIERE_GOUSTEE.md` · Marché : `ANALYSE_MARCHE.md` · État technique : `AUDIT_EXPERT.md`*

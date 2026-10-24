@@ -18,7 +18,13 @@ data class DailyJournalEntity(
     val goodDeedDone: Boolean = false,
     val dailyNote: String = "",
     val divineScoreStars: Int = 0,
-    val tasbihCountToday: Int = 0
+    val tasbihCountToday: Int = 0,
+    /**
+     * Answer to the Dhawq evening question "Quel goût ?" ("douce", "lourde",
+     * "absente", "goutee"). Only today's answer is ever displayed — it is
+     * never aggregated into a score, streak or statistic (Serment #2).
+     */
+    val salahTaste: String = ""
 )
 
 @Entity(tableName = "user_profile")

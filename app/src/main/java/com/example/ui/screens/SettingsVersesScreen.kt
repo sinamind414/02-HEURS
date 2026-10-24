@@ -245,33 +245,17 @@ fun SettingsVersesScreen(
                         }
                     )
                     ReminderToggleRow(
-                        label = AppStrings.reminderFajrLabel(currentLanguage),
-                        checked = userProfile?.reminderFajr == true,
-                        enabled = masterEnabled,
-                        isDayMode = isDayMode,
-                        onCheckedChange = { viewModel.setReminderFajr(it) }
-                    )
-                    ReminderToggleRow(
-                        label = AppStrings.reminderDhuhrLabel(currentLanguage),
-                        checked = userProfile?.reminderDhuhr == true,
-                        enabled = masterEnabled,
-                        isDayMode = isDayMode,
-                        onCheckedChange = { viewModel.setReminderDhuhr(it) }
-                    )
-                    ReminderToggleRow(
                         label = AppStrings.reminderDailyLabel(currentLanguage),
                         checked = userProfile?.reminderSocialScroll == true,
                         enabled = masterEnabled,
                         isDayMode = isDayMode,
                         onCheckedChange = { viewModel.setReminderDaily(it) }
                     )
-                    ReminderToggleRow(
-                        label = AppStrings.reminderFridayLabel(currentLanguage),
-                        checked = userProfile?.reminderFriday == true,
-                        enabled = masterEnabled,
-                        isDayMode = isDayMode,
-                        onCheckedChange = { viewModel.setReminderFriday(it) }
-                    )
+                    // NOTE (audit P1-3): the Fajr / Dhuhr / Friday toggles were
+                    // removed — they were persisted but never read by any
+                    // scheduler. Only settings that actually drive the 13:00
+                    // reminder are shown. Per-prayer reminders return with the
+                    // Dhawq "Rendez-Vous" cycle, backed by real scheduling.
                 }
             }
         }
@@ -467,7 +451,7 @@ fun SettingsVersesScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "سَاعَتَان • SA'ATAN",
+                        text = AppStrings.appTitle(currentLanguage) + " • " + AppStrings.appSubtitle(currentLanguage),
                         fontFamily = CinzelFontFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,

@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-   Sample backup rules file; uncomment and customize as necessary.
-   See https://developer.android.com/guide/topics/data/autobackup
-   for details.
-   Note: This file is ignored for devices older than API 31
-   See https://developer.android.com/about/versions/12/backup-restore
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Backup rules (API < 31). The Room database holds the user's birth date and
+  their private daily journal reflections: it must never leave the device in
+  cleartext via Android's auto-backup (audit — privacy section, Serment #3:
+  "tes réflexions ne quittent jamais ton téléphone").
 -->
 <full-backup-content>
-    <!--
-   <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
--->
+    <exclude domain="database" path="saatan_database.db" />
 </full-backup-content>

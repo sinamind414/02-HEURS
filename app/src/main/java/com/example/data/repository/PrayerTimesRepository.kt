@@ -1,7 +1,9 @@
 package com.example.data.repository
 
 import com.example.data.model.PrayerCountdownState
+import com.example.data.model.PrayerCycleState
 import com.example.data.model.PrayerTimeItem
+import com.example.data.model.RamadanNightState
 import com.example.data.remote.AladhanClient
 import com.example.data.remote.AladhanTimings
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +21,17 @@ import java.util.TimeZone
  * the device's.
  */
 class PrayerTimesRepository {
+
+    companion object {
+        /** "Le Vide": minutes after the adhan during which the app steps aside. */
+        const val PRAYER_WINDOW_MINUTES = 15
+
+        /** "La Minute Précieuse": offered from this many minutes after the adhan. */
+        const val PRECIOUS_MINUTE_MIN_MINUTES = 10
+
+        /** ...and until this many minutes after the adhan. */
+        const val PRECIOUS_MINUTE_MAX_MINUTES = 45
+    }
 
     // The cache is written from Dispatchers.IO and read from the main thread
     // by the countdown ticker, hence @Volatile.
@@ -107,6 +120,100 @@ class PrayerTimesRepository {
 
     /** True when the cached timings are the built-in offline fallback. */
     fun isUsingFallback(): Boolean = usingFallback
+
+    /**
+     * Ramadan season state parsed from the cached Hijri date string
+     * (formatted as "21 Ramadan 1447 H" by [formatHijri]). Month matching is
+     * tolerant of transliteration variants ("Ramadan", "Ramaḍān", رمضان).
+     */
+    fun ramadanNightState(): RamadanNightState {
+        val hijri = cachedHijriStr.trim()
+        if (hijri.isEmpty()) return RamadanNightState()
+
+        val day = hijri.split(" ").firstOrNull()?.toIntOrNull() ?: 0
+        val year = hijri.split(" ").lastOrNull { it.toIntOrNull() != null }?.toIntOrNull() ?: 0
+        val isRamadan = hijri.contains("ramad", ignoreCase = true) || hijri.contains("رمضان")
+        val isLastTen = isRamadan && day in 21..30
+
+        return RamadanNightState(
+            isRamadan = isRamadan,
+            hijriDay = day,
+            hijriYear = year,
+            isLastTenNights = isLastTen,
+            lastTenNightNumber = if (isLastTen) day else 0,
+            isOddNight = isLastTen && day % 2 == 1
+        )
+    }
+
+    /**
+     * Computes the "Cycle Quotidien" state used by the Dhawq experience.
+     * All thresholds are in minutes after the prayer's adhan, in the city's
+     * wall clock (so the cycle stays correct when the device timezone differs
+     * from the selected city):
+     *  * 0..15   → "Le Vide": the app steps aside during the prayer.
+     *  * 10..45  → "La Minute Précieuse" is offered (the assise after salam).
+     *  * last third of the night (Maghrib → Fajr) → golden window badge.
+     */
+    fun currentCycleState(): PrayerCycleState {
+        val timings = cachedTimings ?: return PrayerCycleState()
+        val cal = cityCalendar()
+        val nowMinutes = cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+
+        val prayers = listOf(
+            Triple("fajr", "الفجر", cleanTime(timings.fajr)),
+            Triple("dhuhr", "الظهر", cleanTime(timings.dhuhr)),
+            Triple("asr", "العصر", cleanTime(timings.asr)),
+            Triple("maghrib", "المغرب", cleanTime(timings.maghrib)),
+            Triple("isha", "العشاء", cleanTime(timings.isha))
+        )
+
+        // Most recent prayer whose adhan has already passed today.
+        var recentKey = ""
+        var recentAr = ""
+        var minutesSince = -1
+        for ((key, arName, timeStr) in prayers) {
+            val prayerMin = parseMinutesOfDay(timeStr) ?: continue
+            val since = nowMinutes - prayerMin
+            if (since in 0..1439 && since > minutesSince) {
+                minutesSince = since
+                recentKey = key
+                recentAr = arName
+            }
+        }
+
+        val inWindow = minutesSince in 0..PRAYER_WINDOW_MINUTES
+        val offerMinute = minutesSince in PRECIOUS_MINUTE_MIN_MINUTES..PRECIOUS_MINUTE_MAX_MINUTES
+
+        // Golden window: last third of the night, in "night coordinates"
+        // measured from Maghrib (0) to the next Fajr (nightLength).
+        var golden = false
+        val maghribMin = parseMinutesOfDay(cleanTime(timings.maghrib))
+        val fajrMin = parseMinutesOfDay(cleanTime(timings.fajr))
+        if (maghribMin != null && fajrMin != null) {
+            val nightLength = ((1440 - maghribMin) + fajrMin).coerceAtLeast(1)
+            val posInNight = ((nowMinutes - maghribMin) + 1440) % 1440
+            golden = posInNight >= 2 * nightLength / 3 && posInNight <= nightLength
+        }
+
+        val recentFr = when (recentKey) {
+            "fajr" -> "Fajr"
+            "dhuhr" -> "Dhuhr"
+            "asr" -> "Asr"
+            "maghrib" -> "Maghrib"
+            "isha" -> "Isha"
+            else -> ""
+        }
+
+        return PrayerCycleState(
+            inPrayerWindow = inWindow,
+            windowPrayerNameFr = if (inWindow) recentFr else "",
+            windowPrayerNameAr = if (inWindow) recentAr else "",
+            windowPrayerKey = if (inWindow) recentKey else "",
+            offerPreciousMinute = offerMinute,
+            preciousMinutePrayerKey = if (offerMinute) recentKey else "",
+            inGoldenWindow = golden
+        )
+    }
 
     /**
      * The cached timings belong to a given local day. When that day is over the

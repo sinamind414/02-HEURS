@@ -25,3 +25,49 @@ data class PrayerCountdownState(
     /** True when the next prayer is tomorrow's Fajr (all of today's have passed). */
     val isNextPrayerTomorrow: Boolean = false
 )
+
+/**
+ * The "Cycle Quotidien" of the Dhawq experience, derived from the cached
+ * prayer timings and the city's wall clock:
+ *
+ *  * **Le Vide** — during the ~15 minutes following a prayer's adhan the app
+ *    steps aside: opening it shows a single word, "Va." (Serment #4).
+ *  * **La Minute Précieuse** — between 10 and 45 minutes after the prayer,
+ *    the "assise after the salam" is offered, once per prayer per session.
+ *  * **La Fenêtre d'or** — the last third of the night (between Maghrib and
+ *    Fajr), when supplication is most likely to be answered.
+ */
+data class PrayerCycleState(
+    /** True while now is inside the prayer window (adhan → +15 min). */
+    val inPrayerWindow: Boolean = false,
+    /** French name of the prayer whose window is open ("Fajr"...). */
+    val windowPrayerNameFr: String = "",
+    /** Arabic name of the prayer whose window is open. */
+    val windowPrayerNameAr: String = "",
+    /** Lowercase key of the prayer whose window is open ("fajr"...). */
+    val windowPrayerKey: String = "",
+    /** True between +10 and +45 minutes after a prayer's adhan. */
+    val offerPreciousMinute: Boolean = false,
+    /** Lowercase key of the prayer the precious-minute offer belongs to. */
+    val preciousMinutePrayerKey: String = "",
+    /** True during the last third of the night (Maghrib → Fajr span). */
+    val inGoldenWindow: Boolean = false
+)
+
+/**
+ * Ramadan state derived from the cached Hijri date (Aladhan): powers the
+ * "Dernières Nuits" season — the annual climax of Dhawq, when the app
+ * surfaces the bridge between Laylat al-Qadr (1000 months ≈ 83 years and
+ * 4 months) and the "two hours" concept.
+ */
+data class RamadanNightState(
+    val isRamadan: Boolean = false,
+    val hijriDay: Int = 0,
+    val hijriYear: Int = 0,
+    /** True from the 21st night (inclusive) to the 30th. */
+    val isLastTenNights: Boolean = false,
+    /** Night number within the last ten (21..30), 0 outside. */
+    val lastTenNightNumber: Int = 0,
+    /** True on 21, 23, 25, 27, 29 — where Laylat al-Qadr is to be sought. */
+    val isOddNight: Boolean = false
+)

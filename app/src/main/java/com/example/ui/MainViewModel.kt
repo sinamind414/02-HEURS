@@ -13,6 +13,8 @@ import com.example.data.model.ChallengeItem
 import com.example.data.model.DivineTimeInfo
 import com.example.data.model.LifeMilestone
 import com.example.data.model.PrayerCountdownState
+import com.example.data.model.PrayerCycleState
+import com.example.data.model.RamadanNightState
 import com.example.data.notification.DivineNotificationHelper
 import com.example.data.repository.PrayerTimesRepository
 import com.example.data.repository.SaatanRepository
@@ -30,6 +32,8 @@ import java.util.Calendar
 
 enum class SaatanScreen {
     DIVINE_CLOCK,
+    JOURNEY,
+    LAST_NIGHTS,
     CONVERTER,
     JOURNAL,
     IMMERSIVE_LIFE,
@@ -124,6 +128,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // Prayer Times & Aladhan Integration State
     private val _prayerState = MutableStateFlow(prayerRepository.recalculateCurrentCountdown("Paris", "France"))
     val prayerState: StateFlow<PrayerCountdownState> = _prayerState.asStateFlow()
+
+    // ── Le Cycle Quotidien (Dhawq) ──
+    // Recomputed with the prayer ticker: Le Vide, La Minute Précieuse,
+    // La Fenêtre d'or. See PrayerCycleState for the semantics.
+    private val _cycleState = MutableStateFlow(PrayerCycleState())
+    val cycleState: StateFlow<PrayerCycleState> = _cycleState.asStateFlow()
+
+    /**
+     * In-memory memory of which prayers already offered "La Minute Précieuse"
+     * this session. Deliberately NOT persisted: the offer is a gentle
+     * invitation, and persisting it would turn it into a tracked record
+     * (Serment #2 — no streaks, no history compared).
+     */
+    private val preciousMinuteShown = mutableSetOf<String>()
+
+    // ── Les Dernières Nuits (Ramadan season) ──
+    // Derived from the cached Hijri date; powers the annual climax screen.
+    private val _ramadanState = MutableStateFlow(RamadanNightState())
+    val ramadanState: StateFlow<RamadanNightState> = _ramadanState.asStateFlow()
 
     private val _showCityDialog = MutableStateFlow(false)
     val showCityDialog: StateFlow<Boolean> = _showCityDialog.asStateFlow()
@@ -226,13 +249,41 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 delay(1000)
                 val current = _prayerState.value
                 if (!current.isLoading) {
-                    _prayerState.value = prayerRepository.recalculateCurrentCountdown(
-                        city = current.cityName,
-                        country = current.countryName
-                    )
+                    // Past local midnight in the selected city the cached
+                    // timings belong to yesterday: refresh them instead of
+                    // counting down against stale values (audit P1-1).
+                    if (prayerRepository.isCacheStale()) {
+                        loadPrayerTimes(current.cityName, current.countryName)
+                    } else {
+                        _prayerState.value = prayerRepository.recalculateCurrentCountdown(
+                            city = current.cityName,
+                            country = current.countryName
+                        )
+                    }
+                    // Le Cycle Quotidien: the offer flag is filtered through the
+                    // session memory so the minute is proposed once per prayer.
+                    val cycle = prayerRepository.currentCycleState()
+                    _cycleState.value = if (cycle.offerPreciousMinute) {
+                        val key = "${repository.getTodayIso()}|${cycle.preciousMinutePrayerKey}"
+                        cycle.copy(offerPreciousMinute = key !in preciousMinuteShown)
+                    } else {
+                        cycle
+                    }
+                    // Les Dernières Nuits: Hijri-based Ramadan season state.
+                    _ramadanState.value = prayerRepository.ramadanNightState()
                 }
             }
         }
+    }
+
+    /** Marks "La Minute Précieuse" as shown for the given prayer (this session). */
+    fun markPreciousMinuteShown(prayerKey: String) {
+        preciousMinuteShown.add("${repository.getTodayIso()}|$prayerKey")
+    }
+
+    /** Records today's answer to "Quel goût ?" — never aggregated (Serment #2). */
+    fun recordSalahTaste(taste: String) {
+        viewModelScope.launch { repository.updateSalahTaste(taste) }
     }
 
     fun loadPrayerTimes(city: String, country: String) {
@@ -502,20 +553,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun setReminderFajr(enabled: Boolean) {
-        viewModelScope.launch { repository.updateNotificationPreferences(reminderFajr = enabled) }
-    }
-
-    fun setReminderDhuhr(enabled: Boolean) {
-        viewModelScope.launch { repository.updateNotificationPreferences(reminderDhuhr = enabled) }
-    }
-
     fun setReminderDaily(enabled: Boolean) {
         viewModelScope.launch { repository.updateNotificationPreferences(reminderSocialScroll = enabled) }
-    }
-
-    fun setReminderFriday(enabled: Boolean) {
-        viewModelScope.launch { repository.updateNotificationPreferences(reminderFriday = enabled) }
     }
 
     /**

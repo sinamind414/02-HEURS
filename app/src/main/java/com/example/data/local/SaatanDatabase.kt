@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         DailyJournalEntity::class,
         UserProfileEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 abstract class SaatanDatabase : RoomDatabase() {
@@ -23,6 +23,20 @@ abstract class SaatanDatabase : RoomDatabase() {
 
         @Volatile
         private var INSTANCE: SaatanDatabase? = null
+
+        /**
+         * v2 -> v3
+         *  * adds the daily "taste of the prayer" answer (Dhawq cycle). The
+         *    value is only ever shown for the current day — it is never
+         *    aggregated into a score or a streak (Serment #2).
+         */
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE daily_journal ADD COLUMN salahTaste TEXT NOT NULL DEFAULT ''"
+                )
+            }
+        }
 
         /**
          * v1 -> v2
@@ -49,7 +63,7 @@ abstract class SaatanDatabase : RoomDatabase() {
                     SaatanDatabase::class.java,
                     DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build()
                     .also { INSTANCE = it }
             }

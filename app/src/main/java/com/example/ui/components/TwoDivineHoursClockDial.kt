@@ -42,12 +42,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.data.calculator.DivineTimeCalculator
 import com.example.data.localization.AppStrings
 import com.example.data.model.AppLanguage
 import com.example.data.model.DivineTimeInfo
 import com.example.ui.theme.AmiriFontFamily
 import com.example.ui.theme.CelestialCyan
 import com.example.ui.theme.CinzelFontFamily
+import com.example.ui.theme.DawnCream800
+import com.example.ui.theme.DawnGoldLight
 import com.example.ui.theme.GoldBorder
 import com.example.ui.theme.GoldLight
 import com.example.ui.theme.GoldPrimary
@@ -60,16 +63,20 @@ import com.example.ui.theme.TextMuted
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 /**
- * Circular Canvas Progress Visualization of the "Two Divine Hours" (120 divine minutes)
- * Maps the user's age directly as a position on a clock face (0m to 120m).
+ * Circular Canvas Progress Visualization of the user's life on the "Two Divine
+ * Hours" dial. The full span is derived from the user's life expectancy, so
+ * this dial, the circular clock and the breakdown chart all agree on one
+ * single "% of life" figure.
  */
 @Composable
 fun TwoDivineHoursClockDial(
     divineTime: DivineTimeInfo,
     language: AppLanguage,
+    lifeExpectancyYears: Int = 80,
     modifier: Modifier = Modifier,
     sizeDp: Dp = 270.dp
 ) {
@@ -87,21 +94,26 @@ fun TwoDivineHoursClockDial(
         label = "clock_beacon"
     )
 
-    // Calculate position in the 120 divine minutes
+    // Calculate the user's position in divine minutes
     // Total divine minutes = (hours * 60) + minutes + (seconds / 60)
     val totalDivineMinutesLived = (divineTime.divineHours * 60.0) +
             divineTime.divineMinutes.toDouble() +
             (divineTime.divineSeconds.toDouble() / 60.0)
 
-    // 120 minutes mapped to 360 degrees (1 minute = 3 degrees)
-    val totalMinutesSpan = 120.0
+    // The dial is the user's OWN life: its full span is derived from the same
+    // expectancy the circular clock and the breakdown chart use, so all three
+    // visualizations now agree on a single "% of life" figure (audit P1-4).
+    // divine minutes of a full life = years × (120 divine minutes / 83.33 years)
+    val totalMinutesSpan = lifeExpectancyYears *
+            (DivineTimeCalculator.DIVINE_MINUTES_PER_TWO_HOURS /
+                DivineTimeCalculator.EARTH_YEARS_PER_TWO_DIVINE_HOURS)
     val progressFraction = (totalDivineMinutesLived / totalMinutesSpan).coerceIn(0.0, 1.0).toFloat()
     val handAngleDegrees = (progressFraction * 360f) - 90f // Start at top (12 o'clock / 0m)
 
     val cardBg = if (isDayMode) Color.White.copy(alpha = 0.95f) else Midnight900.copy(alpha = 0.95f)
     val cardBorder = if (isDayMode) GoldPrimary.copy(alpha = 0.35f) else GoldBorder
-    val trackBgColor = if (isDayMode) Color(0xFFE2DCcb) else Midnight700.copy(alpha = 0.5f)
-    val dialTickColor = if (isDayMode) Color(0xFF9E8B65) else GoldBorder
+    val trackBgColor = if (isDayMode) DawnCream800 else Midnight700.copy(alpha = 0.5f)
+    val dialTickColor = if (isDayMode) DawnGoldLight else GoldBorder
 
     CelestialCard(
         modifier = modifier
@@ -339,18 +351,36 @@ fun TwoDivineHoursClockDial(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Dial Milestones Guide
+            // Dial Milestones Guide — quarter marks of the user's own lifespan,
+            // localized (audit P2-1: hardcoded French labels removed).
+            val quarterMinutes = totalMinutesSpan / 4.0
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                DialMilestonePill("0m", "Naissance", isPast = totalDivineMinutesLived >= 0.0)
-                DialMilestonePill("30m", "~20 ans", isPast = totalDivineMinutesLived >= 30.0)
-                DialMilestonePill("60m", "~40 ans", isPast = totalDivineMinutesLived >= 60.0)
-                DialMilestonePill("90m", "~60 ans", isPast = totalDivineMinutesLived >= 90.0)
-                DialMilestonePill("120m", "~80 ans", isPast = totalDivineMinutesLived >= 120.0)
+                DialMilestonePill(
+                    minutesLabel = "0m",
+                    ageLabel = AppStrings.dialMilestoneBirth(language),
+                    isPast = totalDivineMinutesLived >= 0.0
+                )
+                for (quarter in 1..3) {
+                    val mark = quarterMinutes * quarter
+                    DialMilestonePill(
+                        minutesLabel = "${mark.roundToInt()}m",
+                        ageLabel = AppStrings.dialMilestoneYears(
+                            language,
+                            lifeExpectancyYears * quarter / 4
+                        ),
+                        isPast = totalDivineMinutesLived >= mark
+                    )
+                }
+                DialMilestonePill(
+                    minutesLabel = "${totalMinutesSpan.roundToInt()}m",
+                    ageLabel = AppStrings.dialMilestoneYears(language, lifeExpectancyYears),
+                    isPast = totalDivineMinutesLived >= totalMinutesSpan
+                )
             }
         }
     }

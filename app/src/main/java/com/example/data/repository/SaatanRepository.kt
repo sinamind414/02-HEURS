@@ -113,6 +113,17 @@ class SaatanRepository(private val dao: DailyJournalDao) {
         dao.insertOrUpdateJournal(current.copy(dailyNote = note))
     }
 
+    /**
+     * Records today's answer to "Quel goût ?" (Dhawq cycle). The value is
+     * never aggregated, compared or scored — it exists only so the user can
+     * see and change today's answer (Serment #2).
+     */
+    suspend fun updateSalahTaste(taste: String) {
+        val today = getTodayIso()
+        val current = dao.getJournalForDate(today).firstOrNull() ?: DailyJournalEntity(dateIso = today)
+        dao.insertOrUpdateJournal(current.copy(salahTaste = taste))
+    }
+
     suspend fun incrementTasbih() {
         val today = getTodayIso()
         val current = dao.getJournalForDate(today).firstOrNull() ?: DailyJournalEntity(dateIso = today)

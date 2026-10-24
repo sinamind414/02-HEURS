@@ -17,21 +17,21 @@ object AppStrings {
     // ---------------------------------------------------------------------
 
     fun appTitle(lang: AppLanguage): String = when (lang) {
-        AppLanguage.AR -> "سَاعَتَان"
-        AppLanguage.EN -> "SA'ATAN"
-        AppLanguage.FR -> "SA'ATAN"
+        AppLanguage.AR -> "ذَوْق"
+        AppLanguage.EN -> "DHAwQ"
+        AppLanguage.FR -> "DHAwQ"
     }
 
     fun appSubtitle(lang: AppLanguage): String = when (lang) {
-        AppLanguage.AR -> "سَاعَتَان • وَقْتُكَ عِنْدَ اللَّه"
-        AppLanguage.EN -> "SA'ATAN • YOUR TIME WITH ALLAH"
-        AppLanguage.FR -> "سَاعَتَان • TON TEMPS CHEZ ALLAH"
+        AppLanguage.AR -> "ذَوْق • تَذَوُّقُ الصَّلاة"
+        AppLanguage.EN -> "ذَوْق • PRAYER, TASTED"
+        AppLanguage.FR -> "ذَوْق • LA PRIÈRE GOÛTÉE"
     }
 
     fun logoContentDescription(lang: AppLanguage): String = when (lang) {
-        AppLanguage.AR -> "شعار ساعتان"
-        AppLanguage.EN -> "Sa'atan logo"
-        AppLanguage.FR -> "Logo Saatan"
+        AppLanguage.AR -> "شعار ذوق"
+        AppLanguage.EN -> "Dhawq logo"
+        AppLanguage.FR -> "Logo Dhawq"
     }
 
     // ---------------------------------------------------------------------
@@ -455,6 +455,24 @@ object AppStrings {
         AppLanguage.AR -> "الشهر: $month"
         AppLanguage.EN -> "Month: $month"
         AppLanguage.FR -> "Mois : $month"
+    }
+
+    fun birthDayValueLabel(lang: AppLanguage, day: Int): String = when (lang) {
+        AppLanguage.AR -> "اليوم: $day"
+        AppLanguage.EN -> "Day: $day"
+        AppLanguage.FR -> "Jour : $day"
+    }
+
+    fun dialMilestoneBirth(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الولادة"
+        AppLanguage.EN -> "Birth"
+        AppLanguage.FR -> "Naissance"
+    }
+
+    fun dialMilestoneYears(lang: AppLanguage, years: Int): String = when (lang) {
+        AppLanguage.AR -> "≈$years سنة"
+        AppLanguage.EN -> "~$years yrs"
+        AppLanguage.FR -> "~$years ans"
     }
 
     fun lifeExpectancyLabel(lang: AppLanguage): String = when (lang) {
@@ -1146,9 +1164,9 @@ object AppStrings {
     // ---------------------------------------------------------------------
 
     fun dailyReminderNotifTitle(lang: AppLanguage): String = when (lang) {
-        AppLanguage.AR -> "سَاعَتَان • تذكير الوقت الإلهي"
-        AppLanguage.EN -> "SA'ATAN • Divine Lifespan Reminder"
-        AppLanguage.FR -> "SA'ATAN • Ton Rappel Céleste"
+        AppLanguage.AR -> "ذَوْق • تذكير الوقت الإلهي"
+        AppLanguage.EN -> "DHAwQ • Divine Lifespan Reminder"
+        AppLanguage.FR -> "DHAwQ • Ton Rappel Céleste"
     }
 
     fun dailyReminderNotifBody(lang: AppLanguage, divineMinutes: Double): String = when (lang) {
@@ -2336,6 +2354,274 @@ object AppStrings {
             AppLanguage.EN -> "Every night your soul slips away for a tenth of a divine second before returning."
             AppLanguage.FR -> "Chaque nuit, ton âme s'échappe un dixième de seconde divine avant de revenir."
         }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  LE CYCLE QUOTIDIEN (Dhawq) — L'Invitation, Le Vide,
+    //  La Minute Précieuse, La Question du Goût, La Fenêtre d'or
+    // ─────────────────────────────────────────────────────────────
+
+    /** L'Invitation — the countdown card title. */
+    fun invitationTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إنه يدعوك"
+        AppLanguage.EN -> "He is calling you"
+        AppLanguage.FR -> "Il t'appelle"
+    }
+
+    /** L'Invitation — the countdown card subtitle. */
+    fun rendezVousLabel(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الموعد"
+        AppLanguage.EN -> "The Appointment"
+        AppLanguage.FR -> "Le Rendez-Vous"
+    }
+
+    /** Le Vide — the single word shown while the prayer window is open. */
+    fun leVideWord(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اذهب."
+        AppLanguage.EN -> "Go."
+        AppLanguage.FR -> "Va."
+    }
+
+    /** Le Vide — the quiet line under the word. */
+    fun leVideSubtitle(lang: AppLanguage, prayerFr: String, prayerAr: String): String = when (lang) {
+        AppLanguage.AR -> "بدأ موعد $prayerAr. ينسحب التطبيق خلال صلاتك."
+        AppLanguage.EN -> "The $prayerFr appointment has begun. The app steps aside during your prayer."
+        AppLanguage.FR -> "Le Rendez-Vous de $prayerFr a commencé. L'application se retire pendant ta prière."
+    }
+
+    /** Le Vide — the discreet way back in. */
+    fun leVideLater(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لاحقًا"
+        AppLanguage.EN -> "Later"
+        AppLanguage.FR -> "Plus tard"
+    }
+
+    /** La Minute Précieuse — title (the assise that follows the salam). */
+    fun preciousMinuteTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الدقيقة الثمينة"
+        AppLanguage.EN -> "The Precious Minute"
+        AppLanguage.FR -> "La Minute Précieuse"
+    }
+
+    /** La Minute Précieuse — the invitation to stay seated. */
+    fun preciousMinuteBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لا ترحل بعدُ. ستّون ثانية."
+        AppLanguage.EN -> "Do not leave yet. Sixty seconds."
+        AppLanguage.FR -> "Ne pars pas encore. Soixante secondes."
+    }
+
+    /** La Minute Précieuse — shown when the sixty seconds are over. */
+    fun preciousMinuteDone(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "آمين."
+        AppLanguage.EN -> "Ameen."
+        AppLanguage.FR -> "Amine."
+    }
+
+    /** La Minute Précieuse — discreet skip. */
+    fun preciousMinuteSkip(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "تخطٍّ"
+        AppLanguage.EN -> "Skip"
+        AppLanguage.FR -> "Passer"
+    }
+
+    /** La Question du Goût — asked once the minute is over. */
+    fun tasteQuestion(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "صلاتك اليوم، ما طعمها؟"
+        AppLanguage.EN -> "Today's prayer — what did it taste like?"
+        AppLanguage.FR -> "Ta prière d'aujourd'hui, quel goût ?"
+    }
+
+    fun tasteDouce(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "حلوة"
+        AppLanguage.EN -> "Sweet"
+        AppLanguage.FR -> "Douce"
+    }
+
+    fun tasteLourde(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ثقيلة"
+        AppLanguage.EN -> "Heavy"
+        AppLanguage.FR -> "Lourde"
+    }
+
+    fun tasteAbsente(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "غائبة"
+        AppLanguage.EN -> "Absent"
+        AppLanguage.FR -> "Absente"
+    }
+
+    fun tasteGoutee(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "مُذاقة"
+        AppLanguage.EN -> "Tasted"
+        AppLanguage.FR -> "Goûtée"
+    }
+
+    /** La Fenêtre d'or — the last third of the night. */
+    fun goldenWindowBadge(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ساعة الإجابة — الباب مفتوح على مصراعيه"
+        AppLanguage.EN -> "Hour of response — the door is wide open"
+        AppLanguage.FR -> "Heure d'exaucement — la porte est grande ouverte"
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  LE VOYAGE DE LA PRIÈRE (Saison 1 — les 10 stations)
+    // ─────────────────────────────────────────────────────────────
+
+    /** Bottom navigation label for the Journey screen. */
+    fun navJourney(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الرحلة"
+        AppLanguage.EN -> "Journey"
+        AppLanguage.FR -> "Voyage"
+    }
+
+    fun journeyTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "رحلة الصلاة"
+        AppLanguage.EN -> "The Prayer Journey"
+        AppLanguage.FR -> "Le Voyage de la Prière"
+    }
+
+    fun journeySubtitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "عشر محطات لقلبك قبل جسدك. محطة واحدة قبل كل صلاة — ثم اذهب وصلِّ بلا هاتف."
+        AppLanguage.EN -> "Ten stations for your heart before your body. One station before each prayer — then go and pray without your phone."
+        AppLanguage.FR -> "Dix stations pour ton cœur avant ton corps. Une station avant chaque prière — puis va prier sans ton téléphone."
+    }
+
+    /** "Station 3 of 10" progress label. */
+    fun journeyStationProgress(lang: AppLanguage, index: Int, total: Int): String = when (lang) {
+        AppLanguage.AR -> "المحطة $index من $total"
+        AppLanguage.EN -> "Station $index of $total"
+        AppLanguage.FR -> "Station $index sur $total"
+    }
+
+    fun journeyListen(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "استمع قبل الصلاة"
+        AppLanguage.EN -> "Listen before praying"
+        AppLanguage.FR -> "Écouter avant de prier"
+    }
+
+    fun journeyPause(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إيقاف مؤقت"
+        AppLanguage.EN -> "Pause"
+        AppLanguage.FR -> "Pause"
+    }
+
+    /** Shown when the audio of a station has not been recorded yet. */
+    fun journeyComingSoon(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "التسجيل قريبًا"
+        AppLanguage.EN -> "Recording coming soon"
+        AppLanguage.FR -> "Enregistrement à venir"
+    }
+
+    /** Prefix before the classical source of a station. */
+    fun journeySourcePrefix(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "المصدر"
+        AppLanguage.EN -> "Source"
+        AppLanguage.FR -> "Source"
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  LES DERNIÈRES NUITS (Ramadan — le climax annuel)
+    // ─────────────────────────────────────────────────────────────
+
+    fun lastNightsTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الليالي العشر الأخيرة"
+        AppLanguage.EN -> "The Last Ten Nights"
+        AppLanguage.FR -> "Les Dix Dernières Nuits"
+    }
+
+    fun lastNightsSeasonCardTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "موسم رمضان"
+        AppLanguage.EN -> "Ramadan Season"
+        AppLanguage.FR -> "Saison Ramadan"
+    }
+
+    fun lastNightsSeasonCardBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "التمس ليلة القدر في العشر الأواخر — ليلة خير من ألف شهر."
+        AppLanguage.EN -> "Seek the Night of Decree in the last ten nights — a night better than a thousand months."
+        AppLanguage.FR -> "Cherche la Nuit du Destin dans les dix dernières nuits — une nuit meilleure que mille mois."
+    }
+
+    fun lastNightsOpen(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "افتح الموسم"
+        AppLanguage.EN -> "Open the season"
+        AppLanguage.FR -> "Ouvrir la saison"
+    }
+
+    fun qadrVerseQuote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "﴿لَيْلَةُ الْقَدْرِ خَيْرٌ مِنْ أَلْفِ شَهْرٍ﴾"
+        AppLanguage.EN -> "\"The Night of Decree is better than a thousand months.\""
+        AppLanguage.FR -> "« La Nuit du Destin est meilleure que mille mois. »"
+    }
+
+    fun qadrVerseRef(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "سورة القدر 97: 3"
+        AppLanguage.EN -> "Quran 97:3"
+        AppLanguage.FR -> "Coran 97:3"
+    }
+
+    fun lastNightsBridgeTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ليلة واحدة = حياتك كلها"
+        AppLanguage.EN -> "One night = your whole life"
+        AppLanguage.FR -> "Une nuit = ta vie entière"
+    }
+
+    fun lastNightsBridgeBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ألف شهر ≈ 83 سنة و4 أشهر — وهي مدة حياة كاملة بمقياس الساعتين عند الله. ليلة واحدة صادقة قد تزن أكثر من فيلم حياتك بأكمله."
+        AppLanguage.EN -> "A thousand months ≈ 83 years and 4 months — an entire life on the scale of the two hours with God. One sincere night can outweigh your whole film."
+        AppLanguage.FR -> "Mille mois ≈ 83 ans et 4 mois — une vie entière à l'échelle des deux heures auprès de Dieu. Une seule nuit sincère peut peser plus que tout ton film."
+    }
+
+    fun seekLaylatHadith(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "«التمسوا ليلة القدر في الوتر من العشر الأواخر»"
+        AppLanguage.EN -> "\"Seek the Night of Decree in the odd nights of the last ten.\""
+        AppLanguage.FR -> "« Cherchez la Nuit du Destin dans les nuits impaires des dix dernières. »"
+    }
+
+    fun seekLaylatRef(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "رواه البخاري"
+        AppLanguage.EN -> "Reported by al-Bukhari"
+        AppLanguage.FR -> "Rapporté par al-Bukhârî"
+    }
+
+    fun oddNightBadge(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ليلة وتر"
+        AppLanguage.EN -> "Odd night"
+        AppLanguage.FR -> "Nuit impaire"
+    }
+
+    fun nightLabel(lang: AppLanguage, night: Int): String = when (lang) {
+        AppLanguage.AR -> "الليلة $night"
+        AppLanguage.EN -> "Night $night"
+        AppLanguage.FR -> "Nuit $night"
+    }
+
+    fun vigilButton(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ساهد هذه الليلة"
+        AppLanguage.EN -> "Keep vigil tonight"
+        AppLanguage.FR -> "Veiller cette nuit"
+    }
+
+    fun vigilHint(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اسجد، ادعُ، اقرأ… وابقِ الهاتف صامتًا."
+        AppLanguage.EN -> "Prostrate, supplicate, read… and let the phone stay silent."
+        AppLanguage.FR -> "Prosterne-toi, invoque, lis… et laisse le téléphone se taire."
+    }
+
+    fun vigilExit(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إنهاء السَّهَر"
+        AppLanguage.EN -> "End the vigil"
+        AppLanguage.FR -> "Quitter la veille"
+    }
+
+    fun vigilDhikr(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "سُبْحَانَ اللَّهِ • الْحَمْدُ لِلَّهِ • اللَّهُ أَكْبَرُ"
+        AppLanguage.EN -> "سُبْحَانَ اللَّهِ • الْحَمْدُ لِلَّهِ • اللَّهُ أَكْبَرُ"
+        AppLanguage.FR -> "سُبْحَانَ اللَّهِ • الْحَمْدُ لِلَّهِ • اللَّهُ أَكْبَرُ"
+    }
+
+    fun inProgressBadge(lang: AppLanguage, night: Int): String = when (lang) {
+        AppLanguage.AR -> "جارية — الليلة $night"
+        AppLanguage.EN -> "Ongoing — night $night"
+        AppLanguage.FR -> "En cours — nuit $night"
     }
 }
 

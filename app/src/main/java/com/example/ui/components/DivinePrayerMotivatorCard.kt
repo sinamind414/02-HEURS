@@ -54,10 +54,17 @@ import com.example.data.local.DailyJournalEntity
 import com.example.data.localization.AppStrings
 import com.example.data.model.AppLanguage
 import com.example.data.model.PrayerCountdownState
+import com.example.data.model.PrayerCycleState
 import com.example.ui.MainViewModel
 import com.example.ui.theme.AmiriFontFamily
 import com.example.ui.theme.CelestialCyan
 import com.example.ui.theme.CinzelFontFamily
+import com.example.ui.theme.DawnCream900
+import com.example.ui.theme.DawnTextPrimary
+import com.example.ui.theme.DawnTextSecondary
+import com.example.ui.theme.DawnGoldPrimary
+import com.example.ui.theme.DawnCream800
+import com.example.ui.theme.DawnCream600
 import com.example.ui.theme.EmeraldHasanat
 import com.example.ui.theme.GoldBorder
 import com.example.ui.theme.GoldDark
@@ -88,6 +95,7 @@ fun DivinePrayerMotivatorCard(
     prayerState: PrayerCountdownState,
     todayJournal: DailyJournalEntity?,
     language: AppLanguage,
+    cycleState: PrayerCycleState = PrayerCycleState(),
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -156,7 +164,7 @@ fun DivinePrayerMotivatorCard(
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         Text(
-                            text = AppStrings.prayerMotivatorTitle(language),
+                            text = AppStrings.invitationTitle(language),
                             fontFamily = CinzelFontFamily,
                             fontWeight = FontWeight.Bold,
                             fontSize = 13.sp,
@@ -164,11 +172,35 @@ fun DivinePrayerMotivatorCard(
                             color = GoldLight
                         )
                         Text(
-                            text = AppStrings.prayerMotivatorSubtitle(language),
-                            fontSize = 11.5.sp,
+                            text = AppStrings.rendezVousLabel(language),
+                            fontFamily = AmiriFontFamily,
+                            fontSize = 12.sp,
                             color = TextSecondary
                         )
                     }
+                }
+            }
+
+            // La Fenêtre d'or — the last third of the night (ساعة الإجابة).
+            // A single quiet gold thread: no alarm, no badge count.
+            if (cycleState.inGoldenWindow) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(GoldPrimary.copy(alpha = 0.12f))
+                        .border(1.dp, GoldPrimary.copy(alpha = 0.45f), RoundedCornerShape(8.dp))
+                        .padding(horizontal = 10.dp, vertical = 6.dp)
+                        .testTag("golden_window_badge")
+                ) {
+                    Text(
+                        text = "✦ " + AppStrings.goldenWindowBadge(language),
+                        fontSize = 10.5.sp,
+                        color = TextGold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
 
@@ -353,6 +385,64 @@ fun DivinePrayerMotivatorCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            // ── LA QUESTION DU GOÛT (Dhawq) ──
+            // One quiet question, one tap. The answer is stored for today
+            // only and is never compared, scored or charted (Serment #2).
+            val currentTaste = todayJournal?.salahTaste ?: ""
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(
+                        if (isDayMode) DawnCream900 else Midnight800.copy(alpha = 0.55f)
+                    )
+                    .padding(horizontal = 12.dp, vertical = 10.dp)
+                    .testTag("taste_question_card")
+            ) {
+                Text(
+                    text = AppStrings.tasteQuestion(language),
+                    fontFamily = AmiriFontFamily,
+                    fontSize = 12.5.sp,
+                    color = if (isDayMode) DawnTextPrimary else TextPrimary
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    TasteChip(
+                        label = AppStrings.tasteDouce(language),
+                        isSelected = currentTaste == "douce",
+                        isDayMode = isDayMode,
+                        onClick = { viewModel.recordSalahTaste("douce") },
+                        modifier = Modifier.weight(1f)
+                    )
+                    TasteChip(
+                        label = AppStrings.tasteLourde(language),
+                        isSelected = currentTaste == "lourde",
+                        isDayMode = isDayMode,
+                        onClick = { viewModel.recordSalahTaste("lourde") },
+                        modifier = Modifier.weight(1f)
+                    )
+                    TasteChip(
+                        label = AppStrings.tasteAbsente(language),
+                        isSelected = currentTaste == "absente",
+                        isDayMode = isDayMode,
+                        onClick = { viewModel.recordSalahTaste("absente") },
+                        modifier = Modifier.weight(1f)
+                    )
+                    TasteChip(
+                        label = AppStrings.tasteGoutee(language),
+                        isSelected = currentTaste == "goutee",
+                        isDayMode = isDayMode,
+                        onClick = { viewModel.recordSalahTaste("goutee") },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
             // PRIORITY SHOCK TOGGLE: PHONE VS PRAYER
             Box(
                 modifier = Modifier
@@ -476,5 +566,56 @@ private fun PrayerCheckinChip(
                 maxLines = 1
             )
         }
+    }
+}
+
+/**
+ * A single answer chip for "Quel goût ?". Selecting an already-selected chip
+ * clears the answer — the question must always stay free to change (the
+ * taste is never locked in, never scored).
+ */
+@Composable
+private fun TasteChip(
+    label: String,
+    isSelected: Boolean,
+    isDayMode: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(50))
+            .background(
+                when {
+                    isSelected && isDayMode -> DawnGoldPrimary.copy(alpha = 0.18f)
+                    isSelected -> GoldPrimary.copy(alpha = 0.18f)
+                    isDayMode -> DawnCream800
+                    else -> Midnight800
+                }
+            )
+            .border(
+                width = 1.dp,
+                color = when {
+                    isSelected && isDayMode -> DawnGoldPrimary
+                    isSelected -> GoldPrimary
+                    isDayMode -> DawnCream600
+                    else -> Midnight700
+                },
+                shape = RoundedCornerShape(50)
+            )
+            .clickable { onClick() }
+            .padding(horizontal = 8.dp, vertical = 8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = label,
+            fontSize = 11.sp,
+            maxLines = 1,
+            color = when {
+                isSelected -> if (isDayMode) DawnGoldPrimary else TextGold
+                isDayMode -> DawnTextSecondary
+                else -> TextSecondary
+            }
+        )
     }
 }

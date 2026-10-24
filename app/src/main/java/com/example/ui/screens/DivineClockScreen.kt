@@ -58,6 +58,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -110,6 +111,7 @@ import com.example.ui.theme.TextGold
 import com.example.ui.theme.TextMuted
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
+import kotlinx.coroutines.delay
 import java.util.Calendar
 import java.util.Locale
 
@@ -128,6 +130,7 @@ fun DivineClockScreen(
     val showLanguageDialog by viewModel.showLanguageDialog.collectAsState()
     val isDayMode by viewModel.isDayMode.collectAsState()
     val todayJournal by viewModel.todayJournal.collectAsState()
+    val cycleState by viewModel.cycleState.collectAsState()
 
     val bgGradient = if (isDayMode) {
         Brush.verticalGradient(
@@ -329,7 +332,8 @@ fun DivineClockScreen(
                     viewModel = viewModel,
                     prayerState = prayerState,
                     todayJournal = todayJournal,
-                    language = currentLanguage
+                    language = currentLanguage,
+                    cycleState = cycleState
                 )
             }
 
@@ -337,7 +341,8 @@ fun DivineClockScreen(
             item {
                 TwoDivineHoursClockDial(
                     divineTime = divineTime,
-                    language = currentLanguage
+                    language = currentLanguage,
+                    lifeExpectancyYears = userProfile?.lifeExpectancyYears ?: 75
                 )
             }
 
@@ -697,6 +702,45 @@ fun DivineClockScreen(
                 triggerSpiritualHaptic(context)
                 viewModel.setLanguage(lang)
             }
+        )
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    //  LE CYCLE QUOTIDIEN (Dhawq)
+    // ─────────────────────────────────────────────────────────────────────
+
+    // LE VIDE — while the prayer window is open, the whole screen becomes a
+    // single word: "Va." The dismissal is per-prayer (remembered only for the
+    // current window): the next Rendez-Vous offers the silence again.
+    val videKey = cycleState.windowPrayerKey
+    var dismissedVideKey by remember { mutableStateOf<String?>(null) }
+    if (cycleState.inPrayerWindow && videKey.isNotEmpty() && dismissedVideKey != videKey) {
+        LeVideOverlay(
+            language = currentLanguage,
+            prayerFr = cycleState.windowPrayerNameFr,
+            prayerAr = cycleState.windowPrayerNameAr,
+            onLater = { dismissedVideKey = videKey }
+        )
+    }
+
+    // LA MINUTE PRÉCIEUSE — offered once, 10 to 45 minutes after the adhan
+    // (the assise that follows the salam). Sixty silent seconds, then the
+    // question of the taste.
+    var showPreciousMinute by remember { mutableStateOf(false) }
+    LaunchedEffect(cycleState.offerPreciousMinute, cycleState.preciousMinutePrayerKey) {
+        if (cycleState.offerPreciousMinute) {
+            showPreciousMinute = true
+            viewModel.markPreciousMinuteShown(cycleState.preciousMinutePrayerKey)
+        }
+    }
+    if (showPreciousMinute) {
+        PreciousMinuteDialog(
+            language = currentLanguage,
+            onSelectTaste = { taste ->
+                viewModel.recordSalahTaste(taste)
+                showPreciousMinute = false
+            },
+            onDismiss = { showPreciousMinute = false }
         )
     }
 }
@@ -1242,10 +1286,23 @@ fun ProfileEditDialog(
     val cal = remember {
         Calendar.getInstance().apply { timeInMillis = currentBirthMs }
     }
-    var selectedYear by remember { mutableIntStateOf(cal.get(Calendar.YEAR)) }
+    // The upper bound must follow the device clock: a fixed "2024" already
+    // prevented registering children born in 2025+ (audit P0-1).
+    val currentYear = remember { Calendar.getInstance().get(Calendar.YEAR) }
+    var selectedYear by remember {
+        mutableIntStateOf(cal.get(Calendar.YEAR).coerceIn(1940, currentYear))
+    }
     var selectedMonth by remember { mutableIntStateOf(cal.get(Calendar.MONTH) + 1) }
     var selectedDay by remember { mutableIntStateOf(cal.get(Calendar.DAY_OF_MONTH)) }
     var expectancy by remember { mutableFloatStateOf(currentExpectancy.toFloat()) }
+
+    // A day slider needs a valid upper bound for the chosen month, and the
+    // stored day must be re-clamped whenever year/month change — otherwise
+    // Calendar silently rolls "31 February" into March (audit P0-1).
+    val maxDayInMonth = daysInMonthOf(selectedYear, selectedMonth)
+    LaunchedEffect(selectedYear, selectedMonth) {
+        if (selectedDay > maxDayInMonth) selectedDay = maxDayInMonth
+    }
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -1286,7 +1343,8 @@ fun ProfileEditDialog(
                 Slider(
                     value = selectedYear.toFloat(),
                     onValueChange = { selectedYear = it.toInt() },
-                    valueRange = 1940f..2024f,
+                    valueRange = 1940f..currentYear.toFloat(),
+                    steps = (currentYear - 1940 - 1).coerceAtLeast(0),
                     colors = SliderDefaults.colors(
                         thumbColor = GoldPrimary,
                         activeTrackColor = GoldPrimary,
@@ -1305,6 +1363,24 @@ fun ProfileEditDialog(
                     onValueChange = { selectedMonth = it.toInt() },
                     valueRange = 1f..12f,
                     steps = 10,
+                    colors = SliderDefaults.colors(
+                        thumbColor = CelestialCyan,
+                        activeTrackColor = CelestialCyan,
+                        inactiveTrackColor = Midnight700
+                    )
+                )
+
+                Text(
+                    text = AppStrings.birthDayValueLabel(language, selectedDay),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = TextPrimary
+                )
+                Slider(
+                    value = selectedDay.toFloat(),
+                    onValueChange = { selectedDay = it.toInt() },
+                    valueRange = 1f..maxDayInMonth.toFloat(),
+                    steps = (maxDayInMonth - 2).coerceAtLeast(0),
                     colors = SliderDefaults.colors(
                         thumbColor = CelestialCyan,
                         activeTrackColor = CelestialCyan,
@@ -1348,7 +1424,10 @@ fun ProfileEditDialog(
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
                         onClick = {
-                            onSave(selectedYear, selectedMonth, selectedDay, expectancy.toInt())
+                            // Defensive clamp: never let an impossible date
+                            // (e.g. 31 February) reach Calendar.
+                            val safeDay = selectedDay.coerceIn(1, daysInMonthOf(selectedYear, selectedMonth))
+                            onSave(selectedYear, selectedMonth, safeDay, expectancy.toInt())
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = GoldPrimary,
@@ -1360,5 +1439,233 @@ fun ProfileEditDialog(
                 }
             }
         }
+    }
+}
+
+/**
+ * Number of days in the given (year, month) — Calendar-based so it stays
+ * correct on minSdk 24 (no java.time without desugaring). Used to bound the
+ * birth-day slider and to prevent Calendar's silent day-overflow rollover.
+ */
+private fun daysInMonthOf(year: Int, month: Int): Int {
+    val probe = Calendar.getInstance()
+    probe.set(Calendar.YEAR, year)
+    probe.set(Calendar.MONTH, month - 1)
+    probe.set(Calendar.DAY_OF_MONTH, 1)
+    return probe.getActualMaximum(Calendar.DAY_OF_MONTH)
+}
+
+/**
+ * LE VIDE — the anti-feature at the heart of Dhawq (Serment #4).
+ *
+ * While the real prayer window is open, opening the app shows one word on
+ * ink-black: "Va." No data, no clock, no cards. The app steps aside during
+ * the prayer and waits. A discreet "Later" lets the user back in without
+ * turning the silence into a prison.
+ */
+@Composable
+private fun LeVideOverlay(
+    language: AppLanguage,
+    prayerFr: String,
+    prayerAr: String,
+    onLater: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Midnight950)
+            .testTag("le_vide_overlay"),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = AppStrings.leVideWord(language),
+                fontFamily = AmiriFontFamily,
+                fontWeight = FontWeight.Bold,
+                fontSize = 64.sp,
+                color = GoldPrimary
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = AppStrings.leVideSubtitle(language, prayerFr, prayerAr),
+                fontSize = 13.sp,
+                color = TextSecondary,
+                textAlign = TextAlign.Center,
+                lineHeight = 19.sp,
+                modifier = Modifier.padding(horizontal = 44.dp)
+            )
+            Spacer(modifier = Modifier.height(44.dp))
+            TextButton(onClick = onLater) {
+                Text(
+                    text = AppStrings.leVideLater(language),
+                    fontSize = 12.sp,
+                    color = TextMuted
+                )
+            }
+        }
+    }
+}
+
+/**
+ * LA MINUTE PRÉCIEUSE — the assise that follows the salam (الجلوس الثمين).
+ *
+ * Sixty seconds, black and mute: no sound, no score, nothing to achieve.
+ * When the minute is over the question of the taste appears — one tap, and
+ * the dialog closes. Skipping is always allowed, quietly.
+ */
+@Composable
+private fun PreciousMinuteDialog(
+    language: AppLanguage,
+    onSelectTaste: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var secondsLeft by remember { mutableIntStateOf(60) }
+
+    LaunchedEffect(Unit) {
+        while (secondsLeft > 0) {
+            delay(1000)
+            secondsLeft--
+        }
+    }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(28.dp),
+            color = Midnight950,
+            border = androidx.compose.foundation.BorderStroke(1.dp, GoldBorder),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(28.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = AppStrings.preciousMinuteTitle(language),
+                    fontFamily = CinzelFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = GoldLight,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = AppStrings.preciousMinuteBody(language),
+                    fontFamily = AmiriFontFamily,
+                    fontSize = 13.sp,
+                    color = TextSecondary,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(26.dp))
+
+                if (secondsLeft > 0) {
+                    // The countdown: a number and a thin gold thread that
+                    // shortens. Deliberately no ring, no animation flourish.
+                    Text(
+                        text = "$secondsLeft",
+                        fontFamily = AmiriFontFamily,
+                        fontSize = 44.sp,
+                        color = GoldPrimary
+                    )
+                    Spacer(modifier = Modifier.height(18.dp))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(3.dp)
+                            .background(Midnight800)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(secondsLeft / 60f)
+                                .height(3.dp)
+                                .background(GoldPrimary)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(18.dp))
+                    TextButton(onClick = onDismiss) {
+                        Text(
+                            text = AppStrings.preciousMinuteSkip(language),
+                            fontSize = 11.sp,
+                            color = TextMuted
+                        )
+                    }
+                } else {
+                    // The minute is complete: "Amine." then the question.
+                    Text(
+                        text = AppStrings.preciousMinuteDone(language),
+                        fontFamily = AmiriFontFamily,
+                        fontSize = 26.sp,
+                        color = GoldPrimary
+                    )
+                    Spacer(modifier = Modifier.height(22.dp))
+                    Text(
+                        text = AppStrings.tasteQuestion(language),
+                        fontFamily = AmiriFontFamily,
+                        fontSize = 13.5.sp,
+                        color = TextPrimary,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        PreciousTasteOption(
+                            label = AppStrings.tasteDouce(language),
+                            onClick = { onSelectTaste("douce") },
+                            modifier = Modifier.weight(1f)
+                        )
+                        PreciousTasteOption(
+                            label = AppStrings.tasteLourde(language),
+                            onClick = { onSelectTaste("lourde") },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        PreciousTasteOption(
+                            label = AppStrings.tasteAbsente(language),
+                            onClick = { onSelectTaste("absente") },
+                            modifier = Modifier.weight(1f)
+                        )
+                        PreciousTasteOption(
+                            label = AppStrings.tasteGoutee(language),
+                            onClick = { onSelectTaste("goutee") },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** One of the four taste answers inside the Precious Minute dialog. */
+@Composable
+private fun PreciousTasteOption(
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(50))
+            .background(Midnight800)
+            .border(1.dp, GoldBorder, RoundedCornerShape(50))
+            .clickable { onClick() }
+            .padding(horizontal = 10.dp, vertical = 10.dp)
+            .testTag("precious_taste_option"),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            maxLines = 1,
+            color = TextSecondary
+        )
     }
 }

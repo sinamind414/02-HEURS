@@ -58,6 +58,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -337,7 +338,8 @@ fun DivineClockScreen(
             item {
                 TwoDivineHoursClockDial(
                     divineTime = divineTime,
-                    language = currentLanguage
+                    language = currentLanguage,
+                    lifeExpectancyYears = userProfile?.lifeExpectancyYears ?: 75
                 )
             }
 
@@ -1242,10 +1244,23 @@ fun ProfileEditDialog(
     val cal = remember {
         Calendar.getInstance().apply { timeInMillis = currentBirthMs }
     }
-    var selectedYear by remember { mutableIntStateOf(cal.get(Calendar.YEAR)) }
+    // The upper bound must follow the device clock: a fixed "2024" already
+    // prevented registering children born in 2025+ (audit P0-1).
+    val currentYear = remember { Calendar.getInstance().get(Calendar.YEAR) }
+    var selectedYear by remember {
+        mutableIntStateOf(cal.get(Calendar.YEAR).coerceIn(1940, currentYear))
+    }
     var selectedMonth by remember { mutableIntStateOf(cal.get(Calendar.MONTH) + 1) }
     var selectedDay by remember { mutableIntStateOf(cal.get(Calendar.DAY_OF_MONTH)) }
     var expectancy by remember { mutableFloatStateOf(currentExpectancy.toFloat()) }
+
+    // A day slider needs a valid upper bound for the chosen month, and the
+    // stored day must be re-clamped whenever year/month change — otherwise
+    // Calendar silently rolls "31 February" into March (audit P0-1).
+    val maxDayInMonth = daysInMonthOf(selectedYear, selectedMonth)
+    LaunchedEffect(selectedYear, selectedMonth) {
+        if (selectedDay > maxDayInMonth) selectedDay = maxDayInMonth
+    }
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -1286,7 +1301,8 @@ fun ProfileEditDialog(
                 Slider(
                     value = selectedYear.toFloat(),
                     onValueChange = { selectedYear = it.toInt() },
-                    valueRange = 1940f..2024f,
+                    valueRange = 1940f..currentYear.toFloat(),
+                    steps = (currentYear - 1940 - 1).coerceAtLeast(0),
                     colors = SliderDefaults.colors(
                         thumbColor = GoldPrimary,
                         activeTrackColor = GoldPrimary,
@@ -1305,6 +1321,24 @@ fun ProfileEditDialog(
                     onValueChange = { selectedMonth = it.toInt() },
                     valueRange = 1f..12f,
                     steps = 10,
+                    colors = SliderDefaults.colors(
+                        thumbColor = CelestialCyan,
+                        activeTrackColor = CelestialCyan,
+                        inactiveTrackColor = Midnight700
+                    )
+                )
+
+                Text(
+                    text = AppStrings.birthDayValueLabel(language, selectedDay),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = TextPrimary
+                )
+                Slider(
+                    value = selectedDay.toFloat(),
+                    onValueChange = { selectedDay = it.toInt() },
+                    valueRange = 1f..maxDayInMonth.toFloat(),
+                    steps = (maxDayInMonth - 2).coerceAtLeast(0),
                     colors = SliderDefaults.colors(
                         thumbColor = CelestialCyan,
                         activeTrackColor = CelestialCyan,
@@ -1348,7 +1382,10 @@ fun ProfileEditDialog(
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
                         onClick = {
-                            onSave(selectedYear, selectedMonth, selectedDay, expectancy.toInt())
+                            // Defensive clamp: never let an impossible date
+                            // (e.g. 31 February) reach Calendar.
+                            val safeDay = selectedDay.coerceIn(1, daysInMonthOf(selectedYear, selectedMonth))
+                            onSave(selectedYear, selectedMonth, safeDay, expectancy.toInt())
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = GoldPrimary,
@@ -1361,4 +1398,17 @@ fun ProfileEditDialog(
             }
         }
     }
+}
+
+/**
+ * Number of days in the given (year, month) — Calendar-based so it stays
+ * correct on minSdk 24 (no java.time without desugaring). Used to bound the
+ * birth-day slider and to prevent Calendar's silent day-overflow rollover.
+ */
+private fun daysInMonthOf(year: Int, month: Int): Int {
+    val probe = Calendar.getInstance()
+    probe.set(Calendar.YEAR, year)
+    probe.set(Calendar.MONTH, month - 1)
+    probe.set(Calendar.DAY_OF_MONTH, 1)
+    return probe.getActualMaximum(Calendar.DAY_OF_MONTH)
 }

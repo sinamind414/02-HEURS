@@ -226,10 +226,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 delay(1000)
                 val current = _prayerState.value
                 if (!current.isLoading) {
-                    _prayerState.value = prayerRepository.recalculateCurrentCountdown(
-                        city = current.cityName,
-                        country = current.countryName
-                    )
+                    // Past local midnight in the selected city the cached
+                    // timings belong to yesterday: refresh them instead of
+                    // counting down against stale values (audit P1-1).
+                    if (prayerRepository.isCacheStale()) {
+                        loadPrayerTimes(current.cityName, current.countryName)
+                    } else {
+                        _prayerState.value = prayerRepository.recalculateCurrentCountdown(
+                            city = current.cityName,
+                            country = current.countryName
+                        )
+                    }
                 }
             }
         }
@@ -502,20 +509,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun setReminderFajr(enabled: Boolean) {
-        viewModelScope.launch { repository.updateNotificationPreferences(reminderFajr = enabled) }
-    }
-
-    fun setReminderDhuhr(enabled: Boolean) {
-        viewModelScope.launch { repository.updateNotificationPreferences(reminderDhuhr = enabled) }
-    }
-
     fun setReminderDaily(enabled: Boolean) {
         viewModelScope.launch { repository.updateNotificationPreferences(reminderSocialScroll = enabled) }
-    }
-
-    fun setReminderFriday(enabled: Boolean) {
-        viewModelScope.launch { repository.updateNotificationPreferences(reminderFriday = enabled) }
     }
 
     /**

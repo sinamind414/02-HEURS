@@ -457,6 +457,24 @@ object AppStrings {
         AppLanguage.FR -> "Mois : $month"
     }
 
+    fun birthDayValueLabel(lang: AppLanguage, day: Int): String = when (lang) {
+        AppLanguage.AR -> "اليوم: $day"
+        AppLanguage.EN -> "Day: $day"
+        AppLanguage.FR -> "Jour : $day"
+    }
+
+    fun dialMilestoneBirth(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الولادة"
+        AppLanguage.EN -> "Birth"
+        AppLanguage.FR -> "Naissance"
+    }
+
+    fun dialMilestoneYears(lang: AppLanguage, years: Int): String = when (lang) {
+        AppLanguage.AR -> "≈$years سنة"
+        AppLanguage.EN -> "~$years yrs"
+        AppLanguage.FR -> "~$years ans"
+    }
+
     fun lifeExpectancyLabel(lang: AppLanguage): String = when (lang) {
         AppLanguage.AR -> "العمر المقدر للحساب :"
         AppLanguage.EN -> "Estimated life expectancy:"

@@ -12,7 +12,10 @@ interface AladhanApiService {
     suspend fun getTimingsByCity(
         @Query("city") city: String,
         @Query("country") country: String,
-        @Query("method") method: Int = 2, // 2 = Islamic Society of North America
+        // 3 = Muslim World League (18°/17°) — the convention actually used
+        // across the Maghreb; the previous default (2 = ISNA, 15°/15°) is
+        // calibrated for North America and shifts Fajr/Isha by 10-20 min.
+        @Query("method") method: Int = 3,
         @Query("date") date: String? = null
     ): AladhanResponse
 }

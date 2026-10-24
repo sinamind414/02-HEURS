@@ -51,6 +51,7 @@ import com.example.ui.theme.GoldDark
 import com.example.ui.theme.GoldLight
 import com.example.ui.theme.GoldPrimary
 import com.example.ui.theme.LocalSaatanThemeIsDay
+import com.example.ui.theme.Midnight600
 import com.example.ui.theme.Midnight700
 import com.example.ui.theme.Midnight800
 import com.example.ui.theme.Midnight900
@@ -290,11 +291,11 @@ fun DivineTimeBreakdownBarChart(
                 var currentX = 0f
 
                 // Sleep
-                drawRect(Color(0xFF3A506B), topLeft = Offset(currentX, 0f), size = Size(wSleep, h))
+                drawRect(Midnight600, topLeft = Offset(currentX, 0f), size = Size(wSleep, h))
                 currentX += wSleep
 
                 // Work
-                drawRect(Color(0xFF5BC0BE), topLeft = Offset(currentX, 0f), size = Size(wWork, h))
+                drawRect(EmeraldHasanat, topLeft = Offset(currentX, 0f), size = Size(wWork, h))
                 currentX += wWork
 
                 // Screens
@@ -302,7 +303,7 @@ fun DivineTimeBreakdownBarChart(
                 currentX += wScreens
 
                 // Rest
-                drawRect(Color(0xFF6C757D), topLeft = Offset(currentX, 0f), size = Size(wRest, h))
+                drawRect(DawnTextMuted, topLeft = Offset(currentX, 0f), size = Size(wRest, h))
                 currentX += wRest
 
                 // Prayers (Highlighted Glowing Emerald/Gold)
@@ -327,7 +328,7 @@ fun DivineTimeBreakdownBarChart(
                     .padding(10.dp)
             ) {
                 AllocationRowItem(
-                    color = Color(0xFF3A506B),
+                    color = Midnight600,
                     label = AppStrings.segmentSleep(language),
                     divineTime = AppStrings.divineMinutesShort(
                         language,
@@ -337,7 +338,7 @@ fun DivineTimeBreakdownBarChart(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 AllocationRowItem(
-                    color = Color(0xFF5BC0BE),
+                    color = EmeraldHasanat,
                     label = AppStrings.segmentWork(language),
                     divineTime = AppStrings.divineMinutesShort(
                         language,
@@ -357,7 +358,7 @@ fun DivineTimeBreakdownBarChart(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 AllocationRowItem(
-                    color = Color(0xFF6C757D),
+                    color = DawnTextMuted,
                     label = AppStrings.segmentRest(language),
                     divineTime = AppStrings.divineMinutesShort(
                         language,

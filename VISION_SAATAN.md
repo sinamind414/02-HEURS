@@ -1,6 +1,8 @@
 # SA'ATAN — ساعتان
 ## La vision : l'application qui fait sentir le temps de Dieu
 
+> **⚠️ Document historique (v1).** Le concept a évolué : l'application devient **Dhawq — ذوق** (« la prière goûtée »), avec Sa'atan/les 2 Heures intégrés comme moteur. **Voir `VISION_DHAWQ.md`** — la vision courante. Ce document reste la référence pour l'Horloge Silencieuse, le Puits, le Miroir et le 27e Nuit, absorbés dans Dhawq.
+
 *Document de vision produit — 24 octobre 2026*
 
 ---

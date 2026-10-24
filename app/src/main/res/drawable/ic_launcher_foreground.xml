@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Dhawq logo (vision/logo-dhawq.jpg, 912x1172) drawn at true aspect:
+         66dp height -> 51.3dp width. Centered inside the 108dp adaptive canvas,
+         sized to stay within the 72dp safe circle of launcher masks. -->
     <item
-        android:width="66dp"
+        android:width="51.3dp"
         android:height="66dp"
         android:drawable="@drawable/saatan_icon"
         android:gravity="center" />

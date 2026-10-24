@@ -1,13 +1,13 @@
 # Scénarios voix — Dhawq · Saison 1 : Le Voyage de la Prière
-## Scripts d'enregistrement des 10 stations (arabe + anglais)
+## Scripts d'enregistrement des 10 stations (arabe + anglais + français)
 
 *24 octobre 2026 — document de production*
 
-> **✅ ÉTAT : prototype vocal bilingue COMPLET.**
+> **✅ ÉTAT : prototype vocal TRILINGUE COMPLET.**
 > - **Arabe : 10/10** pistes générées (TTS, voix masculine choisie) — `res/raw/dhawq_station_01..10.mp3`
 > - **Anglais : 10/10** pistes générées (TTS, voix masculine choisie) — `res/raw/dhawq_station_01..10_en.mp3`
+> - **Français : 10/10** pistes générées (TTS, voix féminine choisie) — `res/raw/dhawq_station_01..10_fr.mp3`
 > - Ces pistes TTS sont des **prototypes fonctionnels** : elles rendent le Voyage jouable dès maintenant. L'enregistrement humain définitif (récitant) remplacera ces fichiers aux mêmes noms, sans toucher au code.
-> - **Français : scripts à rédiger + audition voix** (l'app démarre en FR par défaut — c'est la priorité suivante).
 
 ---
 
@@ -223,7 +223,51 @@
 
 ---
 
-## 4. Sources classiques utilisées (pour le comité théologique)
+## 4. Les scripts — FRANÇAIS (version française)
+
+### Station 1 — L'Eau
+
+> Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux. Première station : l'Eau. Avant de te tenir devant le Roi, tu fais tes ablutions. Demande-toi : pourquoi l'eau ? Allah dit : « Certes, Allah aime ceux qui reviennent à Lui, et Il aime ceux qui se purifient. » Le wudū' n'est pas une toilette du corps seul : c'est une préparation du cœur. À chaque goutte, lave le poids de ce monde loin de ton cœur. Quand tu laves tes mains, demande : vers quoi mes mains se sont-elles tendues aujourd'hui ? Lave-les avec l'intention du repentir. Quand tu laves ton visage, souviens-toi de ces yeux qui se tiendront un jour devant Lui. Quand tu essuies ta tête, soumets-Lui ce dont tu fus fier. Quand tu laves tes pieds, demande : où marcherai-je après cette prière ? Purifie ta destination. Le Prophète ﷺ a dit : « Quand le serviteur croyant se lave le visage, chaque faute regardée par ses yeux s'en va avec l'eau, jusqu'à ce qu'il en ressorte pur de ses fautes. » Rapporté par Muslim. Maintenant, lève-toi vers ton wudū' avec quiétude, et dis : Ô Allah, fais-moi parmi ceux qui reviennent à Toi, et parmi ceux qui se purifient. Puis marche vers ton rendez-vous.
+
+### Station 2 — La Marche
+
+> Deuxième station : la Marche. Tu vas à un rendez-vous. Pas à une tâche — à une invitation du Roi des rois. Allah dit : « Ô vous qui croyez, quand on appelle à la prière… hâtez-vous vers le rappel d'Allah. » Chaque pas est compté. Le Prophète ﷺ a dit : « Quiconque fait ses ablutions parfaitement, puis sort vers la mosquée, sans être poussé que par la prière, ne fait pas un pas sans qu'un degré ne lui soit élevé et une faute effacée. » Rapporté par Muslim. Et quand tu entends l'iqāma, marche avec quiétude : « Quand vous entendez l'iqāma, marchez vers la prière avec calme et dignité, et rejoignez ce que vous attrapez. » En chemin, ne te retourne pas vers le monde. Tu vas vers Celui qui a dit : « Je suis selon l'attente que Mon serviteur a de Moi, et Je suis avec lui quand il M'évoque. » Que chaque pas dise : me voici, Ô Allah, me voici. Maintenant, élève ton cœur avant tes pieds — et marche.
+
+### Station 3 — L'Appel
+
+> Troisième station : l'Appel. « Ḥayya 'ala ṣ-ṣalāh, ḥayya 'ala al-falāh » — viens à la prière, viens à la réussite. Ce n'est pas une chanson dans la rue : c'est une invitation personnelle du Seigneur des cieux. Si une lettre du roi de cette terre t'invitait à son palais, le monde entier brillerait de joie. Alors qu'en est-il d'une invitation du Créateur des rois — cinq fois, chaque jour ? Le Prophète ﷺ a dit : « Si les gens savaient ce qu'il y a dans l'appel à la prière et dans le premier rang, et ne trouvaient d'autre moyen que le tirage au sort, ils tireraient au sort. » Rapporté par al-Bukhârî et Muslim. Après l'adhān, réponds à l'invitation : « Ô Allah, Seigneur de cet appel parfait et de la prière établie, accorde à Muḥammad l'intercession et l'excellence, et élève-le à la position louable que Tu lui as promise. » Le Prophète ﷺ a dit : « Quiconque dit cela en entendant l'appel, mon intercession lui sera accordée au Jour de la Résurrection. » Rapporté par al-Bukhârî. Maintenant, réponds à l'Appel. Il t'appelle par ton nom : viens à la prière.
+
+### Station 4 — La Porte
+
+> Quatrième station : la Porte. « Allāhu akbar. » Deux mots, légers sur la langue, lourds dans la balance. Quand tu les dis et que tu élèves tes mains, tu jettes le monde entier derrière ton dos : ton téléphone, ton travail, tes soucis, tes petits rêves. Rien n'est plus grand qu'Allah. Ibn al-Qayyim a dit : le sens d'Allāhu akbar est que rien n'est plus grand que Lui, et rien ne Lui ressemble. Quand tu le dis, crois-le avec ton cœur — sinon c'est une parole sans âme. Le Prophète ﷺ a dit : « Il arrive qu'un homme quitte la prière sans qu'il lui en soit écrit que la moitié, ou le tiers, ou le quart. » Rapporté par Ahmad. Qu'est-ce qui manquait ? La présence. Tu es à la porte maintenant. Ôter ses sandales est le symbole d'ôter le monde. Respire profondément. Dis : Allāhu akbar… et entre.
+
+### Station 5 — L'Ouverture
+
+> Cinquième station : l'Ouverture. Nul n'entre chez un roi sans permission, et nul ne commence à lui parler sans louange. Tu as dit le takbīr, tu es entré — ne te précipite pas dans la récitation. Tiens-toi un instant, et loue-Le comme le Messager d'Allah ﷺ nous l'a enseigné. Il disait : « Subḥānaka Allāhumma wa biḥamdika, wa tabāraka smuka, wa ta'ālā jadduka, wa lā ilāha ghayruk. » Rapporté par Muslim. Et il disait : « Ô Allah, éloigne de moi mes fautes comme Tu as éloigné l'Orient de l'Occident. » Rapporté par al-Bukhârî. Ces paroles ne sont pas un formalisme. Elles rappellent à ton cœur : devant qui es-tu debout ? En quelle hospitalité es-tu ? Imagine que tu saches qu'Allah te regarde en cet instant. Il te regarde. Alors allonge la louange — tu es debout devant Lui, Il t'entend, plus proche de toi que ta veine jugulaire. Dis-le maintenant avec ta langue, et allonge la station avec ton cœur.
+
+### Station 6 — Le Dialogue
+
+> Sixième station : le Dialogue. C'est le moment le plus étonnant de toute ta prière. Le Messager d'Allah ﷺ a dit, rapportant de son Seigneur : « Allah a dit : J'ai partagé la prière entre Moi et Mon serviteur, en deux moitiés. Quand il dit « al-ḥamdu lillāhi rabbi l-'ālamīn », Allah dit : Mon serviteur M'a loué. Quand il dit « ar-raḥmāni r-raḥīm », Allah dit : Mon serviteur M'a exalté. Quand il dit « māliki yawmi d-dīn », Allah dit : Mon serviteur M'a glorifié. Quand il dit « iyyāka na'budu wa iyyāka nasta'īn », Allah dit : ceci est entre Moi et Mon serviteur. Et quand il dit « ihdinā ṣ-ṣirāṭa l-mustaqīm », Allah dit : ceci est pour Mon serviteur, et Mon serviteur aura ce qu'il a demandé. » Rapporté par Muslim. Al-Fātiḥa n'est pas une récitation à précipiter. C'est un dialogue : tu parles, et Il répond. Pause après chaque verset, et imagine la réponse de ton Seigneur. Celui qui récite Al-Fātiḥa sans vivre le dialogue a posté une lettre et est parti avant la réponse. Maintenant, récite-la comme si tu L'entendais.
+
+### Station 7 — L'Inclinaison
+
+> Septième station : l'Inclinaison. Maintenant le corps se plie. Mais la vraie inclinaison se joue dans le cœur. Quand tu dis « Subḥāna Rabbiya l-'Aẓīm » — Gloire à mon Seigneur le Magnifique — tu témoignes que toute grandeur en ce monde, tout royaume, toute fortune, toute beauté, vient de Sa grandeur, et fond devant elle. Allah dit : « Glorifie le nom de ton Seigneur, le Très Grand. » Et dans le récit de Muslim : « Quant à l'inclinaison, magnifiez-y le Seigneur. » Le Prophète ﷺ disait dans son inclinaison : « Ô Allah, c'est pour Toi que je me suis incliné, en Toi j'ai cru, et à Toi je me suis soumis. Mon ouïe, ma vue, ma pensée et mes os s'humilient devant Toi. » Rapporté par Muslim. Quand tu t'inclines ce soir, dis-le lentement, trois fois — puis ajoute : « c'est pour Toi que je me suis incliné »… et que ton cœur témoigne que toute grandeur Lui appartient. Incline-toi maintenant, et allonge.
+
+### Station 8 — La Proximité
+
+> Huitième station : la Proximité. Le Messager d'Allah ﷺ a dit : « Le serviteur n'est jamais aussi proche de son Seigneur que lorsqu'il est en prosternation : multipliez donc les invocations. » Rapporté par Muslim. Le moment le plus proche de toute ta vie, c'est celui-ci : ton front au sol, et ton Seigneur qui t'écoute. Pas de secrétaire, pas de rendez-vous, pas d'intermédiaire. Toi… et Lui. Dans ta prosternation, parle-Lui avec tes mots. Tu n'as pas besoin d'éloquence. Ta blessure, ton rêve, ta faute, ta mère malade, ton cœur endurci : dépose tout là. Le Prophète ﷺ disait dans sa prosternation : « Ô Allah, pardonne-moi toute ma faute, la minime et l'énorme, la première et la dernière, celle qui est secrète et celle qui est publique. » Rapporté par Muslim. Il se prosternait si longtemps que 'Ā'isha pensa qu'il était arrivé quelque chose. Ce soir, réserve-Lui une prosternation. Tes yeux ont-ils versé une larme là-bas, un jour ? C'est une larme que les anges eux-mêmes constatent. Prosterne-toi maintenant, et invoque — car en cet instant, Il est plus proche de toi que tout.
+
+### Station 9 — Le Salut
+
+> Neuvième station : le Salut. Maintenant tu t'assieds, et tu attestes. Ibn Mas'ūd, qu'Allah l'agrée, a dit : le Messager d'Allah ﷺ m'a enseigné le tashahhud comme il m'enseignait l'écriture : « At-taḥiyyātu lillāh, wa ṣ-ṣalawātu wa ṭ-ṭayyibāt. As-salāmu 'alayka ayyuha n-nabiyyu wa raḥmatullāhi wa barakātuh. » Rapporté par al-Bukhârî. Imagine : tu adresses la paix au Prophète ﷺ — et il te répond, comme il nous l'a appris : « Nul ne prie sur moi sans qu'Allah ne me rende mon âme afin que je lui rende son salut. » Puis la prière abrahamique : « Ô Allah, prie sur Muḥammad et sur la famille de Muḥammad, comme Tu as prié sur Ibrāhīm et sur la famille d'Ibrāhīm. » Quiconque prie une fois sur moi, Allah prie dix fois sur lui. Et à la toute fin, tu tournes à droite et à gauche : saluant les anges chargés de toi — les scribes, présents, écrivant. Assieds-toi comme on s'assied pour les adieux d'un bien-aimé… et allonge les paroles avant l'adieu.
+
+### Station 10 — L'Assise Précieuse
+
+> Dixième station : l'Assise Précieuse. Ta prière est terminée — et ton trésor n'a pas commencé. Ne te jettes pas sur ton téléphone dès le salām. Reste assis. Quand le Prophète ﷺ achevait sa prière, il demandait pardon trois fois, puis disait : « Ô Allah, Toi la Paix, et de Toi vient la paix. Béni sois-Tu, Seigneur de Majesté et de Noblesse. » Rapporté par Muslim. Puis dis : « Nulle divinité qu'Allah, seul, sans associé. À Lui la royauté, à Lui la louange, et Il est capable de toute chose. » Ces quelques minutes sont l'essence de la prière. Qui t'a donné d'en goûter la douceur ? Lui. Alors demande-Lui de te faire goûter la douceur de la proximité avec Lui. Puis retourne à ton monde, portant une heure de quiétude. Dans quelques heures, tu reviendras à un nouveau rendez-vous : Il t'appelle encore. Nous nous retrouvons à la prochaine station. Et maintenant… va, et prie.
+
+---
+
+## 5. Sources classiques utilisées (pour le comité théologique)
 
 | Station | Source |
 |:---:|---|

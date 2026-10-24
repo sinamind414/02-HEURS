@@ -3,6 +3,7 @@ package com.example.data.repository
 import com.example.data.model.PrayerCountdownState
 import com.example.data.model.PrayerCycleState
 import com.example.data.model.PrayerTimeItem
+import com.example.data.model.RamadanNightState
 import com.example.data.remote.AladhanClient
 import com.example.data.remote.AladhanTimings
 import kotlinx.coroutines.Dispatchers
@@ -119,6 +120,30 @@ class PrayerTimesRepository {
 
     /** True when the cached timings are the built-in offline fallback. */
     fun isUsingFallback(): Boolean = usingFallback
+
+    /**
+     * Ramadan season state parsed from the cached Hijri date string
+     * (formatted as "21 Ramadan 1447 H" by [formatHijri]). Month matching is
+     * tolerant of transliteration variants ("Ramadan", "Ramaḍān", رمضان).
+     */
+    fun ramadanNightState(): RamadanNightState {
+        val hijri = cachedHijriStr.trim()
+        if (hijri.isEmpty()) return RamadanNightState()
+
+        val day = hijri.split(" ").firstOrNull()?.toIntOrNull() ?: 0
+        val year = hijri.split(" ").lastOrNull { it.toIntOrNull() != null }?.toIntOrNull() ?: 0
+        val isRamadan = hijri.contains("ramad", ignoreCase = true) || hijri.contains("رمضان")
+        val isLastTen = isRamadan && day in 21..30
+
+        return RamadanNightState(
+            isRamadan = isRamadan,
+            hijriDay = day,
+            hijriYear = year,
+            isLastTenNights = isLastTen,
+            lastTenNightNumber = if (isLastTen) day else 0,
+            isOddNight = isLastTen && day % 2 == 1
+        )
+    }
 
     /**
      * Computes the "Cycle Quotidien" state used by the Dhawq experience.

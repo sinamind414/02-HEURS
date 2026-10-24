@@ -55,6 +55,7 @@ import com.example.ui.screens.ChallengesScreen
 import com.example.ui.screens.DivineClockScreen
 import com.example.ui.screens.DivineJournalScreen
 import com.example.ui.screens.JourneyScreen
+import com.example.ui.screens.LastNightsScreen
 import com.example.ui.screens.LifeJourneyVisualizerScreen
 import com.example.ui.screens.SettingsVersesScreen
 import com.example.ui.screens.TemporalConverterScreen
@@ -222,6 +223,7 @@ fun SaatanAppContent(viewModel: MainViewModel) {
                     when (screen) {
                         SaatanScreen.DIVINE_CLOCK -> DivineClockScreen(viewModel)
                         SaatanScreen.JOURNEY -> JourneyScreen(viewModel)
+                        SaatanScreen.LAST_NIGHTS -> LastNightsScreen(viewModel)
                         SaatanScreen.CONVERTER -> TemporalConverterScreen(viewModel)
                         SaatanScreen.JOURNAL -> DivineJournalScreen(viewModel)
                         SaatanScreen.IMMERSIVE_LIFE -> LifeJourneyVisualizerScreen(viewModel)

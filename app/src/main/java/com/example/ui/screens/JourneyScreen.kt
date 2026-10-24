@@ -45,6 +45,7 @@ import com.example.data.localization.AppStrings
 import com.example.data.model.AppLanguage
 import com.example.data.model.JourneyStations
 import com.example.ui.MainViewModel
+import com.example.ui.SaatanScreen
 import com.example.ui.components.CelestialCard
 import com.example.ui.theme.AmiriFontFamily
 import com.example.ui.theme.CinzelFontFamily
@@ -80,6 +81,7 @@ fun JourneyScreen(
     val language by viewModel.appLanguage.collectAsState()
     val isDayMode = LocalSaatanThemeIsDay.current
     val context = LocalContext.current
+    val ramadanState by viewModel.ramadanState.collectAsState()
 
     val stations = JourneyStations.ALL
     val stationPlayer = remember { StationPlayer() }
@@ -134,6 +136,16 @@ fun JourneyScreen(
                         color = if (isDayMode) DawnTextSecondary else TextSecondary
                     )
                 }
+            }
+
+            // Ramadan season card — the entry point to the Last Nights.
+            item {
+                LastNightsSeasonCard(
+                    language = language,
+                    ramadanState = ramadanState,
+                    isDayMode = isDayMode,
+                    onOpen = { viewModel.navigateTo(SaatanScreen.LAST_NIGHTS) }
+                )
             }
 
             // The ten stations

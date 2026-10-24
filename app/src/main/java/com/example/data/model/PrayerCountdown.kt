@@ -53,3 +53,21 @@ data class PrayerCycleState(
     /** True during the last third of the night (Maghrib → Fajr span). */
     val inGoldenWindow: Boolean = false
 )
+
+/**
+ * Ramadan state derived from the cached Hijri date (Aladhan): powers the
+ * "Dernières Nuits" season — the annual climax of Dhawq, when the app
+ * surfaces the bridge between Laylat al-Qadr (1000 months ≈ 83 years and
+ * 4 months) and the "two hours" concept.
+ */
+data class RamadanNightState(
+    val isRamadan: Boolean = false,
+    val hijriDay: Int = 0,
+    val hijriYear: Int = 0,
+    /** True from the 21st night (inclusive) to the 30th. */
+    val isLastTenNights: Boolean = false,
+    /** Night number within the last ten (21..30), 0 outside. */
+    val lastTenNightNumber: Int = 0,
+    /** True on 21, 23, 25, 27, 29 — where Laylat al-Qadr is to be sought. */
+    val isOddNight: Boolean = false
+)

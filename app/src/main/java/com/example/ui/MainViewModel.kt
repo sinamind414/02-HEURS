@@ -14,6 +14,7 @@ import com.example.data.model.DivineTimeInfo
 import com.example.data.model.LifeMilestone
 import com.example.data.model.PrayerCountdownState
 import com.example.data.model.PrayerCycleState
+import com.example.data.model.RamadanNightState
 import com.example.data.notification.DivineNotificationHelper
 import com.example.data.repository.PrayerTimesRepository
 import com.example.data.repository.SaatanRepository
@@ -32,6 +33,7 @@ import java.util.Calendar
 enum class SaatanScreen {
     DIVINE_CLOCK,
     JOURNEY,
+    LAST_NIGHTS,
     CONVERTER,
     JOURNAL,
     IMMERSIVE_LIFE,
@@ -140,6 +142,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * (Serment #2 — no streaks, no history compared).
      */
     private val preciousMinuteShown = mutableSetOf<String>()
+
+    // ── Les Dernières Nuits (Ramadan season) ──
+    // Derived from the cached Hijri date; powers the annual climax screen.
+    private val _ramadanState = MutableStateFlow(RamadanNightState())
+    val ramadanState: StateFlow<RamadanNightState> = _ramadanState.asStateFlow()
 
     private val _showCityDialog = MutableStateFlow(false)
     val showCityDialog: StateFlow<Boolean> = _showCityDialog.asStateFlow()
@@ -262,6 +269,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     } else {
                         cycle
                     }
+                    // Les Dernières Nuits: Hijri-based Ramadan season state.
+                    _ramadanState.value = prayerRepository.ramadanNightState()
                 }
             }
         }

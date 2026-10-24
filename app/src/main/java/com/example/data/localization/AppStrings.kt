@@ -2517,5 +2517,111 @@ object AppStrings {
         AppLanguage.EN -> "Source"
         AppLanguage.FR -> "Source"
     }
+
+    // ─────────────────────────────────────────────────────────────
+    //  LES DERNIÈRES NUITS (Ramadan — le climax annuel)
+    // ─────────────────────────────────────────────────────────────
+
+    fun lastNightsTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الليالي العشر الأخيرة"
+        AppLanguage.EN -> "The Last Ten Nights"
+        AppLanguage.FR -> "Les Dix Dernières Nuits"
+    }
+
+    fun lastNightsSeasonCardTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "موسم رمضان"
+        AppLanguage.EN -> "Ramadan Season"
+        AppLanguage.FR -> "Saison Ramadan"
+    }
+
+    fun lastNightsSeasonCardBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "التمس ليلة القدر في العشر الأواخر — ليلة خير من ألف شهر."
+        AppLanguage.EN -> "Seek the Night of Decree in the last ten nights — a night better than a thousand months."
+        AppLanguage.FR -> "Cherche la Nuit du Destin dans les dix dernières nuits — une nuit meilleure que mille mois."
+    }
+
+    fun lastNightsOpen(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "افتح الموسم"
+        AppLanguage.EN -> "Open the season"
+        AppLanguage.FR -> "Ouvrir la saison"
+    }
+
+    fun qadrVerseQuote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "﴿لَيْلَةُ الْقَدْرِ خَيْرٌ مِنْ أَلْفِ شَهْرٍ﴾"
+        AppLanguage.EN -> "\"The Night of Decree is better than a thousand months.\""
+        AppLanguage.FR -> "« La Nuit du Destin est meilleure que mille mois. »"
+    }
+
+    fun qadrVerseRef(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "سورة القدر 97: 3"
+        AppLanguage.EN -> "Quran 97:3"
+        AppLanguage.FR -> "Coran 97:3"
+    }
+
+    fun lastNightsBridgeTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ليلة واحدة = حياتك كلها"
+        AppLanguage.EN -> "One night = your whole life"
+        AppLanguage.FR -> "Une nuit = ta vie entière"
+    }
+
+    fun lastNightsBridgeBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ألف شهر ≈ 83 سنة و4 أشهر — وهي مدة حياة كاملة بمقياس الساعتين عند الله. ليلة واحدة صادقة قد تزن أكثر من فيلم حياتك بأكمله."
+        AppLanguage.EN -> "A thousand months ≈ 83 years and 4 months — an entire life on the scale of the two hours with God. One sincere night can outweigh your whole film."
+        AppLanguage.FR -> "Mille mois ≈ 83 ans et 4 mois — une vie entière à l'échelle des deux heures auprès de Dieu. Une seule nuit sincère peut peser plus que tout ton film."
+    }
+
+    fun seekLaylatHadith(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "«التمسوا ليلة القدر في الوتر من العشر الأواخر»"
+        AppLanguage.EN -> "\"Seek the Night of Decree in the odd nights of the last ten.\""
+        AppLanguage.FR -> "« Cherchez la Nuit du Destin dans les nuits impaires des dix dernières. »"
+    }
+
+    fun seekLaylatRef(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "رواه البخاري"
+        AppLanguage.EN -> "Reported by al-Bukhari"
+        AppLanguage.FR -> "Rapporté par al-Bukhârî"
+    }
+
+    fun oddNightBadge(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ليلة وتر"
+        AppLanguage.EN -> "Odd night"
+        AppLanguage.FR -> "Nuit impaire"
+    }
+
+    fun nightLabel(lang: AppLanguage, night: Int): String = when (lang) {
+        AppLanguage.AR -> "الليلة $night"
+        AppLanguage.EN -> "Night $night"
+        AppLanguage.FR -> "Nuit $night"
+    }
+
+    fun vigilButton(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ساهد هذه الليلة"
+        AppLanguage.EN -> "Keep vigil tonight"
+        AppLanguage.FR -> "Veiller cette nuit"
+    }
+
+    fun vigilHint(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اسجد، ادعُ، اقرأ… وابقِ الهاتف صامتًا."
+        AppLanguage.EN -> "Prostrate, supplicate, read… and let the phone stay silent."
+        AppLanguage.FR -> "Prosterne-toi, invoque, lis… et laisse le téléphone se taire."
+    }
+
+    fun vigilExit(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إنهاء السَّهَر"
+        AppLanguage.EN -> "End the vigil"
+        AppLanguage.FR -> "Quitter la veille"
+    }
+
+    fun vigilDhikr(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "سُبْحَانَ اللَّهِ • الْحَمْدُ لِلَّهِ • اللَّهُ أَكْبَرُ"
+        AppLanguage.EN -> "سُبْحَانَ اللَّهِ • الْحَمْدُ لِلَّهِ • اللَّهُ أَكْبَرُ"
+        AppLanguage.FR -> "سُبْحَانَ اللَّهِ • الْحَمْدُ لِلَّهِ • اللَّهُ أَكْبَرُ"
+    }
+
+    fun inProgressBadge(lang: AppLanguage, night: Int): String = when (lang) {
+        AppLanguage.AR -> "جارية — الليلة $night"
+        AppLanguage.EN -> "Ongoing — night $night"
+        AppLanguage.FR -> "En cours — nuit $night"
+    }
 }
 

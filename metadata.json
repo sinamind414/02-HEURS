@@ -1,0 +1,6 @@
+{
+  "name": "Sa'atan",
+  "description": "Sa'atan (ساعتان) - Ton temps chez Allah. Compteur de vie divine en temps réel, convertisseur céleste, journal des minutes divines et visualisation immersive des 2 heures.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

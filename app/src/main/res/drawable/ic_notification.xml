@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Monochrome status bar icon. Android renders notification small icons as a
+     single-colour silhouette, so this must be a plain vector (no gradients). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFFFF">
+    <!-- Crescent moon -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M15.5,2C9.15,2 4,7.15 4,13.5S9.15,25 15.5,25c2.35,0 4.53,-0.77 6.3,-2.05C18.35,22.15 15,19.6 15,16.5S18.35,10.85 21.8,11.05C20.55,5.85 16.35,2 15.5,2z" />
+</vector>

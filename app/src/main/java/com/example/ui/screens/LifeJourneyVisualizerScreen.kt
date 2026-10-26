@@ -299,7 +299,7 @@ fun LifeJourneyVisualizerScreen(
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            text = AppStrings.milestoneTitle(language, milestone.id),
+                                            text = AppStrings.milestoneLatinTitle(language, milestone.id),
                                             fontFamily = CinzelFontFamily,
                                             fontWeight = FontWeight.Bold,
                                             fontSize = 16.sp,

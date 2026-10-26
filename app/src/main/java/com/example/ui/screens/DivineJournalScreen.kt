@@ -187,8 +187,10 @@ fun DivineJournalScreen(
                             Icon(
                                 imageVector = if (i <= score) Icons.Filled.Star else Icons.Outlined.Star,
                                 contentDescription = null,
-                                tint = if (i <= score) accentGold else insetColor,
-                                modifier = Modifier.size(22.dp)
+                                // Empty stars stay readable (>=3:1): Midnight700
+                                // was too dim against the rating card.
+                                tint = if (i <= score) accentGold else textMuted,
+                                modifier = Modifier.size(24.dp)
                             )
                         }
                     }

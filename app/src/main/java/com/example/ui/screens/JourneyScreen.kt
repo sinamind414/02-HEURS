@@ -285,62 +285,25 @@ fun JourneyScreen(
                         val stationChapters = BookLibrary.chaptersForStation(station.order)
                         if (stationChapters.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(9.dp))
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(50))
-                                    .background(GoldPrimary.copy(alpha = 0.10f))
-                                    .border(1.dp, GoldPrimary.copy(alpha = 0.5f), RoundedCornerShape(50))
-                                    .clickable { viewModel.openBook(stationChapters.first().id) }
-                                    .padding(horizontal = 10.dp, vertical = 5.dp)
-                                    .testTag("journey_book_chip_${station.order}")
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.AutoStories,
-                                    contentDescription = null,
-                                    tint = TextGold,
-                                    modifier = Modifier.size(13.dp)
-                                )
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = AppStrings.bookJourneyChip(language),
-                                    fontFamily = CinzelFontFamily,
-                                    fontSize = 10.sp,
-                                    letterSpacing = 0.6.sp,
-                                    color = TextGold
-                                )
-                            }
+                            FeatureChip(
+                                text = AppStrings.bookJourneyChip(language),
+                                testTag = "journey_book_chip_${station.order}",
+                                icon = Icons.Default.AutoStories,
+                                onClick = { viewModel.openBook(stationChapters.first().id) }
+                            )
                         }
 
                         // Station 6 — "Le Dialogue": the Fatiha stepper screen
                         // (book ch22, hadith qudsi Muslim n°395) opens directly.
                         if (station.order == 6) {
                             Spacer(modifier = Modifier.height(6.dp))
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(50))
-                                    .background(GoldPrimary.copy(alpha = 0.14f))
-                                    .border(1.dp, GoldPrimary.copy(alpha = 0.65f), RoundedCornerShape(50))
-                                    .clickable { viewModel.openFatiha() }
-                                    .padding(horizontal = 10.dp, vertical = 5.dp)
-                                    .testTag("journey_fatiha_chip_6")
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.QuestionAnswer,
-                                    contentDescription = null,
-                                    tint = TextGold,
-                                    modifier = Modifier.size(13.dp)
-                                )
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = AppStrings.bookFatihaChip(language),
-                                    fontFamily = CinzelFontFamily,
-                                    fontSize = 10.sp,
-                                    letterSpacing = 0.6.sp,
-                                    color = TextGold
-                                )
-                            }
+                            FeatureChip(
+                                text = AppStrings.bookFatihaChip(language),
+                                testTag = "journey_fatiha_chip_6",
+                                icon = Icons.Default.QuestionAnswer,
+                                emphasized = true,
+                                onClick = { viewModel.openFatiha() }
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(8.dp))

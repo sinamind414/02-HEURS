@@ -239,7 +239,7 @@ fun SaatanAppContent(viewModel: MainViewModel) {
                                     text = item.label,
                                     fontFamily = CinzelFontFamily,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                    fontSize = 10.sp,
+                                    fontSize = 11.5.sp,
                                     maxLines = 1
                                 )
                             },

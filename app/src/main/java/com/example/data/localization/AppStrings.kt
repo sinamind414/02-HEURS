@@ -1413,6 +1413,17 @@ object AppStrings {
         else -> "الرجوع إلى الله"
     }
 
+    /**
+     * Roman-script stage name shown under the Arabic title (Cinzel pendant,
+     * as seen in the Journey station cards and prayer rows). In Arabic mode
+     * it resolves to the French name — previously it fell back to Arabic and
+     * duplicated the Amiri heading ("الولادة" twice on the birth scene).
+     */
+    fun milestoneLatinTitle(lang: AppLanguage, id: String): String = when (lang) {
+        AppLanguage.AR -> milestoneTitle(AppLanguage.FR, id)
+        else -> milestoneTitle(lang, id)
+    }
+
     fun milestoneDescription(lang: AppLanguage, id: String): String = when (id) {
         "birth" -> when (lang) {
             AppLanguage.AR -> "أول نفَس على الأرض. تصل عارياً عاجزاً، لكنك منعمٌ به رحمة الخالق."

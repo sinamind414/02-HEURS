@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -138,7 +139,7 @@ fun FatihaScreen(
                     modifier = Modifier
                         .clip(CircleShape)
                         .clickable { viewModel.navigateTo(SaatanScreen.DIVINE_CLOCK) }
-                        .padding(6.dp)
+                        .padding(10.dp)
                         .size(24.dp)
                         .testTag("fatiha_back_home")
                 )
@@ -225,15 +226,25 @@ fun FatihaScreen(
                         active -> goldLight
                         else -> dotTodo
                     }
+                    // The 5 dp bar is drawn inside a >=44 dp touch cell —
+                    // the visible bar stays slim, the hit area respects the
+                    // Android/WCAG target minimum.
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .height(5.dp)
-                            .clip(RoundedCornerShape(50))
-                            .background(color)
+                            .heightIn(min = 44.dp)
                             .clickable { step = dot }
-                            .testTag("fatiha_dot_$dot")
-                    )
+                            .testTag("fatiha_dot_$dot"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(5.dp)
+                                .clip(RoundedCornerShape(50))
+                                .background(color)
+                        )
+                    }
                 }
             }
             // The finale step can only be reached through verse 7's button —

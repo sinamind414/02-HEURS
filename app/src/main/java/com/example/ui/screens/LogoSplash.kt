@@ -118,10 +118,10 @@ fun LogoSplashOverlay(
             text = AppStrings.splashEnterHint(language),
             fontFamily = CinzelFontFamily,
             fontWeight = FontWeight.Medium,
-            fontSize = 11.sp,
+            fontSize = 12.5.sp,
             letterSpacing = 1.2.sp,
             textAlign = TextAlign.Center,
-            color = TextGold.copy(alpha = 0.8f),
+            color = TextGold.copy(alpha = 0.85f),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .windowInsetsPadding(WindowInsets.safeDrawing)

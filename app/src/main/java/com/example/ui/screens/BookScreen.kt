@@ -416,7 +416,7 @@ private fun BookReader(
                         modifier = Modifier
                             .clip(CircleShape)
                             .clickable { onBack() }
-                            .padding(6.dp)
+                            .padding(10.dp)
                             .size(24.dp)
                             .testTag("book_back")
                     )
@@ -500,33 +500,18 @@ private fun BookReader(
                     modifier = Modifier.padding(top = 10.dp)
                 ) {
                     if (chapter.station != null) {
-                        Text(
+                        FeatureChip(
                             text = AppStrings.bookStationChip(language, chapter.station),
-                            fontFamily = CinzelFontFamily,
-                            fontSize = 9.5.sp,
-                            color = TextGold,
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(50))
-                                .background(GoldPrimary.copy(alpha = 0.10f))
-                                .border(1.dp, GoldPrimary.copy(alpha = 0.5f), RoundedCornerShape(50))
-                                .clickable { viewModel.navigateTo(SaatanScreen.JOURNEY) }
-                                .padding(horizontal = 10.dp, vertical = 5.dp)
-                                .testTag("book_station_chip")
+                            testTag = "book_station_chip",
+                            onClick = { viewModel.navigateTo(SaatanScreen.JOURNEY) }
                         )
                     }
                     if (chapter.goFatiha) {
-                        Text(
+                        FeatureChip(
                             text = AppStrings.bookFatihaChip(language),
-                            fontFamily = CinzelFontFamily,
-                            fontSize = 9.5.sp,
-                            color = TextGold,
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(50))
-                                .background(GoldPrimary.copy(alpha = 0.10f))
-                                .border(1.dp, GoldPrimary.copy(alpha = 0.5f), RoundedCornerShape(50))
-                                .clickable { viewModel.openFatiha() }
-                                .padding(horizontal = 10.dp, vertical = 5.dp)
-                                .testTag("fatiha_book_chip")
+                            testTag = "fatiha_book_chip",
+                            onClick = { viewModel.openFatiha() },
+                            emphasized = true
                         )
                     }
                 }

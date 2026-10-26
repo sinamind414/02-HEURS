@@ -224,6 +224,19 @@ class PrayerTimesRepository {
         return cached != todayIsoIn(cachedTimezone)
     }
 
+    // ── Snapshot accessors for the reminder scheduler ──────────────────
+    // The receiver refreshes alarms from the Room snapshot, so the
+    // in-process cache hands over its timezone context with the values.
+
+    /** IANA id of the cached city's timezone, e.g. "Europe/Paris". */
+    fun cachedTimezoneId(): String? = cachedTimezone
+
+    /** Offset of the cached city relative to UTC, in seconds. */
+    fun cachedUtcOffsetSecondsValue(): Int = cachedUtcOffsetSeconds
+
+    /** Local date (yyyy-MM-dd, city timezone) of the last successful fetch. */
+    fun cachedDateIsoValue(): String? = cachedDateIso
+
     private fun cleanTime(raw: String): String {
         return raw.trim().substringBefore(" ").trim()
     }

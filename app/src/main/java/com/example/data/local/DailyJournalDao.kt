@@ -23,4 +23,13 @@ interface DailyJournalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveUserProfile(profile: UserProfileEntity)
+
+    // Prayer timings snapshot (single row) — feeds the reminder receivers
+    // so they can re-arm tomorrow's adhan without touching the network.
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertTimingsCache(cache: PrayerTimingsCacheEntity)
+
+    @Query("SELECT * FROM prayer_timings_cache WHERE id = 1 LIMIT 1")
+    fun getTimingsCache(): Flow<PrayerTimingsCacheEntity?>
 }

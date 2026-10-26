@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.calculator.DivineTimeCalculator
 import com.example.data.local.DailyJournalEntity
+import com.example.data.local.PrayerTimingsCacheEntity
 import com.example.data.local.SaatanDatabase
 import com.example.data.local.UserProfileEntity
 import com.example.data.localization.AppStrings
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -232,6 +234,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 // Keep the daily reminder armed (or cancelled) in sync with the
                 // stored preferences.
                 syncDailyReminder(profile)
+
+                // Same reconciliation for the per-prayer reminders (P1-3):
+                // Fajr, Dhuhr and Friday alarms follow the toggles too.
+                syncPrayerRemindersNow()
             }
         }
 
@@ -310,6 +316,39 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _prayerState.value = _prayerState.value.copy(isLoading = true)
             val updated = prayerRepository.fetchPrayerTimes(city = city, country = country)
             _prayerState.value = updated
+
+            // Persist the snapshot so the notification receivers can re-arm
+            // tomorrow's adhan from disk, offline. The offline fallback is
+            // deliberately never stored (its dummy times are not real).
+            if (!updated.isUsingFallback) {
+                val times = updated.prayersList.associate { it.key to it.timeStr }
+                val fajr = times["fajr"]
+                val dhuhr = times["dhuhr"]
+                val asr = times["asr"]
+                val maghrib = times["maghrib"]
+                val isha = times["isha"]
+                if (fajr != null && dhuhr != null && asr != null && maghrib != null && isha != null) {
+                    repository.saveTimingsCache(
+                        PrayerTimingsCacheEntity(
+                            city = updated.cityName,
+                            country = updated.countryName,
+                            timezoneId = prayerRepository.cachedTimezoneId() ?: "",
+                            utcOffsetSeconds = prayerRepository.cachedUtcOffsetSecondsValue(),
+                            dateIso = prayerRepository.cachedDateIsoValue() ?: repository.getTodayIso(),
+                            savedAtMillis = System.currentTimeMillis(),
+                            fajr = fajr,
+                            dhuhr = dhuhr,
+                            asr = asr,
+                            maghrib = maghrib,
+                            isha = isha
+                        )
+                    )
+                }
+            }
+
+            // The reminder scheduler trusts the persisted snapshot, not the
+            // in-process cache: repaint every alarm with the freshest data.
+            syncPrayerRemindersNow()
         }
     }
 
@@ -574,6 +613,47 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setReminderDaily(enabled: Boolean) {
         viewModelScope.launch { repository.updateNotificationPreferences(reminderSocialScroll = enabled) }
+    }
+
+    // Per-prayer reminder toggles (P1-3): persisting is not enough — each
+    // change immediately reconciles the AlarmManager queue.
+
+    fun setReminderFajr(enabled: Boolean) {
+        viewModelScope.launch {
+            repository.updateNotificationPreferences(reminderFajr = enabled)
+            syncPrayerRemindersNow()
+        }
+    }
+
+    fun setReminderDhuhr(enabled: Boolean) {
+        viewModelScope.launch {
+            repository.updateNotificationPreferences(reminderDhuhr = enabled)
+            syncPrayerRemindersNow()
+        }
+    }
+
+    fun setReminderFriday(enabled: Boolean) {
+        viewModelScope.launch {
+            repository.updateNotificationPreferences(reminderFriday = enabled)
+            syncPrayerRemindersNow()
+        }
+    }
+
+    /**
+     * Re-arms (or cancels) the Fajr / Dhuhr / Friday alarms from the persisted
+     * profile + timings snapshot. The decision tree lives inside
+     * [DivineNotificationHelper.syncPrayerReminderAlarms] so the boot receiver
+     * and the alarm receivers share the exact same logic.
+     */
+    private suspend fun syncPrayerRemindersNow() {
+        val database = SaatanDatabase.getDatabase(getApplication())
+        val profile = database.journalDao().getUserProfile().firstOrNull() ?: return
+        val cache = database.journalDao().getTimingsCache().firstOrNull()
+        DivineNotificationHelper.syncPrayerReminderAlarms(
+            context = getApplication(),
+            profile = profile,
+            cache = cache
+        )
     }
 
     /**

@@ -2,6 +2,7 @@ package com.example.data.repository
 
 import com.example.data.local.DailyJournalDao
 import com.example.data.local.DailyJournalEntity
+import com.example.data.local.PrayerTimingsCacheEntity
 import com.example.data.local.UserProfileEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -66,6 +67,13 @@ class SaatanRepository(private val dao: DailyJournalDao) {
     }
 
     fun getTodayJournal(): Flow<DailyJournalEntity?> = dao.getJournalForDate(getTodayIso())
+
+    /** Persists the last successful Aladhan snapshot (single row, REPLACE). */
+    suspend fun saveTimingsCache(cache: PrayerTimingsCacheEntity) {
+        dao.upsertTimingsCache(cache)
+    }
+
+    fun getTimingsCache(): Flow<PrayerTimingsCacheEntity?> = dao.getTimingsCache()
 
     fun getRecentJournals(): Flow<List<DailyJournalEntity>> = dao.getRecentJournals()
 

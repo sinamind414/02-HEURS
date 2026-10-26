@@ -29,11 +29,14 @@ class BootCompletedReceiver : BroadcastReceiver() {
 
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             try {
+                val dao = runCatching {
+                    SaatanDatabase.getDatabase(appContext).journalDao()
+                }.getOrNull() ?: return@launch
                 val profile = runCatching {
-                    SaatanDatabase.getDatabase(appContext).journalDao().getUserProfile().firstOrNull()
-                }.getOrNull()
+                    dao.getUserProfile().firstOrNull()
+                }.getOrNull() ?: return@launch
 
-                if (profile != null && profile.notificationsEnabled && profile.reminderSocialScroll) {
+                if (profile.notificationsEnabled && profile.reminderSocialScroll) {
                     val info = DivineTimeCalculator.calculateDivineTime(
                         birthTimestampMs = profile.birthTimestampMs,
                         lifeExpectancyYears = profile.lifeExpectancyYears
@@ -46,6 +49,11 @@ class BootCompletedReceiver : BroadcastReceiver() {
                         AppLanguage.fromCode(profile.languageCode)
                     )
                 }
+
+                // Per-prayer reminders (P1-3): alarms do not survive a reboot.
+                // Re-armed from the persisted timings snapshot, offline.
+                val cache = runCatching { dao.getTimingsCache().firstOrNull() }.getOrNull()
+                DivineNotificationHelper.syncPrayerReminderAlarms(appContext, profile, cache)
             } finally {
                 pendingResult.finish()
             }

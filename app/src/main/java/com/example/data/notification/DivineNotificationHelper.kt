@@ -21,7 +21,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import com.example.data.local.PrayerTimingsCacheEntity
+import com.example.data.local.UserProfileEntity
 import java.util.Calendar
+import java.util.TimeZone
+import kotlin.math.abs
 
 /**
  * Fires the daily "divine time" reminder and re-arms itself for the next day.
@@ -95,7 +99,8 @@ object DivineNotificationHelper {
         context: Context,
         title: String,
         message: String,
-        language: AppLanguage = AppLanguage.FR
+        language: AppLanguage = AppLanguage.FR,
+        notificationId: Int = NOTIFICATION_ID
     ) {
         createNotificationChannel(context, language)
 
@@ -122,7 +127,7 @@ object DivineNotificationHelper {
 
         try {
             val manager = NotificationManagerCompat.from(context)
-            manager.notify(NOTIFICATION_ID, builder.build())
+            manager.notify(notificationId, builder.build())
         } catch (_: SecurityException) {
             // POST_NOTIFICATIONS permission denied on Android 13+
         }
@@ -181,5 +186,221 @@ object DivineNotificationHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         alarmManager.cancel(pendingIntent)
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  Per-prayer reminders — Fajr / Dhuhr / Friday (P1-3)
+    // ─────────────────────────────────────────────────────────────
+    //
+    // Every kind owns its own PendingIntent (per request code) so arming the
+    // Fajr alarm never replaces the Dhuhr one in place. The alarm receivers
+    // work from the persisted `prayer_timings_cache` snapshot: a receiver
+    // runs without the app and must be able to re-arm tomorrow's adhan
+    // without any network call.
+
+    const val EXTRA_REMINDER_KIND = "extra_reminder_kind"
+    const val KIND_FAJR = "fajr"
+    const val KIND_DHUHR = "dhuhr"
+    const val KIND_FRIDAY = "friday"
+
+    const val NOTIFICATION_ID_FAJR = 1011
+    const val NOTIFICATION_ID_DHUHR = 1012
+    const val NOTIFICATION_ID_FRIDAY = 1013
+
+    private const val REQUEST_CODE_FAJR = 1111
+    private const val REQUEST_CODE_DHUHR = 1112
+    private const val REQUEST_CODE_FRIDAY = 1113
+
+    /**
+     * How long a timings snapshot stays a valid re-arm basis. Beyond it the
+     * seasonal drift of the adhan (up to ~1 min/day) makes tomorrow's
+     * schedule a guess: the alarms stop and await a fresh fetch.
+     */
+    const val TIMINGS_CACHE_MAX_AGE_MS = 7L * 24L * 60L * 60L * 1000L
+
+    /** Fires immediately (test button, alarm receiver) — ids differ per kind. */
+    fun showPrayerNotification(
+        context: Context,
+        kind: String,
+        language: AppLanguage
+    ) {
+        when (kind) {
+            KIND_FAJR -> showNotification(
+                context,
+                AppStrings.reminderFajrNotifTitle(language),
+                AppStrings.reminderFajrNotifBody(language),
+                language,
+                NOTIFICATION_ID_FAJR
+            )
+            KIND_DHUHR -> showNotification(
+                context,
+                AppStrings.reminderDhuhrNotifTitle(language),
+                AppStrings.reminderDhuhrNotifBody(language),
+                language,
+                NOTIFICATION_ID_DHUHR
+            )
+            else -> showNotification(
+                context,
+                AppStrings.reminderFridayNotifTitle(language),
+                AppStrings.reminderFridayNotifBody(language),
+                language,
+                NOTIFICATION_ID_FRIDAY
+            )
+        }
+    }
+
+    fun schedulePrayerReminder(context: Context, kind: String, triggerAtMillis: Long) {
+        if (triggerAtMillis <= 0L) return
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
+        val intent = Intent(context, PrayerReminderReceiver::class.java).apply {
+            putExtra(EXTRA_REMINDER_KIND, kind)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            requestCodeFor(kind),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        try {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+        } catch (_: SecurityException) {
+            // exact alarm permission restricted: the reminder is simply skipped
+        }
+    }
+
+    fun cancelPrayerReminder(context: Context, kind: String) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
+        val intent = Intent(context, PrayerReminderReceiver::class.java).apply {
+            putExtra(EXTRA_REMINDER_KIND, kind)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            requestCodeFor(kind),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
+    }
+
+    private fun requestCodeFor(kind: String): Int = when (kind) {
+        KIND_FAJR -> REQUEST_CODE_FAJR
+        KIND_DHUHR -> REQUEST_CODE_DHUHR
+        else -> REQUEST_CODE_FRIDAY
+    }
+
+    /**
+     * The one place reconciling the stored flags with the real AlarmManager
+     * state, for all three per-prayer kinds. Called by the ViewModel (profile
+     * change, toggles, fresh timings) and by the boot receiver; the alarm
+     * receiver itself only re-arms its own next occurrence.
+     */
+    fun syncPrayerReminderAlarms(
+        context: Context,
+        profile: UserProfileEntity,
+        cache: PrayerTimingsCacheEntity?
+    ) {
+        val now = System.currentTimeMillis()
+        val masterOn = profile.notificationsEnabled
+        val zone = cityZone(cache)
+        val cacheUsable = cache != null && (now - cache.savedAtMillis) <= TIMINGS_CACHE_MAX_AGE_MS
+
+        val fajrAt = nextDailyTrigger(zone, cache?.fajr.orEmpty(), now)
+        if (masterOn && profile.reminderFajr && fajrAt != null && cacheUsable) {
+            schedulePrayerReminder(context, KIND_FAJR, fajrAt)
+        } else {
+            cancelPrayerReminder(context, KIND_FAJR)
+        }
+
+        val dhuhrAt = nextDailyTrigger(zone, cache?.dhuhr.orEmpty(), now)
+        if (masterOn && profile.reminderDhuhr && dhuhrAt != null && cacheUsable) {
+            schedulePrayerReminder(context, KIND_DHUHR, dhuhrAt)
+        } else {
+            cancelPrayerReminder(context, KIND_DHUHR)
+        }
+
+        val fridayAt = nextFridayTrigger(zone, cache?.dhuhr, now)
+        if (masterOn && profile.reminderFriday && fridayAt != null) {
+            schedulePrayerReminder(context, KIND_FRIDAY, fridayAt)
+        } else {
+            cancelPrayerReminder(context, KIND_FRIDAY)
+        }
+    }
+
+    /**
+     * The city's timezone carried by the snapshot — the reminder must ring at
+     * the adhan of the selected city, not of wherever the device currently is.
+     */
+    fun cityZone(cache: PrayerTimingsCacheEntity?): TimeZone {
+        val id = cache?.timezoneId.orEmpty().trim()
+        if (id.isNotEmpty()) {
+            val tz = TimeZone.getTimeZone(id)
+            // getTimeZone silently returns GMT for unknown ids: only accept
+            // the round-trip hits (e.g. "Europe/Paris", "Asia/Almaty").
+            if (tz.id == id) return tz
+        }
+        val offsetSeconds = cache?.utcOffsetSeconds ?: 0
+        if (offsetSeconds != 0) {
+            val totalMinutes = offsetSeconds / 60
+            val sign = if (totalMinutes >= 0) "+" else "-"
+            val hh = abs(totalMinutes) / 60
+            val mm = abs(totalMinutes) % 60
+            val gmt = "GMT$sign$hh" + if (mm != 0) ":" + mm.toString().padStart(2, '0') else ""
+            return TimeZone.getTimeZone(gmt)
+        }
+        return TimeZone.getDefault()
+    }
+
+    /**
+     * Next occurrence of a daily adhan ("HH:mm") in [zone]: today if that hour
+     * is still ahead, tomorrow otherwise. Null when the time is unparsable.
+     */
+    fun nextDailyTrigger(zone: TimeZone, timeStr: String, nowMillis: Long): Long? {
+        val minutes = parseMinutes(timeStr) ?: return null
+        val cal = Calendar.getInstance(zone).apply {
+            timeInMillis = nowMillis
+            set(Calendar.HOUR_OF_DAY, minutes / 60)
+            set(Calendar.MINUTE, minutes % 60)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        if (cal.timeInMillis <= nowMillis) {
+            cal.add(Calendar.DAY_OF_YEAR, 1)
+        }
+        return cal.timeInMillis
+    }
+
+    /**
+     * Next Friday at the Jumu'ah hour: the city's cached Dhuhr when known,
+     * 13:00 otherwise — so it does not blindly stack on the 13:00 daily
+     * divine reminder.
+     */
+    fun nextFridayTrigger(zone: TimeZone, dhuhrTimeStr: String?, nowMillis: Long): Long? {
+        val minutes = dhuhrTimeStr?.let { parseMinutes(it) } ?: 13 * 60
+        val cal = Calendar.getInstance(zone).apply {
+            timeInMillis = nowMillis
+            set(Calendar.HOUR_OF_DAY, minutes / 60)
+            set(Calendar.MINUTE, minutes % 60)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        if (cal.timeInMillis <= nowMillis) {
+            cal.add(Calendar.DAY_OF_YEAR, 1)
+        }
+        var guard = 0
+        while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY && guard < 7) {
+            cal.add(Calendar.DAY_OF_YEAR, 1)
+            guard++
+        }
+        if (cal.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY) return null
+        return cal.timeInMillis
+    }
+
+    private fun parseMinutes(timeStr: String): Int? {
+        val parts = timeStr.trim().split(":")
+        if (parts.size < 2) return null
+        val h = parts[0].toIntOrNull() ?: return null
+        val m = parts[1].toIntOrNull() ?: return null
+        if (h !in 0..23 || m !in 0..59) return null
+        return h * 60 + m
     }
 }

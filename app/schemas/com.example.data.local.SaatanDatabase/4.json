@@ -1,0 +1,289 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "a149c72a537babfdd312c5640112b395",
+    "entities": [
+      {
+        "tableName": "daily_journal",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dateIso` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `fajrDone` INTEGER NOT NULL, `dhuhrDone` INTEGER NOT NULL, `asrDone` INTEGER NOT NULL, `maghribDone` INTEGER NOT NULL, `ishaDone` INTEGER NOT NULL, `quranPagesRead` INTEGER NOT NULL, `sadaqaGiven` INTEGER NOT NULL, `morningEveningDhikr` INTEGER NOT NULL, `goodDeedDone` INTEGER NOT NULL, `dailyNote` TEXT NOT NULL, `divineScoreStars` INTEGER NOT NULL, `tasbihCountToday` INTEGER NOT NULL, `salahTaste` TEXT NOT NULL, PRIMARY KEY(`dateIso`))",
+        "fields": [
+          {
+            "fieldPath": "dateIso",
+            "columnName": "dateIso",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fajrDone",
+            "columnName": "fajrDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dhuhrDone",
+            "columnName": "dhuhrDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "asrDone",
+            "columnName": "asrDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maghribDone",
+            "columnName": "maghribDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ishaDone",
+            "columnName": "ishaDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quranPagesRead",
+            "columnName": "quranPagesRead",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sadaqaGiven",
+            "columnName": "sadaqaGiven",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "morningEveningDhikr",
+            "columnName": "morningEveningDhikr",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "goodDeedDone",
+            "columnName": "goodDeedDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dailyNote",
+            "columnName": "dailyNote",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "divineScoreStars",
+            "columnName": "divineScoreStars",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tasbihCountToday",
+            "columnName": "tasbihCountToday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "salahTaste",
+            "columnName": "salahTaste",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "dateIso"
+          ]
+        }
+      },
+      {
+        "tableName": "user_profile",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `birthTimestampMs` INTEGER NOT NULL, `lifeExpectancyYears` INTEGER NOT NULL, `notificationsEnabled` INTEGER NOT NULL, `reminderFajr` INTEGER NOT NULL, `reminderDhuhr` INTEGER NOT NULL, `reminderSocialScroll` INTEGER NOT NULL, `reminderFriday` INTEGER NOT NULL, `twoHourModeActive` INTEGER NOT NULL, `twoHourModeStartMs` INTEGER NOT NULL, `totalTasbihAllTime` INTEGER NOT NULL, `languageCode` TEXT NOT NULL, `isDayMode` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "birthTimestampMs",
+            "columnName": "birthTimestampMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lifeExpectancyYears",
+            "columnName": "lifeExpectancyYears",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notificationsEnabled",
+            "columnName": "notificationsEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reminderFajr",
+            "columnName": "reminderFajr",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reminderDhuhr",
+            "columnName": "reminderDhuhr",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reminderSocialScroll",
+            "columnName": "reminderSocialScroll",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reminderFriday",
+            "columnName": "reminderFriday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "twoHourModeActive",
+            "columnName": "twoHourModeActive",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "twoHourModeStartMs",
+            "columnName": "twoHourModeStartMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalTasbihAllTime",
+            "columnName": "totalTasbihAllTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "languageCode",
+            "columnName": "languageCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDayMode",
+            "columnName": "isDayMode",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "prayer_timings_cache",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `city` TEXT NOT NULL, `country` TEXT NOT NULL, `timezoneId` TEXT NOT NULL, `utcOffsetSeconds` INTEGER NOT NULL, `dateIso` TEXT NOT NULL, `savedAtMillis` INTEGER NOT NULL, `fajr` TEXT NOT NULL, `dhuhr` TEXT NOT NULL, `asr` TEXT NOT NULL, `maghrib` TEXT NOT NULL, `isha` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timezoneId",
+            "columnName": "timezoneId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "utcOffsetSeconds",
+            "columnName": "utcOffsetSeconds",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateIso",
+            "columnName": "dateIso",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "savedAtMillis",
+            "columnName": "savedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fajr",
+            "columnName": "fajr",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dhuhr",
+            "columnName": "dhuhr",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "asr",
+            "columnName": "asr",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maghrib",
+            "columnName": "maghrib",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isha",
+            "columnName": "isha",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a149c72a537babfdd312c5640112b395')"
+    ]
+  }
+}

@@ -1845,6 +1845,51 @@ object AppStrings {
         AppLanguage.FR -> "Rappel du vendredi"
     }
 
+    // ── Per-prayer reminder notifications (real scheduling, P1-3) ──
+
+    fun reminderFajrNotifTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "🕌 وقت الفجر"
+        AppLanguage.EN -> "🕌 Time for Fajr"
+        AppLanguage.FR -> "🕌 L'heure du Fajr"
+    }
+
+    fun reminderFajrNotifBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "دخل وقت الفجر — قُم للصلاة، فقيام الليل عند الله خير من النوم."
+        AppLanguage.EN -> "The time of Fajr has entered — rise for prayer; standing at night before Allah is better than sleep."
+        AppLanguage.FR -> "L'heure du Fajr est entrée — lève-toi pour prier ; la veille devant Allah vaut mieux que le sommeil."
+    }
+
+    fun reminderDhuhrNotifTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "🕌 وقت الظهر"
+        AppLanguage.EN -> "🕌 Time for Dhuhr"
+        AppLanguage.FR -> "🕌 L'heure du Dhuhr"
+    }
+
+    fun reminderDhuhrNotifBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "دخل وقت الظهر — في قلب النهار، اقطع خيط الدنيا واسجد لله."
+        AppLanguage.EN -> "The time of Dhuhr has entered — at the heart of the day, cut the thread of business and settle before Allah."
+        AppLanguage.FR -> "L'heure du Dhuhr est entrée — au cœur du jour, coupe le fil des affaires et pose-toi devant Allah."
+    }
+
+    fun reminderFridayNotifTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "🕌 يوم الجمعة"
+        AppLanguage.EN -> "🕌 Friday — Jumu'ah"
+        AppLanguage.FR -> "🕌 Vendredi — Jumu'ah"
+    }
+
+    fun reminderFridayNotifBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أفضل أيام الأسبوع — أكثِر من الصلاة على النبي ﷺ."
+        AppLanguage.EN -> "The best day of the week — multiply the salawat upon the Prophet ﷺ."
+        AppLanguage.FR -> "Le meilleur jour de la semaine — multiplie les salawat sur le Prophète ﷺ."
+    }
+
+    /** Settings hint: prayer reminders depend on the selected city's timings. */
+    fun reminderTimingsHint(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "صوتا الفجر والظهر يتبعان وقت مدينة المختارة، محدَّثَين عند كل فتح."
+        AppLanguage.EN -> "Fajr and Dhuhr reminders follow your selected city times (Aladhan), refreshed on every app open."
+        AppLanguage.FR -> "Les rappels du Fajr et du Dhuhr suivent les horaires de ta ville (Aladhan), actualisés à chaque ouverture."
+    }
+
     fun notifPreviewWakeMoment(lang: AppLanguage): String = when (lang) {
         AppLanguage.AR -> "الاستيقاظ"
         AppLanguage.EN -> "Wake up"

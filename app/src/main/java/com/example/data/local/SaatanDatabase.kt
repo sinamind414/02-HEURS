@@ -10,9 +10,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 @Database(
     entities = [
         DailyJournalEntity::class,
-        UserProfileEntity::class
+        UserProfileEntity::class,
+        PrayerTimingsCacheEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = true
 )
 abstract class SaatanDatabase : RoomDatabase() {
@@ -23,6 +24,41 @@ abstract class SaatanDatabase : RoomDatabase() {
 
         @Volatile
         private var INSTANCE: SaatanDatabase? = null
+
+        /**
+         * v3 -> v4
+         *  * creates the `prayer_timings_cache` snapshot (single row) used by
+         *    the per-prayer reminder receivers to re-arm from disk, offline
+         *  * resets the Fajr / Dhuhr / Friday reminder flags to OFF: they had
+         *    been stored as `true` since v1 while no scheduler ever read them.
+         *    Now that the scheduling actually exists (P1-3), waking them up
+         *    with their old values would silently start notifying every
+         *    existing user up to three extra times a day — everyone chooses
+         *    the toggles back on the settings.
+         */
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `prayer_timings_cache` (" +
+                        "`id` INTEGER NOT NULL, " +
+                        "`city` TEXT NOT NULL, " +
+                        "`country` TEXT NOT NULL, " +
+                        "`timezoneId` TEXT NOT NULL, " +
+                        "`utcOffsetSeconds` INTEGER NOT NULL, " +
+                        "`dateIso` TEXT NOT NULL, " +
+                        "`savedAtMillis` INTEGER NOT NULL, " +
+                        "`fajr` TEXT NOT NULL, " +
+                        "`dhuhr` TEXT NOT NULL, " +
+                        "`asr` TEXT NOT NULL, " +
+                        "`maghrib` TEXT NOT NULL, " +
+                        "`isha` TEXT NOT NULL, " +
+                        "PRIMARY KEY(`id`))"
+                )
+                db.execSQL(
+                    "UPDATE user_profile SET reminderFajr = 0, reminderDhuhr = 0, reminderFriday = 0"
+                )
+            }
+        }
 
         /**
          * v2 -> v3
@@ -63,7 +99,7 @@ abstract class SaatanDatabase : RoomDatabase() {
                     SaatanDatabase::class.java,
                     DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .build()
                     .also { INSTANCE = it }
             }

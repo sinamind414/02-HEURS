@@ -251,11 +251,47 @@ fun SettingsVersesScreen(
                         isDayMode = isDayMode,
                         onCheckedChange = { viewModel.setReminderDaily(it) }
                     )
-                    // NOTE (audit P1-3): the Fajr / Dhuhr / Friday toggles were
-                    // removed — they were persisted but never read by any
-                    // scheduler. Only settings that actually drive the 13:00
-                    // reminder are shown. Per-prayer reminders return with the
-                    // Dhawq "Rendez-Vous" cycle, backed by real scheduling.
+                    // Per-prayer reminders (P1-3): backed by real alarms —
+                    // Fajr and Dhuhr at the adhan of the selected city, the
+                    // Friday one at the Jumu'ah hour, all re-armed offline by
+                    // the receivers from the persisted timings snapshot.
+                    ReminderToggleRow(
+                        label = AppStrings.reminderFajrLabel(currentLanguage),
+                        checked = userProfile?.reminderFajr == true,
+                        enabled = masterEnabled,
+                        isDayMode = isDayMode,
+                        onCheckedChange = {
+                            triggerSpiritualHaptic(context)
+                            viewModel.setReminderFajr(it)
+                        }
+                    )
+                    ReminderToggleRow(
+                        label = AppStrings.reminderDhuhrLabel(currentLanguage),
+                        checked = userProfile?.reminderDhuhr == true,
+                        enabled = masterEnabled,
+                        isDayMode = isDayMode,
+                        onCheckedChange = {
+                            triggerSpiritualHaptic(context)
+                            viewModel.setReminderDhuhr(it)
+                        }
+                    )
+                    ReminderToggleRow(
+                        label = AppStrings.reminderFridayLabel(currentLanguage),
+                        checked = userProfile?.reminderFriday == true,
+                        enabled = masterEnabled,
+                        isDayMode = isDayMode,
+                        onCheckedChange = {
+                            triggerSpiritualHaptic(context)
+                            viewModel.setReminderFriday(it)
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = AppStrings.reminderTimingsHint(currentLanguage),
+                        fontSize = 10.sp,
+                        lineHeight = 14.sp,
+                        color = textMuted
+                    )
                 }
             }
         }

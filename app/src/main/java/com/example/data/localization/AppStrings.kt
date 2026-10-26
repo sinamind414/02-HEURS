@@ -2623,5 +2623,111 @@ object AppStrings {
         AppLanguage.EN -> "Ongoing — night $night"
         AppLanguage.FR -> "En cours — nuit $night"
     }
+
+    // ─────────────────────────────────────────────────────────────
+    //  LE LIVRE — La Prière Goûtée (Sprint 4 : l'épisode en livre)
+    // ─────────────────────────────────────────────────────────────
+
+    /** Clock-header book button (A11y text). */
+    fun bookOpenLabel(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الكتاب — صلاة الذوق"
+        AppLanguage.EN -> "The Book — The Tasted Prayer"
+        AppLanguage.FR -> "Le Livre — La Prière Goûtée"
+    }
+
+    fun bookScreenTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "صلاة الذوق"
+        AppLanguage.EN -> "The Tasted Prayer"
+        AppLanguage.FR -> "La Prière Goûtée"
+    }
+
+    fun bookScreenSubtitle(lang: AppLanguage, total: Int): String = when (lang) {
+        AppLanguage.AR -> "كتاب الحلقة — $total فصلًا مرتبطًا بالرحلة"
+        AppLanguage.EN -> "The episode's book — $total chapters woven into the Journey"
+        AppLanguage.FR -> "Le livre de l'épisode — $total chapitres reliés au Voyage"
+    }
+
+    fun bookIndexTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الفهرس"
+        AppLanguage.EN -> "Contents"
+        AppLanguage.FR -> "Sommaire"
+    }
+
+    fun bookBackToIndex(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "العودة إلى الفهرس"
+        AppLanguage.EN -> "Back to the contents"
+        AppLanguage.FR -> "Retour au sommaire"
+    }
+
+    /** Opens the chapter anchor inside the original 2 h 12 min episode. */
+    fun bookListenPassage(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الاستماع إلى المقطع"
+        AppLanguage.EN -> "Listen to the passage"
+        AppLanguage.FR -> "Écouter le passage"
+    }
+
+    /** Chapter label ("Chapitre 7"). */
+    fun bookChapterN(lang: AppLanguage, n: Int): String = when (lang) {
+        AppLanguage.AR -> "الفصل $n"
+        AppLanguage.EN -> "Chapter $n"
+        AppLanguage.FR -> "Chapitre $n"
+    }
+
+    fun bookPrologue(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "المقدمة"
+        AppLanguage.EN -> "Prologue"
+        AppLanguage.FR -> "Prologue"
+    }
+
+    fun bookEpilogue(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الخاتمة"
+        AppLanguage.EN -> "Epilogue"
+        AppLanguage.FR -> "Épilogue"
+    }
+
+    fun bookAppendice(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الملحق"
+        AppLanguage.EN -> "Appendix"
+        AppLanguage.FR -> "Appendice"
+    }
+
+    fun bookPrev(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الفصل السابق"
+        AppLanguage.EN -> "Previous chapter"
+        AppLanguage.FR -> "Chapitre précédent"
+    }
+
+    fun bookNext(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الفصل التالي"
+        AppLanguage.EN -> "Next chapter"
+        AppLanguage.FR -> "Chapitre suivant"
+    }
+
+    /** Chip inside a Voyage station card, opening its book chapter. */
+    fun bookJourneyChip(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اقرأ الفصل"
+        AppLanguage.EN -> "Read the chapter"
+        AppLanguage.FR -> "Lire le chapitre"
+    }
+
+    /** Chip linking a chapter to its Voyage station. */
+    fun bookStationChip(lang: AppLanguage, station: Int): String = when (lang) {
+        AppLanguage.AR -> "محطة $station من الرحلة"
+        AppLanguage.EN -> "Journey station $station"
+        AppLanguage.FR -> "Station $station du Voyage"
+    }
+
+    /** The special chapter 22 — the Fatiha dialogue hadith qudsi. */
+    fun bookFatihaChip(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "حوار الفاتحة"
+        AppLanguage.EN -> "The Fatiha dialogue"
+        AppLanguage.FR -> "Le dialogue de la Fatiha"
+    }
+
+    fun bookNoteTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ملاحظة الناشر"
+        AppLanguage.EN -> "Publisher's note"
+        AppLanguage.FR -> "Note du libraire"
+    }
 }
 

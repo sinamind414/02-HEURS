@@ -34,6 +34,7 @@ enum class SaatanScreen {
     DIVINE_CLOCK,
     JOURNEY,
     LAST_NIGHTS,
+    LIVRE,
     CONVERTER,
     JOURNAL,
     IMMERSIVE_LIFE,
@@ -59,6 +60,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _currentScreen = MutableStateFlow(SaatanScreen.DIVINE_CLOCK)
     val currentScreen: StateFlow<SaatanScreen> = _currentScreen.asStateFlow()
+
+    /**
+     * The book ("La Prière Goûtée", Sprint 4) is not a bottom tab: it opens
+     * from the clock header or from a Voyage station chip. The optional id
+     * focuses the reader directly on one chapter; the screen consumes it
+     * (a malformed id falls back to the sommaire).
+     */
+    private val _pendingBookChapter = MutableStateFlow<String?>(null)
+    val pendingBookChapter: StateFlow<String?> = _pendingBookChapter.asStateFlow()
+
+    fun openBook(chapterId: String? = null) {
+        _pendingBookChapter.value = chapterId
+        _currentScreen.value = SaatanScreen.LIVRE
+    }
+
+    fun consumePendingBookChapter() {
+        _pendingBookChapter.value = null
+    }
 
     private val _liveDivineTime = MutableStateFlow<DivineTimeInfo>(
         DivineTimeCalculator.calculateDivineTime(

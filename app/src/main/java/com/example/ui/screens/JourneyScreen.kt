@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Spa
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import com.example.data.audio.StationPlayer
 import com.example.data.localization.AppStrings
 import com.example.data.model.AppLanguage
+import com.example.data.model.BookLibrary
 import com.example.data.model.JourneyStations
 import com.example.ui.MainViewModel
 import com.example.ui.SaatanScreen
@@ -277,6 +279,37 @@ fun JourneyScreen(
                             lineHeight = 20.sp,
                             color = if (isDayMode) DawnTextPrimary else TextPrimary
                         )
+
+                        // The chapter(s) of the book woven into this station (Sprint 4).
+                        val stationChapters = BookLibrary.chaptersForStation(station.order)
+                        if (stationChapters.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(9.dp))
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .background(GoldPrimary.copy(alpha = 0.10f))
+                                    .border(1.dp, GoldPrimary.copy(alpha = 0.5f), RoundedCornerShape(50))
+                                    .clickable { viewModel.openBook(stationChapters.first().id) }
+                                    .padding(horizontal = 10.dp, vertical = 5.dp)
+                                    .testTag("journey_book_chip_${station.order}")
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.AutoStories,
+                                    contentDescription = null,
+                                    tint = TextGold,
+                                    modifier = Modifier.size(13.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = AppStrings.bookJourneyChip(language),
+                                    fontFamily = CinzelFontFamily,
+                                    fontSize = 10.sp,
+                                    letterSpacing = 0.6.sp,
+                                    color = TextGold
+                                )
+                            }
+                        }
 
                         Spacer(modifier = Modifier.height(8.dp))
 

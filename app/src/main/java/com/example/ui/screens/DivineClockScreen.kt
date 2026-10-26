@@ -29,6 +29,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Edit
@@ -243,6 +244,27 @@ fun DivineClockScreen(
                                     color = GoldLight
                                 )
                             }
+                        }
+
+                        // Book button — La Prière Goûtée (Sprint 4)
+                        IconButton(
+                            onClick = {
+                                triggerSpiritualHaptic(context)
+                                viewModel.openBook()
+                            },
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .background(Midnight800)
+                                .border(1.dp, GoldBorder, CircleShape)
+                                .testTag("book_button")
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.AutoStories,
+                                contentDescription = AppStrings.bookOpenLabel(currentLanguage),
+                                tint = GoldLight,
+                                modifier = Modifier.size(18.dp)
+                            )
                         }
 
                         // Day / Night Theme Selector Toggle

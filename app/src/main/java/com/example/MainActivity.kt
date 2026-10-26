@@ -52,6 +52,7 @@ import com.example.ui.MainViewModel
 import com.example.ui.SaatanScreen
 import com.example.ui.components.triggerSpiritualHaptic
 import com.example.ui.screens.ChallengesScreen
+import com.example.ui.screens.BookScreen
 import com.example.ui.screens.DivineClockScreen
 import com.example.ui.screens.DivineJournalScreen
 import com.example.ui.screens.JourneyScreen
@@ -93,6 +94,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Deep-ish hook for tests and future notifications:
+        //   am start ... --es dhawq_open index|ch16   (opens the book / a chapter)
+        when (val wanted = intent?.getStringExtra("dhawq_open")) {
+            "index" -> viewModel.navigateTo(SaatanScreen.LIVRE)
+            null -> Unit
+            else -> if (com.example.data.model.BookLibrary.BY_ID.containsKey(wanted)) {
+                viewModel.openBook(wanted)
+            }
+        }
+
         setContent {
             val isDayMode by viewModel.isDayMode.collectAsState()
             MyApplicationTheme(isDayMode = isDayMode) {
@@ -224,6 +236,7 @@ fun SaatanAppContent(viewModel: MainViewModel) {
                         SaatanScreen.DIVINE_CLOCK -> DivineClockScreen(viewModel)
                         SaatanScreen.JOURNEY -> JourneyScreen(viewModel)
                         SaatanScreen.LAST_NIGHTS -> LastNightsScreen(viewModel)
+                        SaatanScreen.LIVRE -> BookScreen(viewModel)
                         SaatanScreen.CONVERTER -> TemporalConverterScreen(viewModel)
                         SaatanScreen.JOURNAL -> DivineJournalScreen(viewModel)
                         SaatanScreen.IMMERSIVE_LIFE -> LifeJourneyVisualizerScreen(viewModel)

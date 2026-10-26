@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.QuestionAnswer
 import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -303,6 +304,37 @@ fun JourneyScreen(
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Text(
                                     text = AppStrings.bookJourneyChip(language),
+                                    fontFamily = CinzelFontFamily,
+                                    fontSize = 10.sp,
+                                    letterSpacing = 0.6.sp,
+                                    color = TextGold
+                                )
+                            }
+                        }
+
+                        // Station 6 — "Le Dialogue": the Fatiha stepper screen
+                        // (book ch22, hadith qudsi Muslim n°395) opens directly.
+                        if (station.order == 6) {
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .background(GoldPrimary.copy(alpha = 0.14f))
+                                    .border(1.dp, GoldPrimary.copy(alpha = 0.65f), RoundedCornerShape(50))
+                                    .clickable { viewModel.openFatiha() }
+                                    .padding(horizontal = 10.dp, vertical = 5.dp)
+                                    .testTag("journey_fatiha_chip_6")
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.QuestionAnswer,
+                                    contentDescription = null,
+                                    tint = TextGold,
+                                    modifier = Modifier.size(13.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = AppStrings.bookFatihaChip(language),
                                     fontFamily = CinzelFontFamily,
                                     fontSize = 10.sp,
                                     letterSpacing = 0.6.sp,

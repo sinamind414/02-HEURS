@@ -37,6 +37,7 @@ enum class SaatanScreen {
     JOURNEY,
     LAST_NIGHTS,
     LIVRE,
+    FATIHA,
     CONVERTER,
     JOURNAL,
     IMMERSIVE_LIFE,
@@ -79,6 +80,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun consumePendingBookChapter() {
         _pendingBookChapter.value = null
+    }
+
+    /**
+     * The Fatiha dialogue (Sprint 5) is reached from book chapter 22's chip
+     * (the hadith qudsi n°395 chapter), from Voyage station 6 ("Le Dialogue")
+     * or via the `dhawq_open fatiha` intent hook — the screen restarts from
+     * its own intro card, there is no pending argument to carry.
+     */
+    fun openFatiha() {
+        _currentScreen.value = SaatanScreen.FATIHA
+    }
+
+    // ── Logo splash ("Prayer of Taste" calligraphy video) ───────────────
+    // Lives in the ViewModel so a runtime rotation / configuration change
+    // does not replay the intro; every fresh process (cold open) replays it
+    // — that is the point ("splash à chaque ouverture").
+
+    private val _splashVisible = MutableStateFlow(true)
+    val splashVisible: StateFlow<Boolean> = _splashVisible.asStateFlow()
+
+    fun dismissSplash() {
+        _splashVisible.value = false
     }
 
     private val _liveDivineTime = MutableStateFlow<DivineTimeInfo>(

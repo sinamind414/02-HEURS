@@ -2769,6 +2769,157 @@ object AppStrings {
         AppLanguage.FR -> "Le dialogue de la Fatiha"
     }
 
+    // ── Al-Fatiha dialogue screen (Sprint 5, book chapter 22) ────────────
+    // Only chrome lives here; the verse/hadith text itself is data inside
+    // FatihaLibrary (the JourneyStation convention).
+
+    fun fatihaTopBarLabel(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "حوار الفاتحة"
+        AppLanguage.EN -> "THE FATIHA DIALOGUE"
+        AppLanguage.FR -> "LE DIALOGUE DE LA FATIHA"
+    }
+
+    fun fatihaStationLabel(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "المحطة 06 · الحوار · قمّة الصلاة المذوقة"
+        AppLanguage.EN -> "Station 06 · The Dialogue · The summit of the tasted prayer"
+        AppLanguage.FR -> "Station 06 · الحوار · Le sommet de la prière goûtée"
+    }
+
+    fun fatihaTitlePart1(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "Al-Fatiha ليست تلاوة."
+        AppLanguage.EN -> "Al-Fatiha is not a recitation."
+        AppLanguage.FR -> "Al-Fatiha n'est pas une récitation."
+    }
+
+    fun fatihaTitlePart2(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "بل حوار."
+        AppLanguage.EN -> "It is a dialogue."
+        AppLanguage.FR -> "C'est un dialogue."
+    }
+
+    fun fatihaSubtitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "حديث قدسي — Muslim رقم 395 : « شَقَّتُ الصَّلاةَ بَيْنِي وَبَيْنَ عَبْدِي نِصْفَيْنِ ». تقدّم آيةً بآية، وبعد كلِّ آية توقّف فنفساً — واسمع الجواب."
+        AppLanguage.EN -> "Hadith qudsi — Muslim n°395: \u201CI have divided the prayer between Me and My servant, in two halves.\u201D Move forward verse by verse. After each one, pause — and listen to the answer."
+        AppLanguage.FR -> "Hadith qudsi — Muslim n°395 : « J'ai partagé la prière entre Moi et Mon serviteur, en deux moitiés. » Avance verset par verset. Après chacun, fais une pause — et écoute la réponse."
+    }
+
+    fun fatihaIntroTranslit(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "Bismillahir-Rahmanir-Rahim"
+        AppLanguage.EN -> "Bismillahir-Rahmanir-Rahim — In the name of Allah, the Most Compassionate, the Most Merciful."
+        AppLanguage.FR -> "Bismillahir-Rahmanir-Rahim — Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux."
+    }
+
+    fun fatihaIntroBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أنت تطرق الباب. بعد لحظة ستتكلّم — وهو سيجيب، عند كلِّ آية. من أدرك ذلك لم يعد يُتلو الفاتحة كما كان."
+        AppLanguage.EN -> "You are knocking at the door. In a moment you will speak — and He will answer, at every verse. Whoever grasps this never recites Al-Fatiha the same way again."
+        AppLanguage.FR -> "Tu frappes à la porte. Dans un instant, tu vas parler — et Il va répondre, à chaque verset. Celui qui comprend cela ne récite plus jamais Al-Fatiha comme avant."
+    }
+
+    fun fatihaStart(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ابدأ الحوار"
+        AppLanguage.EN -> "Begin the dialogue"
+        AppLanguage.FR -> "Commencer le dialogue"
+    }
+
+    fun fatihaYouSay(lang: AppLanguage, verse: Int): String = when (lang) {
+        AppLanguage.AR -> "تقول — آية $verse من 7"
+        AppLanguage.EN -> "You say — verse $verse of 7"
+        AppLanguage.FR -> "Tu dis — verset $verse / 7"
+    }
+
+    fun fatihaHeAnswers(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "هُوَ يُجِيبُ"
+        AppLanguage.EN -> "He answers"
+        AppLanguage.FR -> "Il répond"
+    }
+
+    fun fatihaPauseNote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ولا تَعْجَلْ الآن. أبْقَ نَفَساً في هذا الجواب قبل الآية التالية — هنا بالضبط تُذوق الصلاة."
+        AppLanguage.EN -> "Now, do not rush. Stay one breath inside this answer before the next verse — that is precisely where the prayer is tasted."
+        AppLanguage.FR -> "Maintenant, ne cours pas. Reste une respiration dans cette réponse avant le verset suivant — c'est exactement là que se goûte la prière."
+    }
+
+    fun fatihaBack(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "رجوع"
+        AppLanguage.EN -> "Back"
+        AppLanguage.FR -> "Retour"
+    }
+
+    fun fatihaNextVerse(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الآية التالية"
+        AppLanguage.EN -> "Next verse"
+        AppLanguage.FR -> "Verset suivant"
+    }
+
+    fun fatihaSayAmin(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "قل آمين"
+        AppLanguage.EN -> "Say Âmîn"
+        AppLanguage.FR -> "Dire Âmin"
+    }
+
+    fun fatihaFinaleQuote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "﴿ وَلِعَبْدِي مَا سَأَلَ ﴾"
+        AppLanguage.EN -> "\u201CAnd My servant shall have what he asked for.\u201D"
+        AppLanguage.FR -> "« Et Mon serviteur aura ce qu'il a demandé. »"
+    }
+
+    fun fatihaFinaleBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "عشتَ للتوّ في دقيقةٍ ما يُعلّمه الحلقة في سبعَ عَشَرَ دقيقة: الفاتحة مكالمةٌ مع الله. في المرة القادمة التي تُتلائها واقفاً، دَعِ كلَّ جوابٍ أن يأتي."
+        AppLanguage.EN -> "You have just lived in one minute what the episode teaches in seventeen: Al-Fatiha is a conversation. Next time you recite it standing, let every answer arrive."
+        AppLanguage.FR -> "Tu viens de vivre en une minute ce que l'épisode enseigne en dix-sept : la Fatiha est une conversation. La prochaine fois que tu la réciteras debout, laisse chaque réponse arriver."
+    }
+
+    fun fatihaRestart(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أعد الحوار"
+        AppLanguage.EN -> "Restart the dialogue"
+        AppLanguage.FR -> "Recommencer le dialogue"
+    }
+
+    fun fatihaAdvice1Title(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لا تُتلو"
+        AppLanguage.EN -> "Don't recite"
+        AppLanguage.FR -> "Ne récite pas"
+    }
+
+    fun fatihaAdvice1Desc(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "حوار. جملة، جواب، نَفَس."
+        AppLanguage.EN -> "Dialogue. One line, one answer, one breath."
+        AppLanguage.FR -> "Dialogue. Une phrase, une réponse, une respiration."
+    }
+
+    fun fatihaAdvice2Title(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اسمع الجواب"
+        AppLanguage.EN -> "Hear the answer"
+        AppLanguage.FR -> "Entends la réponse"
+    }
+
+    fun fatihaAdvice2Desc(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "« حَمِدَنِي عَبْدِي » — هو عنك يحدّث."
+        AppLanguage.EN -> "\u201CMy servant has praised Me\u201D — He is speaking about you."
+        AppLanguage.FR -> "« Mon serviteur M'a loué » — c'est de toi qu'Il parle."
+    }
+
+    fun fatihaAdvice3Title(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "عَقِّل بآمين"
+        AppLanguage.EN -> "End with Âmîn"
+        AppLanguage.FR -> "Termine par Âmin"
+    }
+
+    fun fatihaAdvice3Desc(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الملائكة تقول آمين معك. لا تُمِحْ خائِناً."
+        AppLanguage.EN -> "The angels say Âmîn with you. Do not murmur it while already fleeing."
+        AppLanguage.FR -> "Les anges disent Âmin avec toi. Ne le murmure pas en fuyant."
+    }
+
+    // ── Logo splash (opening video) ─────────────────────────────────────
+    // The calligraphy "Prayer of Taste" intro that plays on every app open.
+
+    fun splashEnterHint(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اضغط للدخول"
+        AppLanguage.EN -> "Tap to enter"
+        AppLanguage.FR -> "Appuyez pour entrer"
+    }
+
     fun bookNoteTitle(lang: AppLanguage): String = when (lang) {
         AppLanguage.AR -> "ملاحظة الناشر"
         AppLanguage.EN -> "Publisher's note"

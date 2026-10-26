@@ -524,8 +524,9 @@ private fun BookReader(
                                 .clip(RoundedCornerShape(50))
                                 .background(GoldPrimary.copy(alpha = 0.10f))
                                 .border(1.dp, GoldPrimary.copy(alpha = 0.5f), RoundedCornerShape(50))
-                                .clickable { viewModel.navigateTo(SaatanScreen.JOURNEY) }
+                                .clickable { viewModel.openFatiha() }
                                 .padding(horizontal = 10.dp, vertical = 5.dp)
+                                .testTag("fatiha_book_chip")
                         )
                     }
                 }

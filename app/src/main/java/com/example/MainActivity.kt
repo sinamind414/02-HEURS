@@ -55,9 +55,11 @@ import com.example.ui.screens.ChallengesScreen
 import com.example.ui.screens.BookScreen
 import com.example.ui.screens.DivineClockScreen
 import com.example.ui.screens.DivineJournalScreen
+import com.example.ui.screens.FatihaScreen
 import com.example.ui.screens.JourneyScreen
 import com.example.ui.screens.LastNightsScreen
 import com.example.ui.screens.LifeJourneyVisualizerScreen
+import com.example.ui.screens.LogoSplashOverlay
 import com.example.ui.screens.SettingsVersesScreen
 import com.example.ui.screens.TemporalConverterScreen
 import com.example.ui.theme.CinzelFontFamily
@@ -96,9 +98,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         // Deep-ish hook for tests and future notifications:
-        //   am start ... --es dhawq_open index|ch16   (opens the book / a chapter)
+        //   am start ... --es dhawq_open index|fatiha|ch16   (book, Fatiha
+        //   dialogue, or a book chapter)
         when (val wanted = intent?.getStringExtra("dhawq_open")) {
             "index" -> viewModel.navigateTo(SaatanScreen.LIVRE)
+            "fatiha" -> viewModel.openFatiha()
             null -> Unit
             else -> if (com.example.data.model.BookLibrary.BY_ID.containsKey(wanted)) {
                 viewModel.openBook(wanted)
@@ -107,8 +111,29 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val isDayMode by viewModel.isDayMode.collectAsState()
+            val language by viewModel.appLanguage.collectAsState()
             MyApplicationTheme(isDayMode = isDayMode) {
-                SaatanAppContent(viewModel)
+                Box(Modifier.fillMaxSize()) {
+                    SaatanAppContent(viewModel)
+
+                    // The opening "Prayer of Taste" logo video sits above the
+                    // whole app: it dissolves on tap, at video end, or via the
+                    // 12 s watchman; a rotation never replays it (the flag
+                    // lives in the ViewModel).
+                    val splashVisible by viewModel.splashVisible.collectAsState()
+                    Crossfade(
+                        targetState = splashVisible,
+                        animationSpec = tween(450),
+                        label = "logo_splash"
+                    ) { visible ->
+                        if (visible) {
+                            LogoSplashOverlay(
+                                language = language,
+                                onDismiss = viewModel::dismissSplash
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -120,20 +145,29 @@ fun SaatanAppContent(viewModel: MainViewModel) {
     val currentScreen by viewModel.currentScreen.collectAsState()
     val currentLanguage by viewModel.appLanguage.collectAsState()
     val isDayMode by viewModel.isDayMode.collectAsState()
+    val splashVisible by viewModel.splashVisible.collectAsState()
 
     // Handle system back button: return to main divine clock screen
     BackHandler(enabled = currentScreen != SaatanScreen.DIVINE_CLOCK) {
         viewModel.navigateTo(SaatanScreen.DIVINE_CLOCK)
     }
 
+    // While the logo splash is playing, system back simply skips the video
+    // (composed after the handler above, so it takes priority).
+    BackHandler(enabled = splashVisible) {
+        viewModel.dismissSplash()
+    }
+
     // Android 13+ requires an explicit runtime grant for notifications.
     // Without it `NotificationManager.notify()` throws a SecurityException that
-    // is swallowed, so the app would silently never show a reminder.
+    // is swallowed, so the app would silently never show a reminder. Wait for
+    // the logo splash to end before popping the system dialog on first run.
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { /* the reminder scheduler re-arms itself from the stored preferences */ }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(splashVisible) {
+        if (splashVisible) return@LaunchedEffect
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val granted = ContextCompat.checkSelfPermission(
                 context,
@@ -237,6 +271,7 @@ fun SaatanAppContent(viewModel: MainViewModel) {
                         SaatanScreen.JOURNEY -> JourneyScreen(viewModel)
                         SaatanScreen.LAST_NIGHTS -> LastNightsScreen(viewModel)
                         SaatanScreen.LIVRE -> BookScreen(viewModel)
+                        SaatanScreen.FATIHA -> FatihaScreen(viewModel)
                         SaatanScreen.CONVERTER -> TemporalConverterScreen(viewModel)
                         SaatanScreen.JOURNAL -> DivineJournalScreen(viewModel)
                         SaatanScreen.IMMERSIVE_LIFE -> LifeJourneyVisualizerScreen(viewModel)

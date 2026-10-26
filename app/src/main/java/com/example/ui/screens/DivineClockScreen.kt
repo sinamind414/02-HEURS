@@ -30,15 +30,24 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
+import androidx.compose.material.icons.filled.Balance
+import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.HourglassBottom
+import androidx.compose.material.icons.filled.Mosque
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SwapVert
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -314,6 +323,58 @@ fun DivineClockScreen(
                         }
                     }
                 }
+
+                // Secondary destinations demoted from the bottom bar (nav
+                // trimmed to 5 tabs): the temporal converter and the
+                // notifications/verses settings stay one tap away as header
+                // pills on the same midnight motif.
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 2.dp)
+                ) {
+                    IconButton(
+                        onClick = {
+                            triggerSpiritualHaptic(context)
+                            viewModel.navigateTo(SaatanScreen.CONVERTER)
+                        },
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(Midnight800)
+                            .border(1.dp, GoldBorder, CircleShape)
+                            .testTag("clock_converter_button")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.SwapVert,
+                            contentDescription = AppStrings.navConverter(currentLanguage),
+                            tint = GoldLight,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+
+                    IconButton(
+                        onClick = {
+                            triggerSpiritualHaptic(context)
+                            viewModel.navigateTo(SaatanScreen.SETTINGS_VERSES)
+                        },
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(Midnight800)
+                            .border(1.dp, GoldBorder, CircleShape)
+                            .testTag("clock_settings_verses_button")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Notifications,
+                            contentDescription = AppStrings.navSettings(currentLanguage),
+                            tint = GoldLight,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
             }
 
             // Bismillah Header
@@ -439,14 +500,23 @@ fun DivineClockScreen(
                         .testTag("earth_vs_divine_stats")
                 ) {
                     Column(modifier = Modifier.padding(18.dp)) {
-                        Text(
-                            text = "⚖️ " + AppStrings.comparativeTitle(currentLanguage),
-                            fontFamily = CinzelFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp,
-                            letterSpacing = 1.sp,
-                            color = GoldLight
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Balance,
+                                contentDescription = null,
+                                tint = GoldLight,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = AppStrings.comparativeTitle(currentLanguage),
+                                fontFamily = CinzelFontFamily,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp,
+                                letterSpacing = 1.sp,
+                                color = GoldLight
+                            )
+                        }
                         Spacer(modifier = Modifier.height(14.dp))
 
                         // Row Earth
@@ -456,7 +526,12 @@ fun DivineClockScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "🌍", fontSize = 20.sp)
+                                Icon(
+                                    imageVector = Icons.Default.Public,
+                                    contentDescription = null,
+                                    tint = CelestialCyan,
+                                    modifier = Modifier.size(22.dp)
+                                )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Column {
                                     Text(text = AppStrings.onEarth(currentLanguage), fontSize = 12.sp, color = TextSecondary)
@@ -491,7 +566,12 @@ fun DivineClockScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "☁️", fontSize = 20.sp)
+                                Icon(
+                                    imageVector = Icons.Default.Cloud,
+                                    contentDescription = null,
+                                    tint = TextSecondary,
+                                    modifier = Modifier.size(22.dp)
+                                )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Column {
                                     Text(text = AppStrings.withAllahLived(currentLanguage), fontSize = 12.sp, color = TextSecondary)
@@ -527,7 +607,12 @@ fun DivineClockScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "⏳", fontSize = 20.sp)
+                                Icon(
+                                    imageVector = Icons.Default.HourglassBottom,
+                                    contentDescription = null,
+                                    tint = TextGold,
+                                    modifier = Modifier.size(22.dp)
+                                )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Column {
                                     Text(text = AppStrings.withAllahRemaining(currentLanguage), fontSize = 12.sp, color = TextSecondary)
@@ -574,7 +659,12 @@ fun DivineClockScreen(
                                 .border(1.dp, GoldPrimary, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = "⚡", fontSize = 24.sp)
+                            Icon(
+                                imageVector = Icons.Default.Bolt,
+                                contentDescription = null,
+                                tint = GoldPrimary,
+                                modifier = Modifier.size(26.dp)
+                            )
                         }
                         Spacer(modifier = Modifier.width(14.dp))
                         Column(modifier = Modifier.weight(1f)) {
@@ -614,15 +704,27 @@ fun DivineClockScreen(
                         modifier = Modifier.padding(18.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = "🤲 " + AppStrings.minuteDivineQuestion(currentLanguage),
-                            fontFamily = CinzelFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.5.sp,
-                            letterSpacing = 0.5.sp,
-                            color = TextGold,
-                            textAlign = TextAlign.Center
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.VolunteerActivism,
+                                contentDescription = null,
+                                tint = TextGold,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = AppStrings.minuteDivineQuestion(currentLanguage),
+                                fontFamily = CinzelFontFamily,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.5.sp,
+                                letterSpacing = 0.5.sp,
+                                color = TextGold,
+                                textAlign = TextAlign.Center
+                            )
+                        }
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = divineTime.impactPhrase,
@@ -812,11 +914,20 @@ fun PrayerCountdownNotificationCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "${prayerState.cityName}, ${prayerState.countryName} ✎",
+                        text = "${prayerState.cityName}, ${prayerState.countryName}",
                         fontFamily = CinzelFontFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                         color = CelestialCyan
+                    )
+                    // Trailing affordance: the row opens the city dialog.
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = null,
+                        tint = CelestialCyan.copy(alpha = 0.75f),
+                        modifier = Modifier
+                            .padding(start = 3.dp)
+                            .size(13.dp)
                     )
                 }
 
@@ -1130,7 +1241,7 @@ fun DivineTimeMainCounterCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = AppStrings.ageYearsLabel(language, divineTime.earthYearsInt) + " ✎",
+                        text = AppStrings.ageYearsLabel(language, divineTime.earthYearsInt),
                         fontSize = 12.sp,
                         color = CelestialCyan
                     )
@@ -1181,15 +1292,27 @@ fun CitySelectionDialog(
                     .fillMaxWidth()
                     .padding(22.dp)
             ) {
-                Text(
-                    text = "🕌 " + AppStrings.cityPrayerTitle(language),
-                    fontFamily = CinzelFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = GoldLight,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Mosque,
+                        contentDescription = null,
+                        tint = GoldLight,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = AppStrings.cityPrayerTitle(language),
+                        fontFamily = CinzelFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = GoldLight,
+                        textAlign = TextAlign.Center
+                    )
+                }
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = AppStrings.cityPrayerSubtitle(language),

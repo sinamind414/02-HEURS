@@ -26,10 +26,8 @@ import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.HourglassBottom
 import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material.icons.filled.PlayCircle
-import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -179,14 +177,15 @@ fun SaatanAppContent(viewModel: MainViewModel) {
         }
     }
 
+    // Five primary destinations: the converter and the notification/verses
+    // settings were demoted from the bar (7 tabs exceeded the 5-tab mobile
+    // guideline) and are now header pills on the divine clock screen.
     val navItems = listOf(
         NavItem(SaatanScreen.DIVINE_CLOCK, AppStrings.navClock(currentLanguage), Icons.Default.HourglassBottom, "nav_clock"),
         NavItem(SaatanScreen.JOURNEY, AppStrings.navJourney(currentLanguage), Icons.Default.Spa, "nav_journey"),
-        NavItem(SaatanScreen.CONVERTER, AppStrings.navConverter(currentLanguage), Icons.Default.SwapVert, "nav_converter"),
         NavItem(SaatanScreen.JOURNAL, AppStrings.navJournal(currentLanguage), Icons.AutoMirrored.Filled.MenuBook, "nav_journal"),
-        NavItem(SaatanScreen.IMMERSIVE_LIFE, AppStrings.navVisualizer(currentLanguage), Icons.Default.PlayCircle, "nav_visualizer"),
         NavItem(SaatanScreen.CHALLENGES, AppStrings.navChallenges(currentLanguage), Icons.Default.EmojiEvents, "nav_challenges"),
-        NavItem(SaatanScreen.SETTINGS_VERSES, AppStrings.navSettings(currentLanguage), Icons.Default.Notifications, "nav_settings")
+        NavItem(SaatanScreen.IMMERSIVE_LIFE, AppStrings.navVisualizer(currentLanguage), Icons.Default.PlayCircle, "nav_visualizer")
     )
 
     val backgroundColor = if (isDayMode) DawnCream900 else Midnight950

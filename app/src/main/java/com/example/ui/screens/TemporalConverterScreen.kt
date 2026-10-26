@@ -20,6 +20,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.HourglassBottom
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -137,15 +140,26 @@ fun TemporalConverterScreen(
                     .padding(horizontal = 20.dp, vertical = 6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "⏳ " + AppStrings.converterTitle(language),
-                    fontFamily = CinzelFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    letterSpacing = 1.sp,
-                    color = accentGold,
-                    textAlign = TextAlign.Center
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.HourglassBottom,
+                        contentDescription = null,
+                        tint = accentGold,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = AppStrings.converterTitle(language),
+                        fontFamily = CinzelFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        letterSpacing = 1.sp,
+                        color = accentGold,
+                        textAlign = TextAlign.Center
+                    )
+                }
                 Text(
                     text = AppStrings.converterSubtitle(language),
                     fontSize = 12.5.sp,

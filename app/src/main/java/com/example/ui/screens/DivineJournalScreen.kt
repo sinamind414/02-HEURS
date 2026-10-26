@@ -19,8 +19,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Handshake
+import androidx.compose.material.icons.filled.Mosque
+import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -113,15 +119,26 @@ fun DivineJournalScreen(
                     .padding(horizontal = 20.dp, vertical = 6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "📖 " + AppStrings.journalTitle(language),
-                    fontFamily = CinzelFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 19.sp,
-                    letterSpacing = 1.sp,
-                    color = accentGold,
-                    textAlign = TextAlign.Center
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.MenuBook,
+                        contentDescription = null,
+                        tint = accentGold,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = AppStrings.journalTitle(language),
+                        fontFamily = CinzelFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 19.sp,
+                        letterSpacing = 1.sp,
+                        color = accentGold,
+                        textAlign = TextAlign.Center
+                    )
+                }
                 Spacer(modifier = Modifier.height(4.dp))
                 Box(
                     modifier = Modifier
@@ -201,14 +218,23 @@ fun DivineJournalScreen(
         // Daily Deeds Checklist Section
         item {
             Column(modifier = Modifier.padding(start = 24.dp, top = 12.dp, bottom = 6.dp)) {
-                Text(
-                    text = "🕌 " + AppStrings.prayerChecklistTitle(language),
-                    fontFamily = CinzelFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 13.sp,
-                    letterSpacing = 0.5.sp,
-                    color = GoldLight
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Mosque,
+                        contentDescription = null,
+                        tint = GoldLight,
+                        modifier = Modifier.size(15.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = AppStrings.prayerChecklistTitle(language),
+                        fontFamily = CinzelFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                        letterSpacing = 0.5.sp,
+                        color = GoldLight
+                    )
+                }
             }
         }
 
@@ -333,7 +359,8 @@ fun DivineJournalScreen(
                     )
 
                     DeedCheckRow(
-                        title = "🤲 " + AppStrings.sadaqaDone(language),
+                        title = AppStrings.sadaqaDone(language),
+                        icon = Icons.Default.VolunteerActivism,
                         subtitle = AppStrings.sadaqaSubtitle(language),
                         isChecked = todayJournal?.sadaqaGiven == true,
                         isDayMode = isDayMode,
@@ -344,7 +371,8 @@ fun DivineJournalScreen(
                     )
 
                     DeedCheckRow(
-                        title = "📿 " + AppStrings.eveningDhikr(language),
+                        title = AppStrings.eveningDhikr(language),
+                        icon = Icons.Default.Replay,
                         subtitle = AppStrings.dhikrSubtitle(language),
                         isChecked = todayJournal?.morningEveningDhikr == true,
                         isDayMode = isDayMode,
@@ -355,7 +383,8 @@ fun DivineJournalScreen(
                     )
 
                     DeedCheckRow(
-                        title = "🤝 " + AppStrings.goodDeed(language),
+                        title = AppStrings.goodDeed(language),
+                        icon = Icons.Default.Handshake,
                         subtitle = AppStrings.goodDeedSubtitle(language),
                         isChecked = todayJournal?.goodDeedDone == true,
                         isDayMode = isDayMode,
@@ -499,7 +528,8 @@ private fun DeedCheckRow(
     subtitle: String,
     isChecked: Boolean,
     isDayMode: Boolean,
-    onCheck: (Boolean) -> Unit
+    onCheck: (Boolean) -> Unit,
+    icon: ImageVector? = null
 ) {
     val textPrimary = if (isDayMode) DawnTextPrimary else TextPrimary
     val textSecondary = if (isDayMode) DawnTextSecondary else TextSecondary
@@ -524,12 +554,23 @@ private fun DeedCheckRow(
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                fontSize = 13.5.sp,
-                fontWeight = if (isChecked) FontWeight.SemiBold else FontWeight.Normal,
-                color = if (isChecked) goldText else textPrimary
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (icon != null) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = if (isChecked) goldText else textPrimary,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                }
+                Text(
+                    text = title,
+                    fontSize = 13.5.sp,
+                    fontWeight = if (isChecked) FontWeight.SemiBold else FontWeight.Normal,
+                    color = if (isChecked) goldText else textPrimary
+                )
+            }
             Text(
                 text = subtitle,
                 fontSize = 11.sp,

@@ -12,10 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.Bedtime
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -96,9 +101,11 @@ fun LastNightsScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 20.dp)
                 ) {
-                    Text(
-                        text = "🌙",
-                        fontSize = 30.sp
+                    Icon(
+                        imageVector = Icons.Default.Bedtime,
+                        contentDescription = null,
+                        tint = GoldLight,
+                        modifier = Modifier.size(30.dp)
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
@@ -241,16 +248,27 @@ fun LastNightsScreen(
                                 Spacer(modifier = Modifier.width(6.dp))
                             }
                             if (isOdd) {
-                                Text(
-                                    text = "✦ " + AppStrings.oddNightBadge(language),
-                                    fontSize = 9.5.sp,
-                                    color = if (isDayMode) DawnTextSecondary else TextSecondary,
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(50))
                                         .background(if (isDayMode) DawnCream800 else Midnight800)
                                         .border(1.dp, GoldBorder, RoundedCornerShape(50))
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
-                                )
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.AutoAwesome,
+                                        contentDescription = null,
+                                        tint = if (isDayMode) DawnTextSecondary else TextSecondary,
+                                        modifier = Modifier.size(10.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = AppStrings.oddNightBadge(language),
+                                        fontSize = 9.5.sp,
+                                        color = if (isDayMode) DawnTextSecondary else TextSecondary
+                                    )
+                                }
                             }
                         }
                     }
@@ -276,13 +294,24 @@ fun LastNightsScreen(
                             .testTag("vigil_button"),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "🌙  " + AppStrings.vigilButton(language),
-                            fontFamily = CinzelFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp,
-                            color = TextGold
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Bedtime,
+                                contentDescription = null,
+                                tint = TextGold,
+                                modifier = Modifier.size(15.dp)
+                            )
+                            Text(
+                                text = AppStrings.vigilButton(language),
+                                fontFamily = CinzelFontFamily,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp,
+                                color = TextGold
+                            )
+                        }
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
@@ -401,13 +430,22 @@ fun LastNightsSeasonCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "🌙  " + AppStrings.lastNightsSeasonCardTitle(language),
-                    fontFamily = CinzelFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 13.sp,
-                    color = GoldLight
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Bedtime,
+                        contentDescription = null,
+                        tint = GoldLight,
+                        modifier = Modifier.size(15.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = AppStrings.lastNightsSeasonCardTitle(language),
+                        fontFamily = CinzelFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                        color = GoldLight
+                    )
+                }
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = AppStrings.lastNightsSeasonCardBody(language),

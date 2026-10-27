@@ -80,6 +80,7 @@ import com.example.ui.theme.TextGold
 import com.example.ui.theme.TextMuted
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.saatanTextPalette
 
 /**
  * Ultimate Prayer Motivator Component ("Le Grand Motiveur de Prière")
@@ -100,6 +101,7 @@ fun DivinePrayerMotivatorCard(
 ) {
     val context = LocalContext.current
     val isDayMode = LocalSaatanThemeIsDay.current
+    val textPalette = saatanTextPalette()
 
     var isExpandedDetails by remember { mutableStateOf(false) }
 
@@ -169,13 +171,13 @@ fun DivinePrayerMotivatorCard(
                             fontWeight = FontWeight.Bold,
                             fontSize = 13.sp,
                             letterSpacing = 0.6.sp,
-                            color = GoldLight
+                            color = textPalette.accent
                         )
                         Text(
                             text = AppStrings.rendezVousLabel(language),
                             fontFamily = AmiriFontFamily,
                             fontSize = 12.sp,
-                            color = TextSecondary
+                            color = textPalette.secondary
                         )
                     }
                 }
@@ -197,7 +199,7 @@ fun DivinePrayerMotivatorCard(
                     Text(
                         text = "✦ " + AppStrings.goldenWindowBadge(language),
                         fontSize = 10.5.sp,
-                        color = TextGold,
+                        color = textPalette.gold,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -291,14 +293,14 @@ fun DivinePrayerMotivatorCard(
                     fontFamily = CinzelFontFamily,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = GoldLight
+                    color = textPalette.accent
                 )
                 Text(
                     text = AppStrings.prayersDoneRatio(language, completedCount),
                     fontFamily = CinzelFontFamily,
                     fontSize = 11.5.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (completedCount == 5) EmeraldHasanat else TextGold
+                    color = if (completedCount == 5) EmeraldHasanat else textPalette.gold
                 )
             }
 
@@ -321,7 +323,7 @@ fun DivinePrayerMotivatorCard(
             Text(
                 text = AppStrings.divineSecondsInvested(language, String.format(java.util.Locale.US, "%.5f", investedDivineSeconds)),
                 fontSize = 11.sp,
-                color = CelestialCyan
+                color = textPalette.cyan
             )
 
             Spacer(modifier = Modifier.height(12.dp))

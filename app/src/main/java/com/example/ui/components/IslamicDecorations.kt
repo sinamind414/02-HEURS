@@ -67,6 +67,7 @@ import com.example.ui.theme.TextGold
 import com.example.ui.theme.TextMuted
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.saatanTextPalette
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -75,6 +76,7 @@ fun BismillahHeader(
     modifier: Modifier = Modifier,
     subtitle: String? = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
 ) {
+    val textPalette = saatanTextPalette()
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -87,7 +89,7 @@ fun BismillahHeader(
                 fontFamily = AmiriFontFamily,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = TextGold,
+                color = textPalette.gold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
@@ -100,6 +102,7 @@ fun BismillahHeader(
 fun IslamicGoldenDivider(
     modifier: Modifier = Modifier
 ) {
+    val textPalette = saatanTextPalette()
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -113,14 +116,14 @@ fun IslamicGoldenDivider(
                 .height(1.dp)
                 .background(
                     Brush.horizontalGradient(
-                        colors = listOf(Color.Transparent, GoldPrimary.copy(alpha = 0.5f))
+                        colors = listOf(Color.Transparent, textPalette.gold.copy(alpha = 0.5f))
                     )
                 )
         )
         Text(
             text = " ✦ ۞ ✦ ",
             fontSize = 11.sp,
-            color = GoldPrimary,
+            color = textPalette.gold,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
         Box(
@@ -129,7 +132,7 @@ fun IslamicGoldenDivider(
                 .height(1.dp)
                 .background(
                     Brush.horizontalGradient(
-                        colors = listOf(GoldPrimary.copy(alpha = 0.5f), Color.Transparent)
+                        colors = listOf(textPalette.gold.copy(alpha = 0.5f), Color.Transparent)
                     )
                 )
         )

@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -64,6 +65,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -80,6 +82,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.zIndex
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -121,6 +124,7 @@ import com.example.ui.theme.TextGold
 import com.example.ui.theme.TextMuted
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.saatanTextPalette
 import kotlinx.coroutines.delay
 import java.util.Calendar
 import java.util.Locale
@@ -141,6 +145,18 @@ fun DivineClockScreen(
     val isDayMode by viewModel.isDayMode.collectAsState()
     val todayJournal by viewModel.todayJournal.collectAsState()
     val cycleState by viewModel.cycleState.collectAsState()
+    val textPalette = saatanTextPalette()
+
+    // The app bar + pill rows are hoisted OUTSIDE the LazyColumn (audit P2):
+    // this state drives the scrim that keeps them readable once the clock
+    // content scrolls underneath.
+    val lazyListState = rememberLazyListState()
+    val headerOnSurface by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex > 0 ||
+                lazyListState.firstVisibleItemScrollOffset > 12
+        }
+    }
 
     val bgGradient = if (isDayMode) {
         Brush.verticalGradient(
@@ -182,13 +198,46 @@ fun DivineClockScreen(
                 .height(280.dp)
                 .background(bgGradient)
         )
+        // Sticky-header scrim (audit P2): while the list scrolls, a
+        // theme-tinted veil rises behind the fixed header so the pills never
+        // superimpose on running text.
+        val scrimColor = if (isDayMode) {
+            com.example.ui.theme.DawnCream950
+        } else {
+            Midnight950
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .zIndex(2f)
+                .height(190.dp)
+                .background(
+                    if (headerOnSurface) {
+                        Brush.verticalGradient(
+                            0f to scrimColor,
+                            0.6f to scrimColor,
+                            1f to scrimColor.copy(alpha = 0f)
+                        )
+                    } else {
+                        Brush.verticalGradient(
+                            0f to scrimColor.copy(alpha = 0f),
+                            1f to scrimColor.copy(alpha = 0f)
+                        )
+                    }
+                )
+        )
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 96.dp)
+        // Fixed header (audit P2): the app bar and the two pill rows used to
+        // scroll away with the clock content; they are hoisted above the list
+        // so the pills stay reachable at any scroll position. zIndex lifts
+        // them above the full-screen LazyColumn that would otherwise swallow
+        // their taps.
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .zIndex(3f)
         ) {
             // Top App Bar
-            item {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -213,13 +262,13 @@ fun DivineClockScreen(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp,
                                 letterSpacing = 1.2.sp,
-                                color = GoldPrimary
+                                color = textPalette.gold
                             )
                             Text(
                                 text = AppStrings.appSubtitle(currentLanguage),
                                 fontFamily = AmiriFontFamily,
                                 fontSize = 12.sp,
-                                color = TextSecondary
+                                color = textPalette.secondary
                             )
                         }
                     }
@@ -375,8 +424,13 @@ fun DivineClockScreen(
                         )
                     }
                 }
-            }
+        }
 
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = lazyListState,
+            contentPadding = PaddingValues(top = 116.dp, bottom = 96.dp)
+        ) {
             // Bismillah Header
             item {
                 BismillahHeader(modifier = Modifier.padding(horizontal = 16.dp))
@@ -396,13 +450,13 @@ fun DivineClockScreen(
                         fontWeight = FontWeight.Bold,
                         fontSize = 17.sp,
                         letterSpacing = 1.5.sp,
-                        color = GoldLight,
+                        color = textPalette.accent,
                         textAlign = TextAlign.Center
                     )
                     Text(
                         text = AppStrings.centralConceptQuote(currentLanguage),
                         fontSize = 12.sp,
-                        color = TextMuted,
+                        color = textPalette.muted,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(top = 2.dp)
                     )

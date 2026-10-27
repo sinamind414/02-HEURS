@@ -49,8 +49,10 @@ import com.example.data.model.DivineTimeInfo
 import com.example.ui.theme.AmiriFontFamily
 import com.example.ui.theme.CelestialCyan
 import com.example.ui.theme.CinzelFontFamily
+import com.example.ui.theme.DawnCelestialCyan
 import com.example.ui.theme.DawnCream800
 import com.example.ui.theme.DawnGoldLight
+import com.example.ui.theme.DawnGoldPrimary
 import com.example.ui.theme.GoldBorder
 import com.example.ui.theme.GoldLight
 import com.example.ui.theme.GoldPrimary
@@ -62,6 +64,7 @@ import com.example.ui.theme.TextGold
 import com.example.ui.theme.TextMuted
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.saatanTextPalette
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -81,6 +84,7 @@ fun TwoDivineHoursClockDial(
     sizeDp: Dp = 270.dp
 ) {
     val isDayMode = LocalSaatanThemeIsDay.current
+    val textPalette = saatanTextPalette()
 
     // Pulsing glow for hand beacon
     val infiniteTransition = rememberInfiniteTransition(label = "clock_pulse")
@@ -111,9 +115,14 @@ fun TwoDivineHoursClockDial(
     val handAngleDegrees = (progressFraction * 360f) - 90f // Start at top (12 o'clock / 0m)
 
     val cardBg = if (isDayMode) Color.White.copy(alpha = 0.95f) else Midnight900.copy(alpha = 0.95f)
-    val cardBorder = if (isDayMode) GoldPrimary.copy(alpha = 0.35f) else GoldBorder
+    val cardBorder = if (isDayMode) DawnGoldPrimary.copy(alpha = 0.35f) else GoldBorder
     val trackBgColor = if (isDayMode) DawnCream800 else Midnight700.copy(alpha = 0.5f)
     val dialTickColor = if (isDayMode) DawnGoldLight else GoldBorder
+    // Canvas accents: champagne arcs/hand on navy at night, bronze ink on
+    // the white dial card during the day (audit P1 contrast fix).
+    val arcGold = if (isDayMode) DawnGoldPrimary else GoldPrimary
+    val arcCyan = if (isDayMode) DawnCelestialCyan else CelestialCyan
+    val arcIvory = if (isDayMode) DawnGoldLight else GoldLight
 
     CelestialCard(
         modifier = modifier
@@ -142,12 +151,12 @@ fun TwoDivineHoursClockDial(
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp,
                         letterSpacing = 1.sp,
-                        color = GoldLight
+                        color = textPalette.accent
                     )
                     Text(
                         text = AppStrings.clockFaceSubtitle(language),
                         fontSize = 11.5.sp,
-                        color = TextSecondary
+                        color = textPalette.secondary
                     )
                 }
 
@@ -163,7 +172,7 @@ fun TwoDivineHoursClockDial(
                         fontFamily = CinzelFontFamily,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextGold
+                        color = textPalette.gold
                     )
                 }
             }
@@ -217,7 +226,7 @@ fun TwoDivineHoursClockDial(
                         )
 
                         drawLine(
-                            color = if (isMajor) GoldPrimary.copy(alpha = 0.85f) else dialTickColor,
+                            color = if (isMajor) arcGold.copy(alpha = 0.85f) else dialTickColor,
                             start = pStart,
                             end = pEnd,
                             strokeWidth = if (isMajor) 2.2.dp.toPx() else 1.dp.toPx(),
@@ -231,10 +240,10 @@ fun TwoDivineHoursClockDial(
                     if (sweepDegrees > 0f) {
                         val arcBrush = Brush.sweepGradient(
                             colors = listOf(
-                                GoldPrimary,
-                                CelestialCyan,
-                                GoldLight,
-                                GoldPrimary
+                                arcGold,
+                                arcCyan,
+                                arcIvory,
+                                arcGold
                             ),
                             center = canvasCenter
                         )
@@ -280,7 +289,7 @@ fun TwoDivineHoursClockDial(
                     drawPath(
                         path = handPath,
                         brush = Brush.linearGradient(
-                            colors = listOf(GoldLight, GoldPrimary, CelestialCyan),
+                            colors = listOf(arcIvory, arcGold, arcCyan),
                             start = canvasCenter,
                             end = handTip
                         )
@@ -288,7 +297,7 @@ fun TwoDivineHoursClockDial(
 
                     // Hand tip glowing beacon
                     drawCircle(
-                        color = GoldPrimary.copy(alpha = pulseGlow * 0.5f),
+                        color = arcGold.copy(alpha = pulseGlow * 0.5f),
                         radius = 9.dp.toPx(),
                         center = handTip
                     )
@@ -305,7 +314,7 @@ fun TwoDivineHoursClockDial(
                         center = canvasCenter
                     )
                     drawCircle(
-                        color = GoldPrimary,
+                        color = arcGold,
                         radius = 5.dp.toPx(),
                         center = canvasCenter
                     )
@@ -322,7 +331,7 @@ fun TwoDivineHoursClockDial(
                         fontFamily = CinzelFontFamily,
                         fontSize = 9.sp,
                         letterSpacing = 1.2.sp,
-                        color = TextMuted
+                        color = textPalette.muted
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
@@ -330,7 +339,7 @@ fun TwoDivineHoursClockDial(
                         fontFamily = CinzelFontFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = TextGold
+                        color = textPalette.gold
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
@@ -338,13 +347,13 @@ fun TwoDivineHoursClockDial(
                         fontFamily = CinzelFontFamily,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = CelestialCyan
+                        color = textPalette.cyan
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = AppStrings.percentOfLifeLabel(language, progressFraction * 100f),
                         fontSize = 10.5.sp,
-                        color = TextSecondary
+                        color = textPalette.secondary
                     )
                 }
             }
@@ -392,17 +401,33 @@ private fun DialMilestonePill(
     ageLabel: String,
     isPast: Boolean
 ) {
+    // The chip keeps its navy « artwork » background in both themes because it
+    // sits inside the dial card; the age caption rests directly on the white
+    // card during the day, so it follows the day text palette (audit P1).
+    val isDayMode = LocalSaatanThemeIsDay.current
+    val textPalette = saatanTextPalette()
+    val pastBg = if (isDayMode) {
+        DawnGoldPrimary.copy(alpha = 0.18f)
+    } else {
+        GoldPrimary.copy(alpha = 0.2f)
+    }
+    val pastBorder = if (isDayMode) {
+        DawnGoldPrimary.copy(alpha = 0.6f)
+    } else {
+        GoldPrimary.copy(alpha = 0.6f)
+    }
+    val pastText = if (isDayMode) DawnGoldPrimary else TextGold
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(6.dp))
                 .background(
-                    if (isPast) GoldPrimary.copy(alpha = 0.2f)
+                    if (isPast) pastBg
                     else Midnight800
                 )
                 .border(
                     width = 1.dp,
-                    color = if (isPast) GoldPrimary.copy(alpha = 0.6f) else Midnight700,
+                    color = if (isPast) pastBorder else Midnight700,
                     shape = RoundedCornerShape(6.dp)
                 )
                 .padding(horizontal = 6.dp, vertical = 2.dp)
@@ -412,13 +437,13 @@ private fun DialMilestonePill(
                 fontFamily = CinzelFontFamily,
                 fontWeight = if (isPast) FontWeight.Bold else FontWeight.Normal,
                 fontSize = 10.sp,
-                color = if (isPast) TextGold else TextMuted
+                color = if (isPast) pastText else TextMuted
             )
         }
         Text(
             text = ageLabel,
             fontSize = 9.sp,
-            color = TextMuted,
+            color = textPalette.muted,
             modifier = Modifier.padding(top = 2.dp)
         )
     }

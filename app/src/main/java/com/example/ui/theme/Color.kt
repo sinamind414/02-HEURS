@@ -54,3 +54,4 @@ val DawnTextMuted = Color(0xFF5A6B85) // 4,9:1
 val DawnGoldPrimary = Color(0xFF8F6B35) // or bronze lisible sur ivoire — 4,4:1
 val DawnGoldBorder = Color(0x388F6B35)
 val DawnGoldLight = Color(0xFF8A744B)
+val DawnCelestialCyan = Color(0xFF4A6E9C) // encre céleste lisible sur ivoire — 5,2:1

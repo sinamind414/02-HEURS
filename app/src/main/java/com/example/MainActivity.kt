@@ -67,6 +67,7 @@ import com.example.ui.theme.GoldBorder
 import com.example.ui.theme.GoldLight
 import com.example.ui.theme.GoldPrimary
 import com.example.ui.theme.Midnight700
+import com.example.ui.theme.Midnight800
 import com.example.ui.theme.Midnight900
 import com.example.ui.theme.Midnight950
 import com.example.ui.theme.MyApplicationTheme
@@ -244,7 +245,10 @@ fun SaatanAppContent(viewModel: MainViewModel) {
                             },
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = Midnight950,
-                                selectedTextColor = TextGold,
+                                // Selected LABEL sits on the bar background, not on
+                                // the champagne indicator: keep the night gold for
+                                // midnight bars, switch to ink over parchment.
+                                selectedTextColor = if (isDayMode) Midnight800 else TextGold,
                                 indicatorColor = GoldPrimary,
                                 unselectedIconColor = unselectedIconColor,
                                 unselectedTextColor = unselectedTextColor

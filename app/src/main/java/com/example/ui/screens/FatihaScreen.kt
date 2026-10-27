@@ -584,6 +584,7 @@ private fun FatihaVerseCard(
                     text = when (language) {
                         AppLanguage.AR -> verse.responseArProse
                         AppLanguage.EN -> verse.responseEn
+                        AppLanguage.ES, AppLanguage.ID -> verse.responseEn
                         AppLanguage.FR -> verse.responseFr
                     },
                     fontFamily = CinzelFontFamily,

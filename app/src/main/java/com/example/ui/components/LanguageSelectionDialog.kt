@@ -56,7 +56,9 @@ fun LanguageSelectionDialog(
     val languages = listOf(
         Triple(AppLanguage.AR, AppLanguage.AR.displayName, AppStrings.languageDescription(AppLanguage.AR)),
         Triple(AppLanguage.FR, AppLanguage.FR.displayName, AppStrings.languageDescription(AppLanguage.FR)),
-        Triple(AppLanguage.EN, AppLanguage.EN.displayName, AppStrings.languageDescription(AppLanguage.EN))
+        Triple(AppLanguage.EN, AppLanguage.EN.displayName, AppStrings.languageDescription(AppLanguage.EN)),
+        Triple(AppLanguage.ES, AppLanguage.ES.displayName, AppStrings.languageDescription(AppLanguage.ES)),
+        Triple(AppLanguage.ID, AppLanguage.ID.displayName, AppStrings.languageDescription(AppLanguage.ID))
     )
 
     Dialog(onDismissRequest = onDismiss) {

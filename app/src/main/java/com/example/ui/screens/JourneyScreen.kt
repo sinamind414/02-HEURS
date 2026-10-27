@@ -221,6 +221,9 @@ fun JourneyScreen(
                                 AppLanguage.AR -> ""
                                 AppLanguage.EN -> "_en"
                                 AppLanguage.FR -> "_fr"
+                                // ES/ID tracks do not exist yet: fall back to
+                                // the English narration until they are recorded.
+                                AppLanguage.ES, AppLanguage.ID -> "_en"
                             }
                             val audioReady = remember(station.order, language) {
                                 context.resources.getIdentifier(
@@ -273,6 +276,7 @@ fun JourneyScreen(
                             text = when (language) {
                                 AppLanguage.AR -> station.meaningAr
                                 AppLanguage.FR -> station.meaningFr
+                                AppLanguage.ES, AppLanguage.ID -> station.meaningEn
                                 AppLanguage.EN -> station.meaningEn
                             },
                             fontFamily = AmiriFontFamily,

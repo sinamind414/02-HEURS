@@ -8,7 +8,9 @@ enum class AppLanguage(
 ) {
     FR("fr", "Français", "🇫🇷", false),
     AR("ar", "العربية", "🇸🇦", true),
-    EN("en", "English", "🇬🇧", false);
+    EN("en", "English", "🇬🇧", false),
+    ES("es", "Español", "🇪🇸", false),
+    ID("id", "Bahasa Indonesia", "🇮🇩", false);
 
     companion object {
         fun fromCode(code: String): AppLanguage =

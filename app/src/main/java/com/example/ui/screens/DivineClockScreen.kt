@@ -284,47 +284,6 @@ fun DivineClockScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        // Language Selector Pill — the three languages
-                        // (EN · FR · AR) visible at a glance; tap a code to
-                        // switch instantly, no intermediate dialog needed.
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(20.dp))
-                                .background(Midnight800)
-                                .border(1.dp, GoldBorder, RoundedCornerShape(20.dp))
-                                .padding(horizontal = 4.dp, vertical = 3.dp)
-                                .testTag("language_selector_button"),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                listOf(AppLanguage.EN, AppLanguage.FR, AppLanguage.AR).forEach { lang ->
-                                    val isActive = lang == currentLanguage
-                                    Box(
-                                        modifier = Modifier
-                                            .clip(RoundedCornerShape(14.dp))
-                                            .background(
-                                                if (isActive) GoldPrimary.copy(alpha = 0.28f)
-                                                else Color.Transparent
-                                            )
-                                            .clickable {
-                                                triggerSpiritualHaptic(context)
-                                                viewModel.setLanguage(lang)
-                                            }
-                                            .padding(horizontal = 7.dp, vertical = 3.dp)
-                                            .testTag("language_chip_${lang.code}")
-                                    ) {
-                                        Text(
-                                            text = lang.code.uppercase(),
-                                            fontFamily = CinzelFontFamily,
-                                            fontWeight = if (isActive) FontWeight.Bold else FontWeight.Medium,
-                                            fontSize = 11.sp,
-                                            color = if (isActive) TextGold else TextMuted
-                                        )
-                                    }
-                                }
-                            }
-                        }
-
                         // Book button — La Prière Goûtée (Sprint 4)
                         IconButton(
                             onClick = {
@@ -398,6 +357,9 @@ fun DivineClockScreen(
                 // trimmed to 5 tabs): the temporal converter and the
                 // notifications/verses settings stay one tap away as header
                 // pills on the same midnight motif.
+                // The language pill lives on this roomier second row: with
+                // five languages (EN·FR·AR·ES·ID) it no longer fits beside
+                // the app-bar buttons without overflowing in LTR.
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End,
@@ -405,6 +367,47 @@ fun DivineClockScreen(
                         .fillMaxWidth()
                         .padding(top = 2.dp)
                 ) {
+                    // Language Selector Pill — the five languages visible at
+                    // a glance; tap a code to switch instantly, no
+                    // intermediate dialog needed.
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Midnight800)
+                            .border(1.dp, GoldBorder, RoundedCornerShape(20.dp))
+                            .padding(horizontal = 4.dp, vertical = 3.dp)
+                            .testTag("language_selector_button"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            listOf(AppLanguage.EN, AppLanguage.FR, AppLanguage.AR, AppLanguage.ES, AppLanguage.ID).forEach { lang ->
+                                val isActive = lang == currentLanguage
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(14.dp))
+                                        .background(
+                                            if (isActive) GoldPrimary.copy(alpha = 0.28f)
+                                            else Color.Transparent
+                                        )
+                                        .clickable {
+                                            triggerSpiritualHaptic(context)
+                                            viewModel.setLanguage(lang)
+                                        }
+                                        .padding(horizontal = 7.dp, vertical = 3.dp)
+                                        .testTag("language_chip_${lang.code}")
+                                ) {
+                                    Text(
+                                        text = lang.code.uppercase(),
+                                        fontFamily = CinzelFontFamily,
+                                        fontWeight = if (isActive) FontWeight.Bold else FontWeight.Medium,
+                                        fontSize = 11.sp,
+                                        color = if (isActive) TextGold else TextMuted
+                                    )
+                                }
+                            }
+                        }
+                    }
+
                     IconButton(
                         onClick = {
                             triggerSpiritualHaptic(context)

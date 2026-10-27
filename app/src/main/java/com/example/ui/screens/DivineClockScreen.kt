@@ -282,30 +282,44 @@ fun DivineClockScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        // Language Selector Pill
+                        // Language Selector Pill — the three languages
+                        // (EN · FR · AR) visible at a glance; tap a code to
+                        // switch instantly, no intermediate dialog needed.
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(20.dp))
                                 .background(Midnight800)
                                 .border(1.dp, GoldBorder, RoundedCornerShape(20.dp))
-                                .clickable {
-                                    triggerSpiritualHaptic(context)
-                                    viewModel.openLanguageDialog()
-                                }
-                                .padding(horizontal = 9.dp, vertical = 5.dp)
+                                .padding(horizontal = 4.dp, vertical = 3.dp)
                                 .testTag("language_selector_button"),
                             contentAlignment = Alignment.Center
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = currentLanguage.flagEmoji, fontSize = 12.sp)
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = currentLanguage.code.uppercase(),
-                                    fontFamily = CinzelFontFamily,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 11.sp,
-                                    color = GoldLight
-                                )
+                                listOf(AppLanguage.EN, AppLanguage.FR, AppLanguage.AR).forEach { lang ->
+                                    val isActive = lang == currentLanguage
+                                    Box(
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(14.dp))
+                                            .background(
+                                                if (isActive) GoldPrimary.copy(alpha = 0.28f)
+                                                else Color.Transparent
+                                            )
+                                            .clickable {
+                                                triggerSpiritualHaptic(context)
+                                                viewModel.setLanguage(lang)
+                                            }
+                                            .padding(horizontal = 7.dp, vertical = 3.dp)
+                                            .testTag("language_chip_${lang.code}")
+                                    ) {
+                                        Text(
+                                            text = lang.code.uppercase(),
+                                            fontFamily = CinzelFontFamily,
+                                            fontWeight = if (isActive) FontWeight.Bold else FontWeight.Medium,
+                                            fontSize = 11.sp,
+                                            color = if (isActive) TextGold else TextMuted
+                                        )
+                                    }
+                                }
                             }
                         }
 

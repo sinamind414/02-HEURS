@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -210,7 +211,7 @@ fun DivineClockScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .zIndex(2f)
-                .height(190.dp)
+                .height(210.dp)
                 .background(
                     if (headerOnSurface) {
                         Brush.verticalGradient(
@@ -250,9 +251,13 @@ fun DivineClockScreen(
                             painter = painterResource(id = R.drawable.saatan_icon),
                             contentDescription = AppStrings.logoContentDescription(currentLanguage),
                             modifier = Modifier
-                                .size(42.dp)
-                                .clip(CircleShape)
-                                .border(1.5.dp, GoldPrimary, CircleShape)
+                                // The new « Prayer of Taste » artwork wears in its
+                                // native 768×992 geometry: an upright rounded
+                                // rectangle instead of the old circular mask.
+                                .width(40.dp)
+                                .aspectRatio(768f / 992f)
+                                .clip(RoundedCornerShape(12.dp))
+                                .border(1.5.dp, GoldPrimary, RoundedCornerShape(12.dp))
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
@@ -429,7 +434,7 @@ fun DivineClockScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
-            contentPadding = PaddingValues(top = 116.dp, bottom = 96.dp)
+            contentPadding = PaddingValues(top = 126.dp, bottom = 96.dp)
         ) {
             // Bismillah Header
             item {

@@ -28,6 +28,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -93,6 +94,7 @@ import com.example.R
 import com.example.data.calculator.DivineTimeCalculator
 import com.example.data.localization.AppStrings
 import com.example.data.model.AppLanguage
+import com.example.data.model.CountryData
 import com.example.data.model.DivineTimeInfo
 import com.example.data.model.PrayerCountdownState
 import com.example.data.model.PrayerTimeItem
@@ -1336,7 +1338,9 @@ fun CitySelectionDialog(
     onCitySelected: (city: String, country: String) -> Unit
 ) {
     var cityInput by remember { mutableStateOf(currentCity) }
-    var countryInput by remember { mutableStateOf(currentCountry) }
+    var selectedCountry by remember { mutableStateOf(CountryData.findByName(currentCountry)) }
+    var showCountryList by remember { mutableStateOf(false) }
+    var countrySearch by remember { mutableStateOf("") }
 
     val presetCities = listOf(
         Pair("Paris", "France"),
@@ -1396,70 +1400,154 @@ fun CitySelectionDialog(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                // Custom Inputs
-                OutlinedTextField(
-                    value = cityInput,
-                    onValueChange = { cityInput = it },
-                    label = { Text(AppStrings.cityFieldLabel(language), fontSize = 11.sp) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = GoldPrimary,
-                        unfocusedBorderColor = Midnight700,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = countryInput,
-                    onValueChange = { countryInput = it },
-                    label = { Text(AppStrings.countryFieldLabel(language), fontSize = 11.sp) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = GoldPrimary,
-                        unfocusedBorderColor = Midnight700,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text(
-                    text = AppStrings.fastCities(language),
-                    fontSize = 11.5.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = TextGold
-                )
-
-                Spacer(modifier = Modifier.height(6.dp))
-
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(presetCities) { preset ->
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(Midnight800)
-                                .border(1.dp, GoldBorder, RoundedCornerShape(10.dp))
-                                .clickable {
-                                    cityInput = preset.first
-                                    countryInput = preset.second
-                                    onCitySelected(preset.first, preset.second)
-                                }
-                                .padding(horizontal = 8.dp, vertical = 5.dp)
-                        ) {
-                            Text(
-                                text = preset.first,
-                                fontSize = 11.sp,
-                                color = TextPrimary
+                if (showCountryList) {
+                    // ── Mode recherche pays (~224 entrées, populaires en tête) ──
+                    OutlinedTextField(
+                        value = countrySearch,
+                        onValueChange = { countrySearch = it },
+                        label = { Text(AppStrings.countryFieldLabel(language), fontSize = 11.sp) },
+                        singleLine = true,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Public,
+                                contentDescription = null,
+                                tint = GoldLight,
+                                modifier = Modifier.size(16.dp)
                             )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("country_search_field"),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = GoldPrimary,
+                            unfocusedBorderColor = Midnight700,
+                            focusedTextColor = TextPrimary,
+                            unfocusedTextColor = TextPrimary
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    val countryResults = remember(countrySearch) {
+                        CountryData.search(countrySearch)
+                    }
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 300.dp)
+                            .testTag("country_list")
+                    ) {
+                        items(countryResults) { country ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(
+                                        if (country.code == selectedCountry?.code) GoldPrimary.copy(alpha = 0.18f)
+                                        else Color.Transparent
+                                    )
+                                    .clickable {
+                                        selectedCountry = country
+                                        showCountryList = false
+                                    }
+                                    .padding(horizontal = 8.dp, vertical = 7.dp)
+                                    .testTag("country_option_${country.code}"),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = country.flagEmoji, fontSize = 16.sp)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = country.name,
+                                    fontSize = 12.sp,
+                                    color = TextPrimary,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Text(text = country.code, fontSize = 10.sp, color = TextMuted)
+                            }
+                        }
+                    }
+                } else {
+                    // ── Mode ville + pays ──
+                    OutlinedTextField(
+                        value = cityInput,
+                        onValueChange = { cityInput = it },
+                        label = { Text(AppStrings.cityFieldLabel(language), fontSize = 11.sp) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = GoldPrimary,
+                            unfocusedBorderColor = Midnight700,
+                            focusedTextColor = TextPrimary,
+                            unfocusedTextColor = TextPrimary
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Country selector chip → opens the searchable country list.
+                    // Replaces the old free-text field: typos like "Maroc" vs
+                    // "Morocco" silently broke the Aladhan fetch.
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Midnight800)
+                            .border(1.dp, GoldBorder, RoundedCornerShape(12.dp))
+                            .clickable { showCountryList = true }
+                            .padding(horizontal = 12.dp, vertical = 12.dp)
+                            .testTag("country_picker_field")
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = selectedCountry?.flagEmoji ?: "🌐",
+                                fontSize = 16.sp
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = selectedCountry?.name
+                                    ?: AppStrings.countryFieldLabel(language),
+                                fontSize = 12.sp,
+                                color = if (selectedCountry != null) TextPrimary else TextMuted,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Text(text = "▾", fontSize = 12.sp, color = GoldPrimary)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
+                        text = AppStrings.fastCities(language),
+                        fontSize = 11.5.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = TextGold
+                    )
+
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(presetCities) { preset ->
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(Midnight800)
+                                    .border(1.dp, GoldBorder, RoundedCornerShape(10.dp))
+                                    .clickable {
+                                        cityInput = preset.first
+                                        selectedCountry = CountryData.findByName(preset.second)
+                                        onCitySelected(preset.first, preset.second)
+                                    }
+                                    .padding(horizontal = 8.dp, vertical = 5.dp)
+                            ) {
+                                Text(
+                                    text = preset.first,
+                                    fontSize = 11.sp,
+                                    color = TextPrimary
+                                )
+                            }
                         }
                     }
                 }
@@ -1473,19 +1561,22 @@ fun CitySelectionDialog(
                     TextButton(onClick = onDismiss) {
                         Text(AppStrings.cancelBtn(language), color = TextSecondary)
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = {
-                            if (cityInput.isNotBlank() && countryInput.isNotBlank()) {
-                                onCitySelected(cityInput.trim(), countryInput.trim())
-                            }
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = GoldPrimary,
-                            contentColor = Midnight950
-                        )
-                    ) {
-                        Text(AppStrings.applyBtn(language), fontWeight = FontWeight.Bold)
+                    if (!showCountryList) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Button(
+                            onClick = {
+                                val chosen = selectedCountry
+                                if (cityInput.isNotBlank() && chosen != null) {
+                                    onCitySelected(cityInput.trim(), chosen.name)
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = GoldPrimary,
+                                contentColor = Midnight950
+                            )
+                        ) {
+                            Text(AppStrings.applyBtn(language), fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
             }

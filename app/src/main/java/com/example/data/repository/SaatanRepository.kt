@@ -37,6 +37,16 @@ class SaatanRepository(private val dao: DailyJournalDao) {
         dao.saveUserProfile(current.copy(languageCode = langCode))
     }
 
+    /** One-shot read for startup location restore (no Flow re-emission). */
+    suspend fun getProfileOnce(): UserProfileEntity =
+        dao.getUserProfile().firstOrNull() ?: UserProfileEntity()
+
+    /** Persists the last city/country used for prayer times (v5). */
+    suspend fun updateCity(city: String, country: String) {
+        val current = dao.getUserProfile().firstOrNull() ?: UserProfileEntity()
+        dao.saveUserProfile(current.copy(cityName = city, countryName = country))
+    }
+
     /** Persists the day / night theme choice. */
     suspend fun updateThemeMode(isDay: Boolean) {
         val current = dao.getUserProfile().firstOrNull() ?: UserProfileEntity()

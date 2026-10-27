@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         UserProfileEntity::class,
         PrayerTimingsCacheEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 abstract class SaatanDatabase : RoomDatabase() {
@@ -24,6 +24,23 @@ abstract class SaatanDatabase : RoomDatabase() {
 
         @Volatile
         private var INSTANCE: SaatanDatabase? = null
+
+        /**
+         * v4 -> v5
+         *  * persists the last city/country used for prayer times so the app
+         *    restores the user's own location at startup instead of falling
+         *    back to Paris on every cold start.
+         */
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE user_profile ADD COLUMN cityName TEXT NOT NULL DEFAULT 'Paris'"
+                )
+                db.execSQL(
+                    "ALTER TABLE user_profile ADD COLUMN countryName TEXT NOT NULL DEFAULT 'France'"
+                )
+            }
+        }
 
         /**
          * v3 -> v4
@@ -99,7 +116,7 @@ abstract class SaatanDatabase : RoomDatabase() {
                     SaatanDatabase::class.java,
                     DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                     .build()
                     .also { INSTANCE = it }
             }

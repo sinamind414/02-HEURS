@@ -265,7 +265,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         startLiveTicker()
-        loadPrayerTimes("Paris", "France")
+        // Restore the user's own location instead of a hardcoded Paris —
+        // one-shot read so profile re-emissions never re-fetch prayer times.
+        viewModelScope.launch {
+            val saved = repository.getProfileOnce()
+            loadPrayerTimes(saved.cityName, saved.countryName)
+        }
         startPrayerCountdownTicker()
     }
 
@@ -386,6 +391,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun selectCity(city: String, country: String) {
         _showCityDialog.value = false
         loadPrayerTimes(city, country)
+        // Persist so the next cold start restores this location (v5).
+        viewModelScope.launch { repository.updateCity(city, country) }
     }
 
     fun navigateTo(screen: SaatanScreen) {

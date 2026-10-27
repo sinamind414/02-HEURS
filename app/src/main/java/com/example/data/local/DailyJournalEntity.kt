@@ -42,5 +42,8 @@ data class UserProfileEntity(
     val totalTasbihAllTime: Int = 0,
     val languageCode: String = "fr",
     /** Persisted day / night theme choice. */
-    val isDayMode: Boolean = false
+    val isDayMode: Boolean = false,
+    /** Last city/country used for the Aladhan prayer-times fetch (v5). */
+    val cityName: String = "Paris",
+    val countryName: String = "France"
 )

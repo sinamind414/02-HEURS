@@ -68,6 +68,13 @@ Chaque relecteur reçoit : ce dossier + `SCENARIOS_VOIX_DHAWQ.md` (les 30 script
 | 3 | La Fenêtre d'or = dernier tiers de la nuit | Bukhari & Muslim (la descente divine au dernier tiers) | ☐ à confirmer |
 | 4 | La question du goût (« douce, lourde, absente ») | Aucune attribution — reprise du vocabulaire des salaf sur la douceur de la prière (ḥalāwat as-ṣalāt) | ☐ |
 
+### 3.4 Le Convertisseur temporel (ajouté le 28/10/2026)
+
+| # | Affirmation | Source avancée | Statut comité |
+|---|---|---|---|
+| 1 | Coran 22:47 lu comme base d'une « échelle symbolique de réflexion » : 1 jour divin ≈ 1 000 ans ⇒ 1 s divine ≈ 4,23 jours | Coran 22:47 — le verset répond à ceux qui demandaient de hâter le châtiment ; c'est une comparaison, **pas une unité de mesure** | ☐ cadrage appliqué |
+| 2 | L'app ne présente JAMAIS la conversion comme une mesure du temps auprès d'Allah | Décision de cadrage (revue externe 28/10/2026) : note permanente dans l'écran, 5 langues : « une illustration méditative, non une mesure de l'au-delà » | ☐ cadrage appliqué |
+
 ---
 
 ## 4. Ce que le comité ne trouvera pas dans Dhawq

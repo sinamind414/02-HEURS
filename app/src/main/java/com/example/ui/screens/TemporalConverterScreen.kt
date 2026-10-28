@@ -348,6 +348,15 @@ fun TemporalConverterScreen(
                             }
                         }
                     }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = AppStrings.meditativeScaleNote(language),
+                        fontSize = 10.sp,
+                        color = textSecondary,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }

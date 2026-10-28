@@ -832,6 +832,14 @@ object AppStrings {
         AppLanguage.FR -> "🌍 ÉQUIVALENT SUR TERRE POUR LES HOMMES"
     }
 
+    fun meditativeScaleNote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "مقياس رمزي للتأمل مستوحى من سورة الحج ٤٧ — تجسيد للتدبر وليس قياسًا للآخرة."
+        AppLanguage.EN -> "A symbolic scale for reflection inspired by Quran 22:47 — a meditative illustration, not a measure of the Hereafter."
+        AppLanguage.ES -> "Escala simbólica de reflexión inspirada en el Corán 22:47 — una ilustración meditativa, no una medida del más allá."
+        AppLanguage.ID -> "Skala simbolis renungan yang terinspirasi Quran 22:47 — ilustrasi meditatif, bukan ukuran akhirat."
+        AppLanguage.FR -> "Échelle symbolique de réflexion inspirée du Coran 22:47 — une illustration méditative, non une mesure de l'au-delà."
+    }
+
     fun strikingBenchmarksTitle(lang: AppLanguage): String = when (lang) {
         AppLanguage.AR -> "📊 أمثلة حية مؤثرة"
         AppLanguage.EN -> "📊 STRIKING BENCHMARKS"

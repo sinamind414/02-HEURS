@@ -12,6 +12,8 @@
 
 Base calibrée par l'application : 1 seconde divine ≈ 4,23 jours terrestres · 5 prières/journal sur 80 ans ≈ **2 minutes divines** (1,7 % de la vie).
 
+> ⚠️ **Cadrage** : il s'agit d'une **échelle symbolique de réflexion inspirée de Coran 22:47** — le verset, dans son contexte, répond à ceux qui demandaient de hâter le châtiment et n'établit pas d'unité de mesure. Cette conversion est une illustration méditative conçue par l'application, et non une mesure de l'au-delà ni une affirmation théologique sur le temps auprès d'Allah.
+
 ---
 
 ## Fonctionnalités
@@ -22,7 +24,7 @@ Base calibrée par l'application : 1 seconde divine ≈ 4,23 jours terrestres ·
 - 🗣 **Le dialogue d'Al-Fatiha** (station 06) — verset par verset, hadith qudsi Muslim n°395 : *« J'ai divisé la prière entre Moi et Mon serviteur, en deux moitiés. »*
 - 📔 **Journal des minutes divines** — les 5 prières du jour, les bonnes œuvres, le tasbih, l'investissement spirituel du jour.
 - 🏆 **Défis & niveaux** — hassanat, badges, régularité.
-- ⚖ **Convertisseur temporel** — terre → divin et divin → terre, avec benchmarks choc (3 h d'écran/jour = 15 minutes divines de vie).
+- ⚖ **Convertisseur temporel** — terre → divin et divin → terre, avec benchmarks choc (3 h d'écran/jour = 15 minutes divines de vie). Présenté comme une échelle symbolique de réflexion (Coran 22:47), avec avertissement intégré dans l'app.
 - 🌙 **Ramadan** — les 10 dernières nuits, Laylatul Qadr, veille qiyam.
 - 🌗 **Thèmes jour/nuit** — nuit té+or, jour parchemin, contrastes AA.
 

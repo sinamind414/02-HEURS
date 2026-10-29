@@ -335,3 +335,234 @@ Continue · Begin this pause · Finish this return · Skip for now · Keep it si
 **Weekly Report** : [Titre: This week you returned 19 times] · [2 graphiques: minutes + mood before/after] · [Encadré science + 13:28] · [CTA: Gentle intention]
 
 **Explore** : liste progressive avec cadenas, premier item déverrouillé : « Why five pauses? »
+
+---
+
+# PARTIE II — Suite 4 : livrables opérationnels complets (29/10/2026)
+
+## 20. User stories détaillées (acceptance criteria) + API
+
+### Stories avec AC
+
+- **US-01 Onboarding feeling check** — multi-select 1–n états, aucun score « pathologique » affiché, Continue actif dès 1 choix, données locales jusqu'à création de compte.
+- **US-02 Disclaimer + 988** — écran non skippable une fois ; checkbox « I understand » ; lien 988 ; `crisis_ack_at` enregistré.
+- **US-03 Choix du rythme** — défaut = Beginner ; modifiable dans Profile ; Full n'affiche pas de honte si <5.
+- **US-04 Première pause < 60 s pour démarrer** — 1 tap depuis dashboard ; timer visible ; End anytime ; flag `skipped` vs `completed`.
+- **US-05 Mood before/after** — 5 labels ; skippable ; after proposé seulement si pause `completed` ; pas de rouge « worse ».
+- **US-06 Journal privé** — chiffrement local ; sync off par défaut ; pas d'analytics sur le body ; export JSON/PDF ; delete account = wipe.
+- **US-07 Tradition layer** — flag `off | gradual | on` ; bouton Keep it simple toujours ; unlocks persistants ; light skin si `off`.
+- **US-08 Prayer times (si layer on)** — calcul local ou API ; timezone user ; notifications dans les fenêtres, jamais « qada guilt ».
+- **US-09 Challenges sans reset punitif** — missed day → progress en pause, pas à 0 ; copy « the next one is still yours ».
+- **US-10 Crisis** — entrée permanente Profile + overlay pause ; 988, NAMI ; aucun tracking du motif de crise.
+- **US-11 Communauté opt-in** — hash d'identité ; modération ; « I returned today » seulement ; off par défaut.
+- **US-12 Compte / suppression** — Apple/Google/email ; Delete my data (GDPR/CCPA) sous 30 jours ; journal d'abord local.
+
+### Endpoints (REST, JWT, privacy-first) — base `https://api.dhawq.app/v1`
+
+| Méthode | Endpoint | Rôle |
+|---|---|---|
+| POST | `/auth/apple` `/auth/google` `/auth/email` | Session |
+| GET/PATCH | `/me` | profil + rhythm + layer |
+| GET/PATCH | `/me/settings` | notifs, audio, arabic, qibla, journal_sync |
+| POST | `/me/crisis-ack` | disclaimer |
+| DELETE | `/me` | wipe compte |
+| GET | `/returns?from&to` | liste |
+| POST | `/returns` | start `{slot, mode}` |
+| PATCH | `/returns/:id` | complete / skip / duration / stations |
+| POST | `/moods` | `{return_id?, moment, score, label}` |
+| GET | `/moods/summary?period=week` | agrégats only |
+| POST | `/journal` | body chiffré côté client si possible |
+| GET | `/journal` | si sync on |
+| DELETE | `/journal/:id` | — |
+| GET | `/unlocks` | — |
+| POST | `/unlocks` | `{item_key, source}` |
+| GET | `/content/:key?locale=` | CMS |
+| GET | `/prayer-times?lat&lng&date` | ou calcul client |
+| GET | `/qibla?lat&lng` | — |
+| GET/POST | `/challenges` | — |
+| PATCH | `/challenges/:id` | pause/complete |
+| POST | `/community/posts` | opt-in |
+| GET | `/community/feed` | modéré |
+| POST | `/events` | analytics anonymes whitelist |
+| POST | `/support/export` | archive personnelle |
+
+**Interdits serveur** : texte brut du journal en logs ; score « dépression » ; vente d'audiences santé.
+**Events autorisés** : `onboarding_complete`, `pause_started`, `pause_completed`, `mood_logged`, `layer_opened`, `crisis_tapped`, `challenge_started`.
+
+> **Note intégration** : l'app actuelle est local-first (Room, zéro backend). Ces endpoints correspondent à une évolution cloud OPTIONNELLE — rien d'obligatoire pour la v1 US. L'API Aladhan keyless couvre déjà prayer times/qibla.
+
+## 21. Copy stores + privacy + legal US
+
+### App Store (EN-US)
+- **Name** : Dhawq Presence · **Subtitle** : Five daily pauses for calm
+- **Promotional text** : Start with one 4-minute return. No streak shame. Not therapy.
+- **Description** : You feel scattered, anxious, or empty. You are not the only one.
+  Dhawq Presence offers five short, structured pauses timed to the day — morning, midday, afternoon, sunset, and night. An ancient rhythm of return, presented as a modern practice of presence.
+  • Begin with 1–2 pauses a day · Calm guided audio or silence · Inner Weather: a simple check-in before and after · Private journal — yours, on your device unless you opt in · Optional "original tradition" layer (Salat, Al-Fatiha, sources) when you ask for it · Weekly Presence Report — small data, no judgment · Missed a pause? The next one is still yours
+  This app is not therapy, diagnosis, or a treatment for depression, anxiety, or any medical condition. It does not replace a licensed clinician. If you are in crisis in the US, call or text 988.
+  The five pauses stay free.
+- **Keywords** : prayer, mindfulness, anxiety, calm, ritual, muslim, salah, presence, loneliness, journal (pas de « cure », « heal depression »)
+- **What's New** : First US release. Beginner rhythm, private journal, optional tradition layer.
+- **Age** : 17+ · **Category** : Health & Fitness + Lifestyle
+
+### Google Play (EN-US)
+- **Short** : Five daily pauses. Ancient rhythm. Modern calm. Not therapy.
+- **Full** : même corps + « Optional prayer times and qibla if you unlock the tradition layer. Location used only for times/qibla, never sold. »
+- **Content rating** : Everyone ou Teen selon questionnaire.
+
+### Privacy Nutrition Labels (Apple) / Data safety (Play)
+- **Collecté (si compte)** : email / identifiant Apple-Google, timezone, rythme choisi, timestamps des pauses, mood labels (pas le journal sauf sync), events analytics.
+- **Non collecté par défaut** : contacts, photos, tracking cross-app, public journal.
+- **Health** : mood = sensitive → traiter comme Health & Fitness data, pas de partage advertisers.
+- **Location** : Precise uniquement si qibla/prayer times ; sinon jamais.
+- **Tracking** : Non (pas d'ATT pour pubs santé au lancement).
+- **Chiffrement in transit** : Oui. Journal : local first.
+
+### Disclaimers légaux (Settings + onboarding + stores)
+- **Not medical advice.** Dhawq Presence is a wellness and spiritual-practice tool. It does not diagnose, treat, cure, or prevent any disease or mental disorder. It is not psychotherapy, counseling, or crisis care.
+- **Emergency.** If you are in immediate danger or considering self-harm, call 911 (US) or go to an ER. For suicidal crisis, call or text 988 (Suicide & Crisis Lifeline). International : local emergency numbers / IASP resources.
+- **No outcome guarantee.** Studies on ritual, prayer, and religious practice are correlational. Individual results vary. Correlation is not causation.
+- **Faith content.** Islamic texts appear only in an optional layer, or in the Dhawq-branded mode. Translations are provided for reflection, not as a substitute for qualified scholarship.
+- **Privacy.** Journal and mood stay on-device unless you enable sync. We do not sell personal data.
+- **FTC / claims** : interdiction de « heal anxiety/depression/addiction ». Témoignages : « helped me », jamais « cured ».
+- **COPPA** : pas d'enfants. Compte 17+/18+ recommandé.
+
+## 22. Calendrier 30 jours IG / TikTok
+
+Règle : J1–J10 = malaise + rythme (sans islam forcé) · J11–J20 = science + anti-honte · J21–J30 = tradition optionnelle + convertis. Disclaimer 988 en bio.
+
+| J | Hook (3 s) | Script 20–40 s |
+|---|---|---|
+| 1 | "I have people and still feel alone." | Surgeon General loneliness. « Not another habit tracker. Five pauses. Start with one. » |
+| 2 | Phone face-down ASMR | Midday interrupt 4 min. « The scroll can wait. » |
+| 3 | 1am clock | « Your mind won't stop. You don't need a new personality. You need a return. » |
+| 4 | "Missed days don't reset you to zero." | Anti-Duolingo-shame. |
+| 5 | Jaw unclench close-up | Afternoon reset excerpt. |
+| 6 | "I closed the app and felt worse." | Contraste Instagram vs pause. |
+| 7 | Split: productivity vs presence | « Highest ROI isn't another meeting. » (sans calcul divin) |
+| 8 | Convert 30 s James | « Didn't cure me. Gave me somewhere to come back to. » |
+| 9 | Inner Weather UI | Before/after, no red graphs. |
+| 10 | CTA | « Beginner mode: 1–2 pauses. Link in bio. » |
+| 11 | "Loneliness = 15 cigarettes?" | Murthy, disclaimer on screen. |
+| 12 | Haidt card | Anxious Generation + « structured pauses ≠ therapy ». |
+| 13 | Rumination | NIH-style : rituel, attention, système nerveux. |
+| 14 | Sunset window | Sunset Presence audio fragment. |
+| 15 | "Some days are survival days." | Copy 0/5. |
+| 16 | Desk pause | Midday au travail, pas de tapis en ads light. |
+| 17 | Journal vide | « Nothing to say is still data. » |
+| 18 | Slide 988 | « This app cannot replace a human. » Trust > growth. |
+| 19 | Streak myth | Challenge 7 jours sans humiliation. |
+| 20 | Carousel Why 5 hinges | Dawn / noon / afternoon / sunset / night. |
+| 21 | "Unlock only if you want." | Tradition layer explainer. |
+| 22 | Water on hands | Wudu = reset système nerveux + 5:6 (audience musulmane). |
+| 23 | Al-Fatiha ligne 5 | « You alone we ask for help » — overwhelm. |
+| 24 | 13:28 | Hearts find rest + science box. |
+| 25 | Prostration | « Closest… in sujood » (Muslim) — respectueux, pas spectacle. |
+| 26 | Aisha / Fatima 30 s | Femmes US, ton réel. |
+| 27 | Qibla | « Not the center, not alone. » |
+| 28 | Eternal Perspective | 22:47 comme *image*, pas un flex de calculatrice. |
+| 29 | Find a local community | L'app ≠ remplacement des gens. |
+| 30 | Recap + CTA | Deux skins : Presence Rhythm / Dhawq Presence. « Pauses stay free. » |
+
+**Bio** : Five daily pauses. Not therapy. US crisis: 988.
+**Ads J1–20** : lookalikes anxiety/loneliness/ritual — **pas** « Islam will save America ».
+**Ads J21–30** : converts, MSA, « salah khushu », « reverts USA ».
+
+## 23. Scripts audio — layer tradition
+
+Voix : même US calme. Arabe lent puis anglais. « Optional skip ». Pistes séparées du mode light.
+
+- **Wudu (~3:30)** — « If you have water, this is a reset of the body before you speak. / Quran 5:6 reminds us this is not meant to make difficulty, but to purify. / Face… arms… head… feet. No perfection. If you cannot use water, sit and intend a clean start. / Feel the temperature on the skin. Let a little of the day rinse off. / When you finish, you are allowed to begin imperfectly. »
+- **Station journey (~8–10 min ou pistes 1–10)** : 1 Arrive — « The journey begins when you decide to return. » · 2 Water — ci-dessus · 3 Walk — « Even three steps. 62:9: leave off business and hasten to remembrance. Phone down if you can. » · 4 Call — « An invitation, not an alarm. You showed up. » · 5 Stand — « Feet grounded. Qiyam: you stand, and you are seen. Shoulders drop. Not a performance. » · 6 Recite — « A conversation if you want one. Or silence. Both are a return. » → lien Fatiha · 7 Bow — « Ruku. Glory to my Lord, the Magnificent. Let one worry rest. » · 8 Prostrate — « The closest a servant is to his Lord is while prostrating. One extra breath. Nothing to achieve. » · 9 Sit — « Witness. What do you leave here? What do you take? » · 10 Close — « Salam: peace upon you, and upon the world you re-enter. Three breaths. You came back. »
+- **Al-Fatiha ligne par ligne (~6 min)** — Intro : « Some hear this as a dialogue. You can just read. » · 1 Bismillah — « We begin by naming mercy, not achievement. » · 2 Al-hamdu lillahi rabbil-alamin — « Gratitude before request. » · 3 Ar-Rahman ar-Rahim — « Compassion, repeated on purpose. » · 4 Maliki yawm id-din — « A larger scale than today's feed. » · 5 Iyyaka na'budu wa iyyaka nasta'in — « One place to put the overwhelm. » · 6 Ihdina as-sirat al-mustaqim — « Not make me perfect. The next right step. » · 7 Sirat alladhina an'amta… — « Among those who found their way back. » · Hadith Muslim 395 (résumé lent) · Close : « You don't have to feel the dialogue. Showing up for the words is already the return. »
+- **Piste crise** : identique light (stop + 988).
+
+## 24. Wireframes ligne-par-ligne
+
+- **Nav bas (4)** : Home · Journal · Explore · Profile — icône discrète Help (988). Dark, or très discret.
+- **Onboarding 1 Feeling** : progress 1/5 · H1 How have you been feeling lately? · H2 You're not alone. · chips multi-select (5) · Primary Continue (skip OK ici).
+- **Onboarding 2 Invitation** : H1 Five short pauses. One ancient rhythm. · body 4–5 lignes · Secondary See how it works.
+- **Onboarding 3 Voice** : portrait, quote, prénom, âge, « American convert » / « 2nd gen » · play 30 s optionnel.
+- **Onboarding 4 Rhythm** : 3 cartes radio Beginner / Full / Just explore · caption No pressure.
+- **Onboarding 5 Legal** : disclaimer + 988 · checkbox I understand · Primary Begin my first return · link Privacy.
+- **Home** : Header Today's Returns · 3/5 (ou 1/2 beginner) · 5 rows : name (Morning Return **ou** Fajr si layer) · time window · checkbox · chevron Start · card Inner Weather (emoji 5) · minutes this week · insight 1 ligne · FAB Help · si layer off : pas d'arabe, pas de croissant imposant.
+- **Pre-pause** : Title Your next return · 4–8 min · You can stop anytime · toggles Guided/Silent, EN/EN+AR (si unlock) · Primary Begin this pause · End anytime.
+- **Live** : timer 0:00 · zone texte large (max 3 lignes) · dots stations · Pause / End · audio bar si guided · Keep it simple (si tradition).
+- **Post-pause** : H1 How do you feel now? · 5 états · prompt rotatif · Save & continue · Skip.
+- **Journal list** : search · rows date/slot/stars/preview · empty « Nothing to say is still data. » · composer prompt + textarea + stars 1–5 · badge Private.
+- **Weekly report** : H1 This week you returned 19 times · minutes · mood before/after (2 courbes douces) · insight · box Why this can help + disclaimer · CTA Gentle intention (chips).
+- **Explore hub** : H1 Go deeper when you're ready · H2 Optional. Pauses work without this. · cards + lock state · footer Keep it simple.
+- **Eternal Perspective** : quote 22:47 · body contemplatif · slider âge/minutes **optionnel** · caption Not a scientific calculation.
+- **Profile** : Rhythm · Tradition layer · Notifications · Voice · Journal sync · Export · Delete · Need help now? · Legal.
+- **Crisis overlay** : H1 Need help now? · 988 · NAMI · IASP · « You matter. This app cannot replace a human in an emergency. » · Close.
+- **Empty 0/5** : Some days are survival days. The rhythm waits. · Primary Next pause window.
+
+## 25. Textes FR / AR / ES / ID (mode US multilingue)
+
+### Onboarding — feeling
+| EN | FR | ES | ID | AR |
+|---|---|---|---|---|
+| How have you been feeling lately? | Comment vous sentez-vous en ce moment ? | ¿Cómo te has sentido últimamente? | Bagaimana perasaanmu belakangan ini? | كيف كنت تشعر مؤخرًا؟ |
+| You're not alone. | Vous n'êtes pas seul(e). | No estás solo/a. | Kamu tidak sendirian. | لست وحدك. |
+| Overwhelmed / racing thoughts | Submergé / pensées qui s'emballent | Abrumado / mente acelerada | Kewalahan / pikiran berkejar | مُثقل / أفكار متسارعة |
+| Lonely, even around people | Seul, même entouré | Solo, incluso acompañado | Kesepian meski ada orang | وحيد حتى بين الناس |
+| Numb or disconnected | Anesthésié ou déconnecté | Entumecido o desconectado | Mati rasa atau terputus | خدر أو منفصل |
+| Scrolling but never satisfied | Je scrolle sans jamais être rassasié | Scroll infinito sin saturarme | Scroll terus tapi tak puas | أتصفح دون شبع |
+| Just looking for more meaning | Je cherche plus de sens | Busco más sentido | Mencari makna | أبحث عن معنى |
+
+### Invitation
+- **FR** : Cinq pauses courtes. Un rythme ancien. Depuis 1 400 ans, des êtres humains reviennent, cinq fois, vers quelque chose de plus grand que le fil d'actualité. Ce n'est pas une thérapie. Ce n'est pas un remplacement des soignants. C'est un retour quotidien.
+- **ES** : Cinco pausas breves. Un ritmo antiguo. No es terapia. Es un regreso diario.
+- **ID** : Lima jeda singkat. Irama kuno. Ini bukan terapi. Ini kepulangan harian.
+- **AR** : خمس وقفات قصيرة. إيقاع قديم. ليست علاجًا طبيًا. إنها عودة يومية.
+
+### Dashboard / actions
+| EN | FR | ES | ID | AR |
+|---|---|---|---|---|
+| Today's Returns | Retours du jour | Tus regresos de hoy | Kembali hari ini | عودات اليوم |
+| Inner Weather | Météo intérieure | Clima interior | Cuaca batin | طقس الداخل |
+| Begin this pause | Commencer cette pause | Empezar esta pausa | Mulai jeda ini | ابدأ هذه الوقفة |
+| Finish this return | Terminer ce retour | Terminar este regreso | Selesai kembali | أنهِ هذه العودة |
+| Skip for now | Passer pour l'instant | Ahora no | Lewati dulu | ليس الآن |
+| Keep it simple | Rester simple | Mantenerlo simple | Tetap sederhana | أبقِ الأمر بسيطًا |
+| Explore the tradition | Explorer la tradition | Explorar la tradición | Jelajahi tradisi | استكشف التقليد |
+| How do you feel now? | Comment vous sentez-vous maintenant ? | ¿Cómo te sientes ahora? | Bagaimana perasaanmu sekarang? | كيف تشعر الآن؟ |
+| What shifted, even a little? | Qu'est-ce qui a bougé, même un peu ? | ¿Qué cambió, aunque sea un poco? | Apa yang bergeser, meski sedikit? | ما الذي تغيّر ولو قليلًا؟ |
+| Some days are survival days. The rhythm waits. | Certains jours, on survit. Le rythme attend. | Hay días de sobrevivir. El ritmo espera. | Ada hari hanya untuk bertahan. Iramanya menunggu. | بعض الأيام للبقاء فقط. الإيقاع ينتظر. |
+| You missed one. The next one is still yours. | Vous en avez manqué une. La suivante est encore à vous. | Fallaste una. La siguiente sigue siendo tuya. | Kamu melewatkan satu. Yang berikutnya masih milikmu. | فاتتك واحدة. التالية ما زالت لك. |
+| Need help now? | Besoin d'aide maintenant ? | ¿Necesitas ayuda ahora? | Butuh bantuan sekarang? | هل تحتاج مساعدة الآن؟ |
+| This is not therapy. | Ceci n'est pas une thérapie. | Esto no es terapia. | Ini bukan terapi. | هذا ليس علاجًا نفسيًا. |
+
+### Notifications (douces)
+- **FR** : Aube — Un départ calme est disponible. 4 minutes, si vous voulez. · Midi — Une pause peut couper le scroll. · 48h — Aucune pression. Les pauses sont toujours là.
+- **ES** : Un comienzo quieto está disponible. 4 minutos, si quieres. · Una pausa puede cortar el scroll. · Sin presión. Las pausas siguen aquí.
+- **ID** : Awal yang tenang tersedia. 4 menit, jika kamu mau. · Satu jeda bisa menyela scroll. · Tanpa tekanan. Jedanya masih di sini.
+- **AR** : بداية هادئة متاحة. أربع دقائق إن شئت. · وقفة واحدة قد تقطع التمرير. · بلا ضغط. الوقفات ما زالت هنا.
+
+### Noms des 5 moments (light → tradition)
+| Light EN | FR | ES | ID | AR light | Tradition |
+|---|---|---|---|---|---|
+| Morning Return | Retour du matin | Regreso de la mañana | Kembali pagi | عودة الصباح | Fajr / الفجر |
+| Midday Pause | Pause de midi | Pausa del mediodía | Jeda siang | وقفة الظهيرة | Dhuhr / الظهر |
+| Afternoon Reset | Reset d'après-midi | Reinicio de tarde | Reset sore | إعادة العصر | Asr / العصر |
+| Sunset Presence | Présence au coucher | Presencia al atardecer | Hadir senja | حضور الغروب | Maghrib / المغرب |
+| Night Return | Retour de nuit | Regreso nocturno | Kembali malam | عودة الليل | Isha / العشاء |
+
+### Store sous-titre court
+- FR : Cinq pauses par jour pour revenir au calme
+- ES : Cinco pausas al día para volver a la calma
+- ID : Lima jeda harian untuk ketenangan
+- AR : خمس وقفات يومية للعودة إلى الطمأنينة
+
+> 988 reste US. Hors US : « numéro local d'urgence / IASP ».
+
+## 26. Ordre de build recommandé (par le package externe)
+
+1. Presence Rhythm (light) + onboarding + 5 pauses audio + mood + journal local + 988
+2. Stores + privacy policy + 17+
+3. Reports hebdo + notifs gentilles
+4. Flag `tradition_layer` + Fatiha + stations + 5:6 / 13:28 / 22:47
+5. A/B ads 14 jours
+6. Communauté opt-in en dernier (modération = coût)
+
+**Gel des claims** : jamais « guérir l'Amérique », jamais « 2 minutes divines » en pub, jamais « traite l'anxiété ».

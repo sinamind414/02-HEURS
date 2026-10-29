@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -82,6 +83,18 @@ fun GuidedPauseOverlay(
             .background(Midnight950.copy(alpha = 0.98f))
             .testTag("guided_pause_root")
     ) {
+        // Modal scrim — a click-absorbing layer UNDER the content (last
+        // drawn sibling wins hit-testing): taps that miss every control die
+        // here instead of falling through to the return cards behind the
+        // pause (that is how a stray tap once ticked a checkbox behind).
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { /* absorb — the pause asks for nothing else */ }
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()

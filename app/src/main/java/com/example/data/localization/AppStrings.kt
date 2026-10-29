@@ -4632,5 +4632,21 @@ object AppStrings {
         AppLanguage.ID -> "Apa yang Anda lakukan setiap hari lebih berarti daripada sesekali."
         AppLanguage.FR -> "Ce que vous faites chaque jour compte plus que ce que vous faites de temps en temps."
     }
+
+    fun lightJournalQuestion(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "كيف كان يومك، بصدق؟"
+        AppLanguage.EN -> "How was your day, honestly?"
+        AppLanguage.ES -> "¿Cómo fue tu día, con honestidad?"
+        AppLanguage.ID -> "Bagaimana harimu, dengan jujur?"
+        AppLanguage.FR -> "Votre journée, en toute honnêteté ?"
+    }
+
+    fun lightJournalNotePlaceholder(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "سطر واحد عن يومك — لعينيك فقط."
+        AppLanguage.EN -> "One line about today — for your eyes only."
+        AppLanguage.ES -> "Una línea sobre hoy — solo para ti."
+        AppLanguage.ID -> "Satu baris tentang hari ini — hanya untuk Anda."
+        AppLanguage.FR -> "Une ligne sur votre journée — pour vos yeux seulement."
+    }
 }
 

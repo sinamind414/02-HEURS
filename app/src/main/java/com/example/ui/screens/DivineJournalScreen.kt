@@ -133,7 +133,9 @@ fun DivineJournalScreen(
             }
         }
 
-        // Title and Today Divine Value
+        // Title and Today Divine Value — the divine-time framing is the
+        // tradition layer's; the light skin keeps only its own title, a
+        // plain question and the checklist (slice 2d).
         item {
             Column(
                 modifier = Modifier
@@ -141,46 +143,54 @@ fun DivineJournalScreen(
                     .padding(horizontal = 20.dp, vertical = 6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.MenuBook,
-                        contentDescription = null,
-                        tint = accentGold,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Text(
-                        text = AppStrings.journalTitle(language),
-                        fontFamily = CinzelFontFamily,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 19.sp,
-                        letterSpacing = 1.sp,
-                        color = accentGold,
-                        textAlign = TextAlign.Center
-                    )
+                if (!lightSkin) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.MenuBook,
+                            contentDescription = null,
+                            tint = accentGold,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = AppStrings.journalTitle(language),
+                            fontFamily = CinzelFontFamily,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 19.sp,
+                            letterSpacing = 1.sp,
+                            color = accentGold,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.height(4.dp))
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(cardColor)
-                        .border(1.dp, GoldBorder, RoundedCornerShape(20.dp))
-                        .padding(horizontal = 14.dp, vertical = 6.dp)
-                ) {
-                    Text(
-                        text = AppStrings.todayIsLabel(language),
-                        fontFamily = CinzelFontFamily,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = CelestialCyan,
-                        textAlign = TextAlign.Center
-                    )
+                if (!lightSkin) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(cardColor)
+                            .border(1.dp, GoldBorder, RoundedCornerShape(20.dp))
+                            .padding(horizontal = 14.dp, vertical = 6.dp)
+                    ) {
+                        Text(
+                            text = AppStrings.todayIsLabel(language),
+                            fontFamily = CinzelFontFamily,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = CelestialCyan,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = AppStrings.howFilledQuestion(language),
+                    text = if (lightSkin) {
+                        AppStrings.lightJournalQuestion(language)
+                    } else {
+                        AppStrings.howFilledQuestion(language)
+                    },
                     fontSize = 13.sp,
                     color = textSecondary,
                     textAlign = TextAlign.Center
@@ -543,7 +553,11 @@ fun DivineJournalScreen(
                         },
                         placeholder = {
                             Text(
-                                text = AppStrings.journalNotePlaceholder(language),
+                                text = if (lightSkin) {
+                                    AppStrings.lightJournalNotePlaceholder(language)
+                                } else {
+                                    AppStrings.journalNotePlaceholder(language)
+                                },
                                 fontSize = 12.5.sp,
                                 color = textMuted
                             )

@@ -226,6 +226,8 @@ class PresenceRhythmTest {
         allLanguagesNotBlank({ AppStrings.gentleChannelDescription(it) }, "gentleChannelDescription")
         allLanguagesNotBlank({ AppStrings.lightJournalTitle(it) }, "lightJournalTitle")
         allLanguagesNotBlank({ AppStrings.lightJournalQuote(it) }, "lightJournalQuote")
+        allLanguagesNotBlank({ AppStrings.lightJournalQuestion(it) }, "lightJournalQuestion")
+        allLanguagesNotBlank({ AppStrings.lightJournalNotePlaceholder(it) }, "lightJournalNotePlaceholder")
     }
 
     /**

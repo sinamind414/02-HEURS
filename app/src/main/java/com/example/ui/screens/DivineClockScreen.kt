@@ -284,7 +284,14 @@ fun DivineClockScreen(
                                 color = textPalette.gold
                             )
                             Text(
-                                text = AppStrings.appSubtitle(currentLanguage),
+                                // Light skin keeps the brand but swaps the
+                                // object: « Presence, tasted », never the
+                                // prayer tagline (slice 2).
+                                text = if (lightSkin) {
+                                    AppStrings.lightHeaderSubtitle(currentLanguage)
+                                } else {
+                                    AppStrings.appSubtitle(currentLanguage)
+                                },
                                 fontFamily = AmiriFontFamily,
                                 fontSize = 12.sp,
                                 color = textPalette.secondary

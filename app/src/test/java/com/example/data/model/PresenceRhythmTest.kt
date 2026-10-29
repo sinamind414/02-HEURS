@@ -224,6 +224,7 @@ class PresenceRhythmTest {
         allLanguagesNotBlank({ AppStrings.gentleDailyNotifBody(it) }, "gentleDailyNotifBody")
         allLanguagesNotBlank({ AppStrings.gentleChannelName(it) }, "gentleChannelName")
         allLanguagesNotBlank({ AppStrings.gentleChannelDescription(it) }, "gentleChannelDescription")
+        allLanguagesNotBlank({ AppStrings.lightHeaderSubtitle(it) }, "lightHeaderSubtitle")
         allLanguagesNotBlank({ AppStrings.lightJournalTitle(it) }, "lightJournalTitle")
         allLanguagesNotBlank({ AppStrings.lightJournalQuote(it) }, "lightJournalQuote")
         allLanguagesNotBlank({ AppStrings.lightJournalQuestion(it) }, "lightJournalQuestion")
@@ -275,7 +276,10 @@ class PresenceRhythmTest {
                 AppStrings.gentleChannelName(lang) + " " + AppStrings.gentleChannelDescription(lang)
             },
             "lightJournalTitle" to AppStrings::lightJournalTitle,
-            "lightJournalQuote" to AppStrings::lightJournalQuote
+            "lightJournalQuote" to AppStrings::lightJournalQuote,
+            "lightJournalQuestion" to AppStrings::lightJournalQuestion,
+            "lightJournalNote" to AppStrings::lightJournalNotePlaceholder,
+            "lightHeaderSubtitle" to AppStrings::lightHeaderSubtitle
         )
         AppLanguage.entries.forEach { lang ->
             copies.forEach { (label, value) ->

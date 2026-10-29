@@ -4615,6 +4615,18 @@ object AppStrings {
         AppLanguage.FR -> "Des rappels doux pour vos pauses quotidiennes."
     }
 
+    // ── Slice 2: the light home header ──
+    // The brand mark ذَوْق (« to taste ») stays; what is tasted changes with
+    // the skin: presence, never prayer vocabulary.
+
+    fun lightHeaderSubtitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ذَوْق • إيقاعُ الحضور"
+        AppLanguage.EN -> "ذَوْق • PRESENCE, TASTED"
+        AppLanguage.ES -> "ذَوْق • PRESENCIA, SABOREADA"
+        AppLanguage.ID -> "ذَوْق • KEHADIRAN YANG DIRASAKAN"
+        AppLanguage.FR -> "ذَوْق • LA PRÉSENCE GOÛTÉE"
+    }
+
     // ── Slice 2d: the light journal ──
 
     fun lightJournalTitle(lang: AppLanguage): String = when (lang) {

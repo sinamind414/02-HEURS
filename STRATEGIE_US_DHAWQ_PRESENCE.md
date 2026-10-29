@@ -1,7 +1,7 @@
 # Dhawq Presence — Package Stratégie US (v1, 2026-10-29)
 
 > **Source** : revue externe transmise le 29/10/2026 (« Complete Revised Package for the US Market » + suites 1-3).
-> **Statut** : document de stratégie produit — **rien n'est implémenté dans le code à cette date**.
+> **Statut** : document de stratégie produit — **slice 1 + slice 2 implémentées et vérifiées** (commits `8ee60ab`, `fe6c8fe`, `d937531`, branche `main`).
 > **Décisions ouvertes** : voir §0. Validation théologique requise : voir COMITE_THEOLOGIQUE.md §3.5.
 
 ---
@@ -9,6 +9,13 @@
 ## 0. Décisions ouvertes (à trancher avant tout développement)
 
 1. **Identité produit** : « Presence Rhythm » (layer islamique caché par défaut) vs « Dhawq Presence » (islamique d'emblée). A/B test proposé — tension avec l'âme du projet (تذوق العبادات = goûter LA prière). **✅ TRANCHÉ le 29/10/2026 par le propriétaire** (« go développe la version focalisée sur le malaise US ») : les DEUX skins vivent dans la même codebase via le flag `tradition_layer`. Slice 1 implémentée et poussée (`8ee60ab`) : onboarding 5 écrans (le choix du rythme porte la peau — Beginner→light, Full→tradition, Explore→gradual), Inner Weather, crise 988, hub Explore, Room v6. **Choix sémantique assumé** : en arabe, « العصر » est aussi le mot ordinaire pour « après-midi » — le nom light AR « إعادة العصر » (reset d'après-midi) est un mot de temps, pas le nom de la prière (testé dans `PresenceRhythmTest`).
+
+**Slice 2 implémentée et poussée (`fe6c8fe` + fix `d937531`, 29/10/2026)** — la version light « Presence Rhythm » du §§5-7 + 9 :
+- **Cinq cartes de retour** (Morning Return → Night Return) avec cases honnêtes réutilisant `toggleHabit`, bouton « Take this pause now » sur le moment courant, countdown renommé « NEXT RETURN ».
+- **Pause guidée 4 étapes** (GuidedPauseOverlay : Breathe → Notice → Intention → mood) avec cercle de respiration ; **mood-after-pause** réutilise les 5 chips Inner Weather → `moodAfterPause` (Room v6) — **vérifié en DB** (`moodAfterPause='calmer'` écrit par le flux guidé). Fix modal : scrim absorbant sous le contenu (un tap fantôme cochait une carte derrière l'overlay — corrigé et re-testé).
+- **Notifications douces** : les receivers (Fajr/Dhuhr/Friday) lisent la peau persistée ; en light skin le texte est la voix Presence Rhythm (« Your Morning Return is here » / « One quiet minute of presence before the day begins. ») — **déclenché par broadcast sur émulateur, capture `us2_notif_gentle.png`** : aucun vocabulaire théologique n'apparaît.
+- **Journal light 2e passe** : Bismillah, titre « Divine Minutes », chip « divine second », score étoiles, Hassanat, placeholder « repentance » masqués/renommés (« Divine Minutes Journal » → « Presence Notes », question « How was your day, honestly? », note « One line about today — for your eyes only. »).
+- **Garde-fous tests** : `PresenceRhythmTest` 15 tests verts (75 au total, lint 0 erreur), liste bannie étendue à toute la copie slice 2 (pray/adhan/oración/shalat/الأذان…).
 2. **Stack** : le package propose React Native/Flutter + Supabase = réécriture totale. **✅ TRANCHÉ le 29/10/2026 : PAS de réécriture** — l'app existe (Kotlin/Jetpack Compose natif, tests verts, 5 langues, lint vert). Le pivot se fait par **feature-flag `tradition_layer`** dans la codebase actuelle (Room `user_profile.traditionLayer`).
 3. **Nouveaux hadiths proposés** à valider par le comité (§4 ci-dessous). — Toujours en attente.
 4. **Monétisation** : freemium plus tard, jamais de paywall sur les 5 pauses de base. — Reconduit.

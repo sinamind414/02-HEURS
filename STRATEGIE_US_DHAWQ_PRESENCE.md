@@ -8,10 +8,10 @@
 
 ## 0. Décisions ouvertes (à trancher avant tout développement)
 
-1. **Identité produit** : « Presence Rhythm » (layer islamique caché par défaut) vs « Dhawq Presence » (islamique d'emblée). A/B test proposé — tension avec l'âme du projet (تذوق العبادات = goûter LA prière). **Décision propriétaire + comité requise.**
-2. **Stack** : le package propose React Native/Flutter + Supabase = réécriture totale. **Recommandation contraire** : l'app existe déjà (Kotlin/Jetpack Compose natif, 60 tests, 5 langues, lint vert). Le pivot se fait par **feature-flag `tradition_layer`** dans la codebase actuelle.
-3. **Nouveaux hadiths proposés** à valider par le comité (§4 ci-dessous).
-4. **Monétisation** : freemium plus tard, jamais de paywall sur les 5 pauses de base.
+1. **Identité produit** : « Presence Rhythm » (layer islamique caché par défaut) vs « Dhawq Presence » (islamique d'emblée). A/B test proposé — tension avec l'âme du projet (تذوق العبادات = goûter LA prière). **✅ TRANCHÉ le 29/10/2026 par le propriétaire** (« go développe la version focalisée sur le malaise US ») : les DEUX skins vivent dans la même codebase via le flag `tradition_layer`. Slice 1 implémentée et poussée (`8ee60ab`) : onboarding 5 écrans (le choix du rythme porte la peau — Beginner→light, Full→tradition, Explore→gradual), Inner Weather, crise 988, hub Explore, Room v6. **Choix sémantique assumé** : en arabe, « العصر » est aussi le mot ordinaire pour « après-midi » — le nom light AR « إعادة العصر » (reset d'après-midi) est un mot de temps, pas le nom de la prière (testé dans `PresenceRhythmTest`).
+2. **Stack** : le package propose React Native/Flutter + Supabase = réécriture totale. **✅ TRANCHÉ le 29/10/2026 : PAS de réécriture** — l'app existe (Kotlin/Jetpack Compose natif, tests verts, 5 langues, lint vert). Le pivot se fait par **feature-flag `tradition_layer`** dans la codebase actuelle (Room `user_profile.traditionLayer`).
+3. **Nouveaux hadiths proposés** à valider par le comité (§4 ci-dessous). — Toujours en attente.
+4. **Monétisation** : freemium plus tard, jamais de paywall sur les 5 pauses de base. — Reconduit.
 
 ---
 

@@ -79,10 +79,10 @@ Chaque relecteur reçoit : ce dossier + `SCENARIOS_VOIX_DHAWQ.md` (les 30 script
 
 | # | Question soulevée | Détail | Statut comité |
 |---|---|---|---|
-| 1 | Layer « Presence Rhythm » masquant l'islam par défaut | Noms universels (Morning Return…), pas d'arabe/Salat/wudu visibles, layer islamique optionnel progressif — tension avec l'identité تذوق العبادات (goûter LA prière) | ☐ à trancher |
-| 2 | Nouveaux hadiths proposés aux écrans US | Muslim (prostration) ✓ · Muslim 395 ✓ (déjà dans l'app) · Muslim « prayer is a light » ✓ · « coolness of my eyes » (Ahmad, authentifié par plusieurs savants dont al-Albani) — attribution complète exigée | ☐ à confirmer |
-| 3 | Présentation des études US (Murthy, Haidt, Case-Deaton, Putnam, NIH) avec disclaimer « corrélation ≠ causalité, pas un traitement » | Compatible avec la ligne du comité si les disclaimers restent toujours visibles | ☐ conforme |
-| 4 | « Eternal Perspective » (convertisseur 22:47 contemplatif, déverrouillé après 3-4 semaines) | Aligné avec le cadrage §3.4 | ☐ conforme |
+| 1 | Layer « Presence Rhythm » masquant l'islam par défaut | Noms universels (Morning Return…), pas d'arabe/Salat/wudu visibles, layer islamique optionnel progressif — tension avec l'identité تذوق العبادات (goûter LA prière) | ☑ **Tranché par le propriétaire 29/10/2026** : double skin dans la même app (flag `tradition_layer`), slice 1 poussée (`8ee60ab`). Le choix Full à l'onboarding garde la tradition d'emblée ; NB : en arabe « العصر » = mot commun « après-midi » (light AR « إعادة العصر » est un temps, pas la prière). **Framing théologique du light mode à revoir en priorité** : la tradition reste un tap de l'écran Explore, jamais cachée |
+| 2 | Nouveaux hadiths proposés aux écrans US | Muslim (prostration) ✓ · Muslim 395 ✓ (déjà dans l'app) · Muslim « prayer is a light » ✓ · « coolness of my eyes » (Ahmad, authentifié par plusieurs savants dont al-Albani) — attribution complète exigée | ☐ à confirmer (pas encore dans le code — les 10 stations/Fatiha existants utilisent les sources déjà validées) |
+| 3 | Présentation des études US (Murthy, Haidt, Case-Deaton, Putnam, NIH) avec disclaimer « corrélation ≠ causalité, pas un traitement » | Compatible avec la ligne du comité si les disclaimers restent toujours visibles | ☐ conforme — carte Science & Revelation livrée avec disclaimer permanent (testé) |
+| 4 | « Eternal Perspective » (convertisseur 22:47 contemplatif, déverrouillé après 3-4 semaines) | Aligné avec le cadrage §3.4 | ☐ conforme (le convertisseur existant porte déjà la note §3.4) |
 
 ---
 

@@ -670,21 +670,23 @@ fun DivineClockScreen(
                 }
             }
 
-            // Circular Visualizer Dial
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    DivineCircularClock(
-                        percentageLived = divineTime.percentageLived,
-                        elapsedDivineTimeStr = divineTime.formattedDivineTime,
-                        totalDivineLifeStr = divineTime.formattedTotalDivineLife,
-                        language = currentLanguage,
-                        sizeDp = 220.dp
-                    )
+            // Circular Visualizer Dial — theological chrome, light skin hides it.
+            if (!lightSkin) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        DivineCircularClock(
+                            percentageLived = divineTime.percentageLived,
+                            elapsedDivineTimeStr = divineTime.formattedDivineTime,
+                            totalDivineLifeStr = divineTime.formattedTotalDivineLife,
+                            language = currentLanguage,
+                            sizeDp = 220.dp
+                        )
+                    }
                 }
             }
 

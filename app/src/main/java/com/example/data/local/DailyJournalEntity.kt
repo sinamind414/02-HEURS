@@ -24,7 +24,15 @@ data class DailyJournalEntity(
      * "absente", "goutee"). Only today's answer is ever displayed — it is
      * never aggregated into a score, streak or statistic (Serment #2).
      */
-    val salahTaste: String = ""
+    val salahTaste: String = "",
+    /**
+     * Inner Weather check-in of the day (Presence Rhythm US-05). A raw
+     * [com.example.data.model.InnerWeather] key — "" means "not logged
+     * today". Stored but never scored, compared or aggregated (Serment #2).
+     */
+    val moodCheckIn: String = "",
+    /** Inner Weather logged right after a completed pause ("" = none yet). */
+    val moodAfterPause: String = ""
 )
 
 @Entity(tableName = "user_profile")
@@ -45,5 +53,16 @@ data class UserProfileEntity(
     val isDayMode: Boolean = false,
     /** Last city/country used for the Aladhan prayer-times fetch (v5). */
     val cityName: String = "Paris",
-    val countryName: String = "France"
+    val countryName: String = "France",
+    /**
+     * US onboarding (Presence Rhythm, 29/10/2026) walked through to the
+     * disclaimer — false until then, so the flow shows once on next launch.
+     */
+    val usOnboardingDone: Boolean = false,
+    /** Timestamp of the "I understand" crisis disclaimer acknowledgment. */
+    val crisisAckAtMs: Long = 0L,
+    /** Daily rhythm chosen at onboarding: [com.example.data.model.UsRhythm] key. */
+    val usRhythm: String = "beginner",
+    /** [com.example.data.model.TraditionLayer] key — "off" = light skin. */
+    val traditionLayer: String = "off"
 )

@@ -3850,5 +3850,587 @@ object AppStrings {
         AppLanguage.ID -> "Catatan Penerbit"
         AppLanguage.FR -> "Note du libraire"
     }
+
+    // ─────────────────────────────────────────────────────────────────────
+    //  PRESENCE RHYTHM — the US-facing skin (29/10/2026).
+    //  Light strings deliberately avoid all religious vocabulary; the
+    //  tradition names live one explicit unlock away (Explore hub).
+    // ─────────────────────────────────────────────────────────────────────
+
+    /** Light-skin name of a daily moment ("fajr" → "Morning Return"). */
+    fun lightReturnName(lang: AppLanguage, key: String): String = when (key.lowercase()) {
+        "fajr" -> when (lang) {
+            AppLanguage.AR -> "عودة الصباح"
+            AppLanguage.EN -> "Morning Return"
+            AppLanguage.ES -> "Regreso de la mañana"
+            AppLanguage.ID -> "Kembali pagi"
+            AppLanguage.FR -> "Retour du matin"
+        }
+        "dhuhr" -> when (lang) {
+            AppLanguage.AR -> "وقفة الظهيرة"
+            AppLanguage.EN -> "Midday Pause"
+            AppLanguage.ES -> "Pausa del mediodía"
+            AppLanguage.ID -> "Jeda siang"
+            AppLanguage.FR -> "Pause de midi"
+        }
+        "asr" -> when (lang) {
+            AppLanguage.AR -> "إعادة العصر"
+            AppLanguage.EN -> "Afternoon Reset"
+            AppLanguage.ES -> "Reinicio de tarde"
+            AppLanguage.ID -> "Reset sore"
+            AppLanguage.FR -> "Reset d'après-midi"
+        }
+        "maghrib" -> when (lang) {
+            AppLanguage.AR -> "حضور الغروب"
+            AppLanguage.EN -> "Sunset Presence"
+            AppLanguage.ES -> "Presencia al atardecer"
+            AppLanguage.ID -> "Hadir senja"
+            AppLanguage.FR -> "Présence au couchant"
+        }
+        "isha" -> when (lang) {
+            AppLanguage.AR -> "عودة الليل"
+            AppLanguage.EN -> "Night Return"
+            AppLanguage.ES -> "Regreso nocturno"
+            AppLanguage.ID -> "Kembali malam"
+            AppLanguage.FR -> "Retour de nuit"
+        }
+        else -> prayerName(lang, key)
+    }
+
+    // ── Light home header ──
+
+    fun usHomeTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "عودات اليوم"
+        AppLanguage.EN -> "TODAY'S RETURNS"
+        AppLanguage.ES -> "TUS REGRESOS DE HOY"
+        AppLanguage.ID -> "KEMBALIAN HARI INI"
+        AppLanguage.FR -> "RETOURS DU JOUR"
+    }
+
+    fun usHomeQuote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "خمس لحظات حضور عند مفاصل اليوم"
+        AppLanguage.EN -> "Five moments of presence, at the natural hinges of the day"
+        AppLanguage.ES -> "Cinco momentos de presencia, en las bisagras del día"
+        AppLanguage.ID -> "Lima momen hadir di engsela hari"
+        AppLanguage.FR -> "Cinq moments de présence, aux charnières naturelles du jour"
+    }
+
+    /** Label replacing "Next prayer" in the light schedule card. */
+    fun usNextReturnLabel(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "العودة التالية"
+        AppLanguage.EN -> "Next return"
+        AppLanguage.ES -> "Próximo regreso"
+        AppLanguage.ID -> "Kembali berikutnya"
+        AppLanguage.FR -> "Prochain retour"
+    }
+
+    // ── Inner Weather ──
+
+    fun innerWeatherTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "كيف تشعر الآن؟"
+        AppLanguage.EN -> "How are you feeling right now?"
+        AppLanguage.ES -> "¿Cómo te sientes ahora?"
+        AppLanguage.ID -> "Bagaimana perasaanmu sekarang?"
+        AppLanguage.FR -> "Comment vous sentez-vous, maintenant ?"
+    }
+
+    fun innerWeatherNote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لك وحدك — بلا تقييم ولا مشاركة."
+        AppLanguage.EN -> "Yours alone — never scored, never shared."
+        AppLanguage.ES -> "Solo tuyo — sin notas, sin compartir."
+        AppLanguage.ID -> "Hanya untukmu — tanpa nilai, tanpa dibagikan."
+        AppLanguage.FR -> "Pour vous seul — jamais noté, jamais partagé."
+    }
+
+    fun innerWeatherLabel(lang: AppLanguage, key: String): String = when (key) {
+        "overwhelmed" -> when (lang) {
+            AppLanguage.AR -> "مُثقل"
+            AppLanguage.EN -> "Overwhelmed"
+            AppLanguage.ES -> "Abrumado"
+            AppLanguage.ID -> "Kewalahan"
+            AppLanguage.FR -> "Submergé"
+        }
+        "anxious" -> when (lang) {
+            AppLanguage.AR -> "متوتر"
+            AppLanguage.EN -> "Anxious"
+            AppLanguage.ES -> "Ansioso"
+            AppLanguage.ID -> "Cemas"
+            AppLanguage.FR -> "Anxieux"
+        }
+        "neutral" -> when (lang) {
+            AppLanguage.AR -> "محايد"
+            AppLanguage.EN -> "Neutral"
+            AppLanguage.ES -> "Neutral"
+            AppLanguage.ID -> "Netral"
+            AppLanguage.FR -> "Neutre"
+        }
+        "calmer" -> when (lang) {
+            AppLanguage.AR -> "أهدأ"
+            AppLanguage.EN -> "Calmer"
+            AppLanguage.ES -> "Más tranquilo"
+            AppLanguage.ID -> "Lebih tenang"
+            AppLanguage.FR -> "Plus calme"
+        }
+        "grounded" -> when (lang) {
+            AppLanguage.AR -> "متماسك"
+            AppLanguage.EN -> "Grounded"
+            AppLanguage.ES -> "En tierra"
+            AppLanguage.ID -> "Menetap"
+            AppLanguage.FR -> "Ancré"
+        }
+        else -> key
+    }
+
+    // ── US Onboarding (5 screens) ──
+
+    fun onboardingStepLabel(lang: AppLanguage, step: Int, total: Int): String = when (lang) {
+        AppLanguage.AR -> "$step / $total"
+        AppLanguage.EN -> "$step of $total"
+        AppLanguage.ES -> "$step de $total"
+        AppLanguage.ID -> "$step dari $total"
+        AppLanguage.FR -> "$step sur $total"
+    }
+
+    fun onboardingFeelingTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "كيف كنت تشعر مؤخرًا؟"
+        AppLanguage.EN -> "How have you been feeling lately?"
+        AppLanguage.ES -> "¿Cómo te has sentido últimamente?"
+        AppLanguage.ID -> "Bagaimana perasaanmu belakangan ini?"
+        AppLanguage.FR -> "Comment vous sentez-vous en ce moment ?"
+    }
+
+    fun onboardingFeelingSubtitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لست وحدك. ملايين الناس يشعرون الآن بالتشتت أو القلق أو الفراغ."
+        AppLanguage.EN -> "You're not alone. Millions feel scattered, anxious, or empty right now."
+        AppLanguage.ES -> "No estás solo. Millones se sienten dispersos, ansiosos o vacíos ahora mismo."
+        AppLanguage.ID -> "Kamu tidak sendirian. Jutaan orang merasa tercecer, cemas, atau hampa saat ini."
+        AppLanguage.FR -> "Vous n'êtes pas seul. Des millions de personnes se sentent dispersées, anxieuses ou vides en ce moment."
+    }
+
+    fun onboardingFeelingOption(lang: AppLanguage, index: Int): String = when (index) {
+        0 -> when (lang) {
+            AppLanguage.AR -> "مُثقل / أفكار متسارعة"
+            AppLanguage.EN -> "Overwhelmed / racing thoughts"
+            AppLanguage.ES -> "Abrumado / mente acelerada"
+            AppLanguage.ID -> "Kewalahan / pikiran berkejar"
+            AppLanguage.FR -> "Submergé / pensées qui s'emballent"
+        }
+        1 -> when (lang) {
+            AppLanguage.AR -> "وحيد حتى بين الناس"
+            AppLanguage.EN -> "Lonely, even around people"
+            AppLanguage.ES -> "Solo, incluso acompañado"
+            AppLanguage.ID -> "Kesepian meski ada orang"
+            AppLanguage.FR -> "Seul, même entouré"
+        }
+        2 -> when (lang) {
+            AppLanguage.AR -> "خدر أو منفصل"
+            AppLanguage.EN -> "Numb or disconnected"
+            AppLanguage.ES -> "Entumecido o desconectado"
+            AppLanguage.ID -> "Mati rasa atau terputus"
+            AppLanguage.FR -> "Anesthésié ou déconnecté"
+        }
+        3 -> when (lang) {
+            AppLanguage.AR -> "أتصفح دون شبع"
+            AppLanguage.EN -> "Scrolling but never satisfied"
+            AppLanguage.ES -> "Scroll infinito sin saciarme"
+            AppLanguage.ID -> "Scroll terus tapi tak pernah puas"
+            AppLanguage.FR -> "Je scrolle sans jamais être rassasié"
+        }
+        else -> when (lang) {
+            AppLanguage.AR -> "أبحث عن معنى"
+            AppLanguage.EN -> "Just looking for more meaning"
+            AppLanguage.ES -> "Busco más sentido"
+            AppLanguage.ID -> "Mencari lebih banyak makna"
+            AppLanguage.FR -> "Je cherche plus de sens"
+        }
+    }
+
+    fun onboardingInvitationTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "خمس وقفات قصيرة. إيقاع قديم."
+        AppLanguage.EN -> "Five short pauses. One ancient rhythm."
+        AppLanguage.ES -> "Cinco pausas breves. Un ritmo antiguo."
+        AppLanguage.ID -> "Lima jeda singkat. Satu irama kuno."
+        AppLanguage.FR -> "Cinq pauses courtes. Un rythme ancien."
+    }
+
+    fun onboardingInvitationBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "منذ 1400 سنة، يعود الناس خمس مرات كل يوم إلى شيء أكبر منهم. تؤكد الأبحاث الحديثة ما عرفته التقليد: الانتظام والطقس والجماعة تساعد الجهاز العصبي على الهدوء وتعيد إحساس المعنى.\n\nهذه ليست علاجًا نفسيًا. إنها عودة يومية."
+        AppLanguage.EN -> "For 1,400 years, people have used five daily moments of return — structured, embodied, and directed toward something larger than themselves. Research now confirms what tradition always knew: regular ritual, presence, and community help regulate the nervous system and restore a sense of meaning.\n\nThis is not therapy. This is not a replacement for professional care. This is a daily return."
+        AppLanguage.ES -> "Durante 1.400 años, las personas han usado cinco momentos diarios de regreso: estructurados, encarnados y dirigidos a algo más grande que ellas. La investigación confirma lo que la tradición siempre supo: el ritual regular, la presencia y la comunidad ayudan a regular el sistema nervioso y devuelven el sentido.\n\nEsto no es terapia. No reemplaza la atención profesional. Es un regreso diario."
+        AppLanguage.ID -> "Selama 1.400 tahun, manusia memakai lima momen kembali setiap hari: terstruktur, dihayati, dan diarahkan pada sesuatu yang lebih besar. Riset kini mengonfirmasi yang tradisi selalu tahu: ritual rutin, kehadiran, dan komunitas menenangkan sistem saraf dan memulihkan makna.\n\nIni bukan terapi. Ini bukan pengganti pertolongan profesional. Ini kepulangan harian."
+        AppLanguage.FR -> "Depuis 1 400 ans, des êtres humains utilisent cinq moments quotidiens de retour — structurés, incarnés, dirigés vers quelque chose de plus grand qu'eux. La recherche confirme ce que la tradition savait : le rituel régulier, la présence et la communauté apaisent le système nerveux et rendent le sens.\n\nCe n'est pas une thérapie. Ce n'est pas un remplacement des soignants. C'est un retour quotidien."
+    }
+
+    fun onboardingVoiceQuote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "« كنت أستيقظ الثالثة فجرًا وقلبي يسرع، وأتصفح حتى أشعر بأسوأ. هذه الوقفات الخمس منحتني إيقاعًا لم أكن أعلم أنني أحتاجه. لم تصلح كل شيء بين عشية وضحاها، لكنها أعطتني مكانًا أعود إليه. »"
+        AppLanguage.EN -> "\u201CI used to wake up at 3am with my heart racing, scrolling until I felt worse. These five pauses gave me a rhythm I didn't know I needed. It didn't fix everything overnight, but it gave me somewhere to come back to.\u201D"
+        AppLanguage.ES -> "\u201CMe despertaba a las 3 am con el corazón acelerado, haciendo scroll hasta sentirme peor. Estas cinco pausas me dieron un ritmo que no sabía que necesitaba. No lo arregló todo de un día para otro, pero me dio un lugar al que volver.\u201D"
+        AppLanguage.ID -> "\u201CDulu aku terbangun pukul 3 pagi dengan jantung berdebar, terus scrolling sampai merasa lebih buruk. Lima jeda ini memberiku irama yang tak kukenal perlu kukbutuhkan. Semuanya tak langsung membaik, tapi kini ada tempat untuk kembali.\u201D"
+        AppLanguage.FR -> "« Je me réveillais à 3h du matin, le cœur au bord des lèvres, et je scrollais jusqu'à me sentir pire. Ces cinq pauses m'ont donné un rythme dont j'ignorais avoir besoin. Tout n'a pas été réparé du jour au lendemain, mais j'ai eu un endroit où revenir. »"
+    }
+
+    fun onboardingVoiceAuthor(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "جيمس، 34 سنة — في طريق التعافي"
+        AppLanguage.EN -> "James, 34 — in recovery"
+        AppLanguage.ES -> "James, 34 — en recuperación"
+        AppLanguage.ID -> "James, 34 — dalam pemulihan"
+        AppLanguage.FR -> "James, 34 ans — en chemin de guérison"
+    }
+
+    fun onboardingRhythmTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ابدأ من حيث أنت"
+        AppLanguage.EN -> "Start where you are"
+        AppLanguage.ES -> "Empieza donde estás"
+        AppLanguage.ID -> "Mulai dari tempatmu berada"
+        AppLanguage.FR -> "Commencez où vous êtes"
+    }
+
+    fun onboardingRhythmBeginner(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "مبتدئ — 1–2 وقفات في اليوم (موصى به)"
+        AppLanguage.EN -> "Beginner — 1–2 pauses a day (recommended)"
+        AppLanguage.ES -> "Principiante — 1–2 pausas al día (recomendado)"
+        AppLanguage.ID -> "Pemula — 1–2 jeda sehari (disarankan)"
+        AppLanguage.FR -> "Débutant — 1–2 pauses par jour (recommandé)"
+    }
+
+    fun onboardingRhythmFull(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الإيقاع الكامل — العودات الخمس مع الأسماء الأصلية"
+        AppLanguage.EN -> "Full rhythm — all 5 daily returns, original names"
+        AppLanguage.ES -> "Ritmo completo — los 5 regresos diarios, nombres originales"
+        AppLanguage.ID -> "Irama penuh — 5 kembali harian, nama aslinya"
+        AppLanguage.FR -> "Rythme complet — les 5 retours quotidiens, noms originaux"
+    }
+
+    fun onboardingRhythmExplore(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "استكشف أولًا"
+        AppLanguage.EN -> "Just explore first"
+        AppLanguage.ES -> "Primero explorar"
+        AppLanguage.ID -> "Jelajahi dulu"
+        AppLanguage.FR -> "D'abord explorer"
+    }
+
+    fun onboardingRhythmCaption(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "يمكنك التغيير لاحقًا. بلا ضغط."
+        AppLanguage.EN -> "You can always change this later. No pressure."
+        AppLanguage.ES -> "Puedes cambiarlo más adelante. Sin presión."
+        AppLanguage.ID -> "Kamu bisa mengubahnya nanti. Tanpa tekanan."
+        AppLanguage.FR -> "Vous pourrez toujours changer. Sans pression."
+    }
+
+    fun onboardingLegalTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "قبل أن تبدأ"
+        AppLanguage.EN -> "Before you begin"
+        AppLanguage.ES -> "Antes de empezar"
+        AppLanguage.ID -> "Sebelum memulai"
+        AppLanguage.FR -> "Avant de commencer"
+    }
+
+    fun onboardingLegalBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "نحن لسنا مختصين طبيًا. إذا كنت في أزمة، فاطلب مساعدة معالج مرخّص أو اتصل/أرسل رسالة إلى 988 (خط أزمات الانتحار في الولايات المتحدة).\n\nهذه الممارسة قد تُكمل الرعاية المهنية، لكنها لا تستبدلها أبدًا."
+        AppLanguage.EN -> "We are not medical professionals. If you are in crisis, please reach out to a licensed therapist or call or text 988 (Suicide & Crisis Lifeline, US).\n\nThis practice can complement, but never replace, professional mental health care."
+        AppLanguage.ES -> "No somos profesionales médicos. Si estás en crisis, acude a un terapeuta licenciado o llama o escribe al 988 (Línea de Crisis, EE. UU.).\n\nEsta práctica puede complementar, pero nunca reemplazar, la atención profesional de salud mental."
+        AppLanguage.ID -> "Kami bukan tenaga medis. Jika kamu sedang krisis, hubungi terapis berlisensi atau telepon/kirim SMS ke 988 (Lini Krisis, AS).\n\nPraktik ini bisa melengkapi, namun tak pernah menggantikan, perawatan kesehatan mental profesional."
+        AppLanguage.FR -> "Nous ne sommes pas professionnels de santé. En cas de crise, contactez un thérapeute agréé ou appelez/écrivez au 988 (ligne crise suicidaire, États-Unis).\n\nCette pratique peut compléter, mais jamais remplacer, un accompagnement professionnel de santé mentale."
+    }
+
+    fun onboardingLegalCheckbox(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "فهمت"
+        AppLanguage.EN -> "I understand"
+        AppLanguage.ES -> "Lo entiendo"
+        AppLanguage.ID -> "Saya mengerti"
+        AppLanguage.FR -> "J'ai compris"
+    }
+
+    fun onboardingBeginBtn(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ابدأ عودتي الأولى"
+        AppLanguage.EN -> "Begin my first return"
+        AppLanguage.ES -> "Comenzar mi primer regreso"
+        AppLanguage.ID -> "Mulai kepulangan pertama"
+        AppLanguage.FR -> "Commencer mon premier retour"
+    }
+
+    fun onboardingSkip(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ليس الآن"
+        AppLanguage.EN -> "Skip for now"
+        AppLanguage.ES -> "Ahora no"
+        AppLanguage.ID -> "Lewati dulu"
+        AppLanguage.FR -> "Passer pour l'instant"
+    }
+
+    fun onboardingContinueBtn(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "متابعة"
+        AppLanguage.EN -> "Continue"
+        AppLanguage.ES -> "Continuar"
+        AppLanguage.ID -> "Lanjut"
+        AppLanguage.FR -> "Continuer"
+    }
+
+    // ── Crisis support (988 — permanent, both skins) ──
+
+    fun crisisSupportTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "هل تحتاج مساعدة الآن؟"
+        AppLanguage.EN -> "Need help now?"
+        AppLanguage.ES -> "¿Necesitas ayuda ahora?"
+        AppLanguage.ID -> "Butuh bantuan sekarang?"
+        AppLanguage.FR -> "Besoin d'aide maintenant ?"
+    }
+
+    fun crisisSupportBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إذا كنت في خطر مباشر أو تفكر في إيذاء نفسك، اتصل بـ 911 (الولايات المتحدة) أو اذهب إلى الطوارئ. في الأزمة الانتحارية: اتصل أو أرسل رسالة إلى 988."
+        AppLanguage.EN -> "If you are in immediate danger or considering self-harm, call 911 (US) or go to an ER. For suicidal crisis: call or text 988."
+        AppLanguage.ES -> "Si estás en peligro inmediato o piensas en hacerte daño, llama al 911 (EE. UU.) o ve a urgencias. En crisis suicida: llama o escribe al 988."
+        AppLanguage.ID -> "Jika kamu dalam bahaya langsung atau berpikir menyakiti diri, telepon 911 (AS) atau pergi ke UGD. Krisis bunuh diri: telepon/kirim SMS ke 988."
+        AppLanguage.FR -> "En danger immédiat ou pensées d'auto-agression : appelez le 911 (États-Unis) ou allez aux urgences. Crise suicidaire : appelez ou écrivez au 988."
+    }
+
+    fun crisis988Button(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اتصل أو أرسل رسالة إلى 988 (الولايات المتحدة)"
+        AppLanguage.EN -> "Call or text 988 (US)"
+        AppLanguage.ES -> "Llamar o escribir al 988 (EE. UU.)"
+        AppLanguage.ID -> "Telepon atau SMS 988 (AS)"
+        AppLanguage.FR -> "Appeler ou écrire au 988 (États-Unis)"
+    }
+
+    fun crisisNamiButton(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "موارد NAMI"
+        AppLanguage.EN -> "NAMI resources"
+        AppLanguage.ES -> "Recursos NAMI"
+        AppLanguage.ID -> "Sumber daya NAMI"
+        AppLanguage.FR -> "Ressources NAMI"
+    }
+
+    fun crisisIaspButton(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "IASP — دولي"
+        AppLanguage.EN -> "IASP — international"
+        AppLanguage.ES -> "IASP — internacional"
+        AppLanguage.ID -> "IASP — internasional"
+        AppLanguage.FR -> "IASP — international"
+    }
+
+    fun crisisAppNote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أنت مهم. هذا التطبيق لا يمكنه أن يستبدل إنسانًا في حالة طارئة."
+        AppLanguage.EN -> "You matter. This app cannot replace a human in an emergency."
+        AppLanguage.ES -> "Eres importante. Esta app no puede reemplazar a una persona en una emergencia."
+        AppLanguage.ID -> "Kamu penting. Aplikasi ini tak bisa menggantikan manusia dalam keadaan darurat."
+        AppLanguage.FR -> "Vous comptez. Cette application ne peut remplacer un humain en cas d'urgence."
+    }
+
+    fun crisisButtonLabel(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "مساعدة — أزمة"
+        AppLanguage.EN -> "Crisis support"
+        AppLanguage.ES -> "Apoyo en crisis"
+        AppLanguage.ID -> "Dukungan krisis"
+        AppLanguage.FR -> "Soutien en crise"
+    }
+
+    fun crisisDismiss(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إغلاق"
+        AppLanguage.EN -> "Close"
+        AppLanguage.ES -> "Cerrar"
+        AppLanguage.ID -> "Tutup"
+        AppLanguage.FR -> "Fermer"
+    }
+
+    // ── Explore the tradition hub ──
+
+    fun exploreTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "تعمّق متى شئت"
+        AppLanguage.EN -> "Go deeper when you're ready"
+        AppLanguage.ES -> "Profundiza cuando estés listo"
+        AppLanguage.ID -> "Selami lebih dalam saat siap"
+        AppLanguage.FR -> "Allez plus loin quand vous serez prêt"
+    }
+
+    fun exploreSubtitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "كل شيء هنا اختياري. الوقفات الخمس تعمل بدونه."
+        AppLanguage.EN -> "Everything here is optional. The five pauses work without it."
+        AppLanguage.ES -> "Todo aquí es opcional. Las cinco pausas funcionan sin esto."
+        AppLanguage.ID -> "Semua di sini opsional. Lima jeda bekerja tanpanya."
+        AppLanguage.FR -> "Tout ici est optionnel. Les cinq pauses fonctionnent sans."
+    }
+
+    fun exploreUnlockBtn(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "افتح التقليد الأصلي"
+        AppLanguage.EN -> "Unlock the original tradition"
+        AppLanguage.ES -> "Desbloquear la tradición original"
+        AppLanguage.ID -> "Buka tradisi aslinya"
+        AppLanguage.FR -> "Débloquer la tradition originale"
+    }
+
+    fun exploreKeepSimpleBtn(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أبقِ الأمر بسيطًا"
+        AppLanguage.EN -> "Keep it simple"
+        AppLanguage.ES -> "Mantenerlo simple"
+        AppLanguage.ID -> "Tetap sederhana"
+        AppLanguage.FR -> "Rester simple"
+    }
+
+    fun exploreOpen(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "افتح"
+        AppLanguage.EN -> "Open"
+        AppLanguage.ES -> "Abrir"
+        AppLanguage.ID -> "Buka"
+        AppLanguage.FR -> "Ouvrir"
+    }
+
+    fun exploreCardWhyFive(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لماذا خمس وقفات؟"
+        AppLanguage.EN -> "Why five pauses?"
+        AppLanguage.ES -> "¿Por qué cinco pausas?"
+        AppLanguage.ID -> "Mengapa lima jeda?"
+        AppLanguage.FR -> "Pourquoi cinq pauses ?"
+    }
+
+    fun exploreCardWhyFiveBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "خمس لحظات موزعة على اليوم تصنع إيقاعًا يتعلّمه الجهاز العصبي: الصباح والظهيرة والعصر والغروب والليل — مفاصل طبيعية في وقت الإنسان. منذ 1400 سنة، هذه البنية تُدعى الصلاة."
+        AppLanguage.EN -> "Five moments spread across the day create a rhythm the nervous system can learn. Morning, midday, afternoon, sunset, night — natural hinges in human time. For 1,400 years, this structure has been called Salat."
+        AppLanguage.ES -> "Cinco momentos repartidos por el día crean un ritmo que el sistema nervioso puede aprender: mañana, mediodía, tarde, atardecer, noche — bisagras naturales del tiempo humano. Durante 1.400 años, esta estructura se ha llamado Salat."
+        AppLanguage.ID -> "Lima momen sepanjang hari menciptakan irama yang bisa dipelajari sistem saraf: pagi, siang, sore, senja, malam — engsela alami waktu manusia. Selama 1.400 tahun, struktur ini disebut Salat."
+        AppLanguage.FR -> "Cinq moments répartis dans la journée créent un rythme que le système nerveux peut apprendre : matin, midi, après-midi, crépuscule, nuit — des charnières naturelles du temps humain. Depuis 1 400 ans, cette structure s'appelle Salat."
+    }
+
+    fun exploreCardNames(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الأسماء الخمسة"
+        AppLanguage.EN -> "The five names"
+        AppLanguage.ES -> "Los cinco nombres"
+        AppLanguage.ID -> "Lima nama"
+        AppLanguage.FR -> "Les cinq noms"
+    }
+
+    fun exploreCardNamesBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الفجر، الظهر، العصر، المغرب، العشاء. أسماء من تقليد — ويمكنك مواصلة تسميتها العودة الصباحية، وقفة الظهيرة…"
+        AppLanguage.EN -> "Fajr (dawn), Dhuhr (midday), Asr (afternoon), Maghrib (sunset), Isha (night). Names from a tradition — you can keep calling them Morning Return, Midday Pause…"
+        AppLanguage.ES -> "Fajr (alba), Dhuhr (mediodía), Asr (tarde), Maghrib (atardecer), Isha (noche). Nombres de una tradición — puedes seguir llamándolos Regreso de la mañana, Pausa del mediodía…"
+        AppLanguage.ID -> "Fajr (fajar), Dhuhr (siang), Asr (sore), Maghrib (senja), Isha (malam). Nama dari sebuah tradisi — boleh juga menyebutnya Kembali pagi, Jeda siang…"
+        AppLanguage.FR -> "Fajr (aube), Dhuhr (midi), Asr (après-midi), Maghrib (crépuscule), Isha (nuit). Des noms d'une tradition — vous pouvez continuer à dire Retour du matin, Pause de midi…"
+    }
+
+    fun exploreCardWater(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الماء (الوضوء)"
+        AppLanguage.EN -> "Water (Wudu)"
+        AppLanguage.ES -> "Agua (Wudú)"
+        AppLanguage.ID -> "Air (Wudu)"
+        AppLanguage.FR -> "L'eau (Wudu)"
+    }
+
+    fun exploreCardWaterBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "« وما يريد بكم عسرًا ولكن يريد أن يطهركم » (المائدة: 6). إعادة ضبط جسدية: الوجه والذراعان والرأس والقدمان. نظافة + نية. كثيرون يقولون إنها تغسل نهارَهم قبل أن يتكلموا."
+        AppLanguage.EN -> "\u201CGod does not intend to make difficulty for you, but to purify you\u201D (Quran 5:6). A physical reset: face, arms, head, feet. Hygiene + intention. Many describe it as washing the day off before they speak."
+        AppLanguage.ES -> "\u201CDios no quiere daros dificultad, sino purificaros\u201D (Corán 5:6). Un reinicio físico: rostro, brazos, cabeza, pies. Higiene + intención. Muchos lo describen como lavarse el día antes de hablar."
+        AppLanguage.ID -> "\u201CAllah tidak ingin menyusahkanmu, tetapi ingin menyucikanmu\u201D (Al-Quran 5:6). Reset fisik: wajah, lengan, kepala, kaki. Kebersihan + niat. Banyak yang menyebutnya mencuci hari sebelum berbicara."
+        AppLanguage.FR -> "« Dieu ne veut pas vous imposer de difficulté, mais Vous purifier » (Coran 5:6). Un reset physique : visage, bras, tête, pieds. Hygiène + intention. Beaucoup décrivent cela comme laver sa journée avant de parler."
+    }
+
+    fun exploreCardQibla(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الاتجاه (القبلة)"
+        AppLanguage.EN -> "Direction (Qibla)"
+        AppLanguage.ES -> "Dirección (Qibla)"
+        AppLanguage.ID -> "Arah (Kiblat)"
+        AppLanguage.FR -> "La direction (Qibla)"
+    }
+
+    fun exploreCardQiblaBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اتجاه واحد مشترك. تذكير بأنك لست مركز العالم — ولست وحدك."
+        AppLanguage.EN -> "One shared direction. A reminder that you are not the center — and that you are not alone."
+        AppLanguage.ES -> "Una dirección compartida. Un recordatorio de que no eres el centro — y de que no estás solo."
+        AppLanguage.ID -> "Satu arah yang sama. Pengingat bahwa kamu bukan pusat segalanya — dan tidak sendirian."
+        AppLanguage.FR -> "Une direction partagée. Un rappel : vous n'êtes pas le centre — et vous n'êtes pas seul."
+    }
+
+    fun exploreCardFatiha(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الحوار (الفاتحة)"
+        AppLanguage.EN -> "The conversation (Al-Fatiha)"
+        AppLanguage.ES -> "La conversación (Al-Fátija)"
+        AppLanguage.ID -> "Percakapan (Al-Fatiha)"
+        AppLanguage.FR -> "La conversation (Al-Fatiha)"
+    }
+
+    fun exploreCardFatihaBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "سبع آيات سمعها كثيرون كحوار: العبد يتكلم، والرب يجيب. تجربة تفاعلية آية بآية."
+        AppLanguage.EN -> "Seven verses many have heard as a dialogue: the servant speaks, the Lord answers. An interactive, verse-by-verse experience."
+        AppLanguage.ES -> "Siete versículos que muchos han escuchado como diálogo: el siervo habla, el Señor responde. Una experiencia interactiva, versículo a versículo."
+        AppLanguage.ID -> "Tujuh ayat yang banyak didengar sebagai percakapan: hamba berbicara, Tuhan menjawab. Pengalaman interaktif, ayat demi ayat."
+        AppLanguage.FR -> "Sept versets que beaucoup ont entendus comme un dialogue : le serviteur parle, le Seigneur répond. Une expérience interactive, verset par verset."
+    }
+
+    fun exploreCardStations(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "المحطات العشر"
+        AppLanguage.EN -> "The 10 stations"
+        AppLanguage.ES -> "Las 10 estaciones"
+        AppLanguage.ID -> "10 perhentian"
+        AppLanguage.FR -> "Les 10 stations"
+    }
+
+    fun exploreCardStationsBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "رحلة العودة داخل الصلاة: الوصول، الماء، المشي، النداء، الوقوف، التلاوة، الركوع، السجود، الجلوس، السلام. كل محطة 20–90 ثانية."
+        AppLanguage.EN -> "The return journey inside the prayer: arrive, water, walk, the call, stand, recite, bow, prostrate, sit, peace. Each station 20–90 seconds."
+        AppLanguage.ES -> "El viaje de regreso dentro de la oración: llegar, agua, caminar, la llamada, estar de pie, recitar, inclinarse, postrarse, sentarse, paz. Cada estación, 20–90 segundos."
+        AppLanguage.ID -> "Perjalanan kembali di dalam salat: datang, air, berjalan, seruan, berdiri, membaca, ruku, sujud, duduk, damai. Tiap perhentian 20–90 detik."
+        AppLanguage.FR -> "Le voyage du retour dans la prière : arriver, l'eau, marcher, l'appel, se tenir, réciter, s'incliner, se prosterner, s'asseoir, la paix. Chaque station, 20–90 secondes."
+    }
+
+    fun exploreCardEternal(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "مقياس زمني مختلف"
+        AppLanguage.EN -> "A different scale of time"
+        AppLanguage.ES -> "Una escala de tiempo diferente"
+        AppLanguage.ID -> "Skala waktu yang berbeda"
+        AppLanguage.FR -> "Une autre échelle du temps"
+    }
+
+    fun exploreCardEternalBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "« ويستعجل بك يوم هو كألف سنة مما تعدون » (الحج: 47) — صورة تأملية، لا حساب."
+        AppLanguage.EN -> "\u201CA day with your Lord is like a thousand years of what you count\u201D (Quran 22:47) — a contemplative image, not a calculation."
+        AppLanguage.ES -> "\u201CUn día junto a tu Señor es como mil años de los que contáis\u201D (Corán 22:47) — una imagen contemplativa, no un cálculo."
+        AppLanguage.ID -> "\u201CSatu hari bersama Tuhanmu seperti seribu tahun menurut perhitunganmu\u201D (Al-Quran 22:47) — gambaran kontemplatif, bukan hitungan."
+        AppLanguage.FR -> "« Un jour auprès de ton Seigneur est comme mille ans de ce que vous comptez » (Coran 22:47) — une image contemplative, pas un calcul."
+    }
+
+    fun exploreCardScience(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "العلم والوحي"
+        AppLanguage.EN -> "Science & Revelation"
+        AppLanguage.ES -> "Ciencia y Revelación"
+        AppLanguage.ID -> "Sains dan Wahyu"
+        AppLanguage.FR -> "Science & Révélation"
+    }
+
+    fun exploreCardScienceBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "« ألا بذكر الله تطمئن القلوب » (الرعد: 28). أبحاث أمريكية: وباء الوحدة (الجراح العام 2023)، العلاقة بين الطقس المنتظم والتنظيم العاطفي (NIH، Harvard)."
+        AppLanguage.EN -> "\u201CUnquestionably, by the remembrance of God hearts find rest\u201D (Quran 13:28). US research: the loneliness epidemic (Surgeon General, 2023), regular ritual linked to better emotional regulation (NIH, Harvard)."
+        AppLanguage.ES -> "\u201CCon el recuerdo de Dios se serenan los corazones\u201D (Corán 13:28). Investigación de EE. UU.: la epidemia de soledad (Surgeon General, 2023), el ritual regular vinculado a mejor regulación emocional (NIH, Harvard)."
+        AppLanguage.ID -> "\u201CDengan mengingat Allah, hati menjadi tenteram\u201D (Al-Quran 13:28). Riset AS: epidemi kesepian (Surgeon General, 2023), ritual rutin terkait regulasi emosi yang lebih baik (NIH, Harvard)."
+        AppLanguage.FR -> "« C'est par le souvenir de Dieu que les cœurs s'apaisent » (Coran 13:28). Recherche américaine : l'épidémie de solitude (Surgeon General, 2023), le rituel régulier associé à une meilleure régulation émotionnelle (NIH, Harvard)."
+    }
+
+    fun exploreScienceDisclaimer(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الارتباط ليس سببية. هذه الممارسة ليست علاجًا للاكتئاب أو القلق السريري."
+        AppLanguage.EN -> "Correlation is not causation. This practice is not a treatment for clinical depression or anxiety."
+        AppLanguage.ES -> "Correlación no es causalidad. Esta práctica no es un tratamiento para la depresión o la ansiedad clínicas."
+        AppLanguage.ID -> "Korelasi bukan kausalitas. Praktik ini bukan pengobatan untuk depresi atau kecemasan klinis."
+        AppLanguage.FR -> "Corrélation n'est pas causalité. Cette pratique n'est pas un traitement de la dépression ou de l'anxiété clinique."
+    }
+
+    fun exploreCardVoices(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أصوات من هنا"
+        AppLanguage.EN -> "Voices from here"
+        AppLanguage.ES -> "Voces de aquí"
+        AppLanguage.ID -> "Suara dari sini"
+        AppLanguage.FR -> "Des voix d'ici"
+    }
+
+    fun exploreCardVoicesBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "شهادات حقيقية من أمريكيين: « ساعدني على البقاء » — وليس أبدًا « لقد شفاني »."
+        AppLanguage.EN -> "Real testimonies from Americans: \u201Cit helped me stay\u201D — never \u201Cit cured me\u201D."
+        AppLanguage.ES -> "Testimonios reales de estadounidenses: \u201Cme ayudó a seguir\u201D — nunca \u201Cme curó\u201D."
+        AppLanguage.ID -> "Kesaksian nyata orang Amerika: \u201Chal ini membantuku bertahan\u201D — bukan pernah \u201Cmenyembuhkanku\u201D."
+        AppLanguage.FR -> "Des témoignages réels d'Américains : « ça m'a aidé à tenir » — jamais « ça m'a guéri »."
+    }
+
+    fun exploreUnlockedNote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "التقليد الأصلي ظاهر الآن — الأسماء وال مصادر."
+        AppLanguage.EN -> "The original tradition is now visible — names and sources."
+        AppLanguage.ES -> "La tradición original ya es visible — nombres y fuentes."
+        AppLanguage.ID -> "Tradisi aslinya kini terlihat — nama dan sumbernya."
+        AppLanguage.FR -> "La tradition originale est maintenant visible — noms et sources."
+    }
 }
 

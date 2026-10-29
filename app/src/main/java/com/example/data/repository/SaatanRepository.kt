@@ -53,6 +53,50 @@ class SaatanRepository(private val dao: DailyJournalDao) {
         dao.saveUserProfile(current.copy(isDayMode = isDay))
     }
 
+    // ── Presence Rhythm (US repositioning) ──────────────────────────────
+
+    /**
+     * Completes the US onboarding in ONE write: the rhythm choice, the
+     * tradition layer and the crisis disclaimer acknowledgment travel
+     * together, so "I understand" can never be persisted without the
+     * disclaimer screen having been shown (US-02).
+     */
+    suspend fun completeUsOnboarding(
+        usRhythmKey: String,
+        traditionLayerKey: String,
+        crisisAckAtMs: Long
+    ) {
+        val current = dao.getUserProfile().firstOrNull() ?: UserProfileEntity()
+        dao.saveUserProfile(
+            current.copy(
+                usOnboardingDone = true,
+                usRhythm = usRhythmKey,
+                traditionLayer = traditionLayerKey,
+                crisisAckAtMs = crisisAckAtMs
+            )
+        )
+    }
+
+    /** Switches the skin: "off" (light) ↔ "gradual"/"on" (original names). */
+    suspend fun updateTraditionLayer(key: String) {
+        val current = dao.getUserProfile().firstOrNull() ?: UserProfileEntity()
+        dao.saveUserProfile(current.copy(traditionLayer = key))
+    }
+
+    /** Records today's Inner Weather check-in (before a pause). */
+    suspend fun updateMoodCheckIn(key: String) {
+        val today = getTodayIso()
+        val current = dao.getJournalForDate(today).firstOrNull() ?: DailyJournalEntity(dateIso = today)
+        dao.insertOrUpdateJournal(current.copy(moodCheckIn = key))
+    }
+
+    /** Records the Inner Weather logged right after a pause. */
+    suspend fun updateMoodAfterPause(key: String) {
+        val today = getTodayIso()
+        val current = dao.getJournalForDate(today).firstOrNull() ?: DailyJournalEntity(dateIso = today)
+        dao.insertOrUpdateJournal(current.copy(moodAfterPause = key))
+    }
+
     /**
      * Updates the notification preferences. Only the given flags are written so
      * that a single toggle does not clobber the others.

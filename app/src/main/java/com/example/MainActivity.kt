@@ -48,11 +48,13 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.ui.MainViewModel
 import com.example.ui.SaatanScreen
+import com.example.ui.components.CrisisSupportDialog
 import com.example.ui.components.triggerSpiritualHaptic
 import com.example.ui.screens.ChallengesScreen
 import com.example.ui.screens.BookScreen
 import com.example.ui.screens.DivineClockScreen
 import com.example.ui.screens.DivineJournalScreen
+import com.example.ui.screens.ExploreTraditionScreen
 import com.example.ui.screens.FatihaScreen
 import com.example.ui.screens.JourneyScreen
 import com.example.ui.screens.LastNightsScreen
@@ -60,6 +62,7 @@ import com.example.ui.screens.LifeJourneyVisualizerScreen
 import com.example.ui.screens.LogoSplashOverlay
 import com.example.ui.screens.SettingsVersesScreen
 import com.example.ui.screens.TemporalConverterScreen
+import com.example.ui.screens.UsOnboardingScreen
 import com.example.ui.theme.CinzelFontFamily
 import com.example.ui.theme.DawnCream900
 import com.example.ui.theme.DawnGoldPrimary
@@ -115,6 +118,20 @@ class MainActivity : ComponentActivity() {
                 Box(Modifier.fillMaxSize()) {
                     SaatanAppContent(viewModel)
 
+                    // Presence Rhythm US onboarding: once the splash ends, the
+                    // flow covers the app until the disclaimer is acknowledged
+                    // (null = profile not read yet → never flash it).
+                    val usOnboardingDone by viewModel.usOnboardingDone.collectAsState()
+                    val splashForOnboarding by viewModel.splashVisible.collectAsState()
+                    if (usOnboardingDone == false && !splashForOnboarding) {
+                        UsOnboardingScreen(
+                            language = language,
+                            onComplete = { rhythm, layer ->
+                                viewModel.completeUsOnboarding(rhythm, layer)
+                            }
+                        )
+                    }
+
                     // The opening "Prayer of Taste" logo video sits above the
                     // whole app: it dissolves on tap, at video end, or via the
                     // 12 s watchman; a rotation never replays it (the flag
@@ -155,6 +172,22 @@ fun SaatanAppContent(viewModel: MainViewModel) {
     // (composed after the handler above, so it takes priority).
     BackHandler(enabled = splashVisible) {
         viewModel.dismissSplash()
+    }
+
+    // During the US onboarding, back is swallowed: the disclaimer is the
+    // only exit (US-02 — acknowledged once, then never shown again).
+    val usOnboardingDone by viewModel.usOnboardingDone.collectAsState()
+    BackHandler(enabled = usOnboardingDone == false && !splashVisible) {
+        // intentionally empty — no way around the crisis disclaimer
+    }
+
+    // The crisis support dialog is root-level so it can rise above any skin.
+    val showCrisisSupport by viewModel.showCrisisSupport.collectAsState()
+    if (showCrisisSupport) {
+        CrisisSupportDialog(
+            language = currentLanguage,
+            onDismiss = viewModel::closeCrisisSupport
+        )
     }
 
     // Android 13+ requires an explicit runtime grant for notifications.
@@ -280,6 +313,7 @@ fun SaatanAppContent(viewModel: MainViewModel) {
                         SaatanScreen.IMMERSIVE_LIFE -> LifeJourneyVisualizerScreen(viewModel)
                         SaatanScreen.CHALLENGES -> ChallengesScreen(viewModel)
                         SaatanScreen.SETTINGS_VERSES -> SettingsVersesScreen(viewModel)
+                        SaatanScreen.EXPLORE -> ExploreTraditionScreen(viewModel)
                     }
                 }
             }

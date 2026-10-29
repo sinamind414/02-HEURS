@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         UserProfileEntity::class,
         PrayerTimingsCacheEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 abstract class SaatanDatabase : RoomDatabase() {
@@ -24,6 +24,38 @@ abstract class SaatanDatabase : RoomDatabase() {
 
         @Volatile
         private var INSTANCE: SaatanDatabase? = null
+
+        /**
+         * v5 -> v6
+         *  * Presence Rhythm (US repositioning, 29/10/2026): adds the US
+         *    onboarding state (disclaimer ack + rhythm choice) and the
+         *    `tradition_layer` flag that switches between the light
+         *    "Presence Rhythm" skin ("off") and the original Dhawq skin
+         *  * adds the daily Inner Weather columns to the journal — a raw
+         *    label stored on device, never scored or aggregated (Serment #2)
+         */
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE user_profile ADD COLUMN usOnboardingDone INTEGER NOT NULL DEFAULT 0"
+                )
+                db.execSQL(
+                    "ALTER TABLE user_profile ADD COLUMN crisisAckAtMs INTEGER NOT NULL DEFAULT 0"
+                )
+                db.execSQL(
+                    "ALTER TABLE user_profile ADD COLUMN usRhythm TEXT NOT NULL DEFAULT 'beginner'"
+                )
+                db.execSQL(
+                    "ALTER TABLE user_profile ADD COLUMN traditionLayer TEXT NOT NULL DEFAULT 'off'"
+                )
+                db.execSQL(
+                    "ALTER TABLE daily_journal ADD COLUMN moodCheckIn TEXT NOT NULL DEFAULT ''"
+                )
+                db.execSQL(
+                    "ALTER TABLE daily_journal ADD COLUMN moodAfterPause TEXT NOT NULL DEFAULT ''"
+                )
+            }
+        }
 
         /**
          * v4 -> v5
@@ -116,7 +148,7 @@ abstract class SaatanDatabase : RoomDatabase() {
                     SaatanDatabase::class.java,
                     DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                     .build()
                     .also { INSTANCE = it }
             }

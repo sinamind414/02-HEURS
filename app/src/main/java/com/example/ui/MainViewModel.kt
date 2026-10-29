@@ -16,6 +16,9 @@ import com.example.data.model.LifeMilestone
 import com.example.data.model.PrayerCountdownState
 import com.example.data.model.PrayerCycleState
 import com.example.data.model.RamadanNightState
+import com.example.data.model.InnerWeather
+import com.example.data.model.TraditionLayer
+import com.example.data.model.UsRhythm
 import com.example.data.notification.DivineNotificationHelper
 import com.example.data.repository.PrayerTimesRepository
 import com.example.data.repository.SaatanRepository
@@ -27,6 +30,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -42,7 +46,8 @@ enum class SaatanScreen {
     JOURNAL,
     IMMERSIVE_LIFE,
     CHALLENGES,
-    SETTINGS_VERSES
+    SETTINGS_VERSES,
+    EXPLORE
 }
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -102,6 +107,45 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun dismissSplash() {
         _splashVisible.value = false
+    }
+
+    // ── Presence Rhythm (US repositioning, 29/10/2026) ──────────────────
+    // Assigned in init (they need the repository). `null` = the profile row
+    // has not been read yet: the onboarding overlay must NOT flash while
+    // Room warms up. `false` = show the flow once; `true` = the disclaimer
+    // was acknowledged, never ask again.
+
+    val usOnboardingDone: StateFlow<Boolean?>
+    val traditionLayer: StateFlow<TraditionLayer>
+
+    fun completeUsOnboarding(rhythm: UsRhythm, layer: TraditionLayer) {
+        viewModelScope.launch {
+            repository.completeUsOnboarding(
+                usRhythmKey = rhythm.key,
+                traditionLayerKey = layer.key,
+                crisisAckAtMs = System.currentTimeMillis()
+            )
+        }
+    }
+
+    fun setTraditionLayer(layer: TraditionLayer) {
+        viewModelScope.launch { repository.updateTraditionLayer(layer.key) }
+    }
+
+    fun setMoodCheckIn(mood: InnerWeather) {
+        viewModelScope.launch { repository.updateMoodCheckIn(mood.key) }
+    }
+
+    // Crisis support — reachable from every skin, one tap from the header.
+    private val _showCrisisSupport = MutableStateFlow(false)
+    val showCrisisSupport: StateFlow<Boolean> = _showCrisisSupport.asStateFlow()
+
+    fun openCrisisSupport() {
+        _showCrisisSupport.value = true
+    }
+
+    fun closeCrisisSupport() {
+        _showCrisisSupport.value = false
     }
 
     private val _liveDivineTime = MutableStateFlow<DivineTimeInfo>(
@@ -232,6 +276,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             SharingStarted.WhileSubscribed(5000),
             emptyList()
         )
+
+        // Presence Rhythm: onboarding gate (null → false → true) and the
+        // skin driving the home screen. Both derive from the same profile
+        // row; the in-flight defaults only matter under the onboarding
+        // overlay, which covers the app until the choice exists.
+        usOnboardingDone = repository.getUserProfile()
+            .map { it?.usOnboardingDone ?: false }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+        traditionLayer = repository.getUserProfile()
+            .map { TraditionLayer.fromKey(it?.traditionLayer ?: "off") }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TraditionLayer.OFF)
 
         viewModelScope.launch {
             userProfile.collect { profile ->

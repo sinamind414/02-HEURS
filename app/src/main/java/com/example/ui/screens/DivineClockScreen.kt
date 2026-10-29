@@ -39,6 +39,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Emergency
 import androidx.compose.material.icons.filled.HourglassBottom
 import androidx.compose.material.icons.filled.Mosque
 import androidx.compose.material.icons.filled.Public
@@ -107,6 +108,7 @@ import com.example.ui.components.DivinePrayerMotivatorCard
 import com.example.ui.components.DivineTimeBreakdownBarChart
 import com.example.ui.components.IslamicGoldenDivider
 import com.example.ui.components.LanguageSelectionDialog
+import com.example.ui.components.InnerWeatherCard
 import com.example.ui.components.TwoDivineHoursClockDial
 import com.example.ui.components.TwoDivineHoursLifeMap
 import com.example.ui.components.triggerSpiritualHaptic
@@ -148,6 +150,10 @@ fun DivineClockScreen(
     val isDayMode by viewModel.isDayMode.collectAsState()
     val todayJournal by viewModel.todayJournal.collectAsState()
     val cycleState by viewModel.cycleState.collectAsState()
+    // Presence Rhythm skin: "off" hides the theological chrome of the home
+    // screen and renames the five moments (strategy §5).
+    val tradition by viewModel.traditionLayer.collectAsState()
+    val lightSkin = tradition.isLightSkin
     val textPalette = saatanTextPalette()
 
     // The app bar + pill rows are hoisted OUTSIDE the LazyColumn (audit P2):
@@ -350,6 +356,28 @@ fun DivineClockScreen(
                                 modifier = Modifier.size(18.dp)
                             )
                         }
+
+                        // Crisis support — permanent in both skins (988, US).
+                        // Nothing about the tap is ever recorded.
+                        IconButton(
+                            onClick = {
+                                triggerSpiritualHaptic(context)
+                                viewModel.openCrisisSupport()
+                            },
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .background(Midnight800)
+                                .border(1.dp, GoldBorder, CircleShape)
+                                .testTag("crisis_support_button")
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Emergency,
+                                contentDescription = AppStrings.crisisButtonLabel(currentLanguage),
+                                tint = GoldPrimary,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
                     }
                 }
 
@@ -455,12 +483,15 @@ fun DivineClockScreen(
             state = lazyListState,
             contentPadding = PaddingValues(top = 126.dp, bottom = 96.dp)
         ) {
-            // Bismillah Header
-            item {
-                BismillahHeader(modifier = Modifier.padding(horizontal = 16.dp))
+            // Bismillah Header — hidden on the light Presence Rhythm skin.
+            if (!lightSkin) {
+                item {
+                    BismillahHeader(modifier = Modifier.padding(horizontal = 16.dp))
+                }
             }
 
-            // Subtitle Title: TON TEMPS CHEZ ALLAH
+            // Subtitle Title: TON TEMPS CHEZ ALLAH (original) /
+            // TODAY'S RETURNS (light Presence Rhythm skin).
             item {
                 Column(
                     modifier = Modifier
@@ -469,7 +500,11 @@ fun DivineClockScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = AppStrings.yourTimeWithAllah(currentLanguage),
+                        text = if (lightSkin) {
+                            AppStrings.usHomeTitle(currentLanguage)
+                        } else {
+                            AppStrings.yourTimeWithAllah(currentLanguage)
+                        },
                         fontFamily = CinzelFontFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 17.sp,
@@ -478,7 +513,11 @@ fun DivineClockScreen(
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = AppStrings.centralConceptQuote(currentLanguage),
+                        text = if (lightSkin) {
+                            AppStrings.usHomeQuote(currentLanguage)
+                        } else {
+                            AppStrings.centralConceptQuote(currentLanguage)
+                        },
                         fontSize = 12.sp,
                         color = textPalette.muted,
                         textAlign = TextAlign.Center,
@@ -487,51 +526,64 @@ fun DivineClockScreen(
                 }
             }
 
-            // 1. LE GRAND MOTIVEUR DE PRIÈRE (Ultimate Prayer Motivator)
-            item {
-                DivinePrayerMotivatorCard(
-                    viewModel = viewModel,
-                    prayerState = prayerState,
-                    todayJournal = todayJournal,
-                    language = currentLanguage,
-                    cycleState = cycleState
-                )
+            // 1. LE GRAND MOTIVEUR DE PRIÈRE — the guilt-free light skin
+            // replaces it with the schedule + Inner Weather (slice 2 brings
+            // the five return cards).
+            if (!lightSkin) {
+                item {
+                    DivinePrayerMotivatorCard(
+                        viewModel = viewModel,
+                        prayerState = prayerState,
+                        todayJournal = todayJournal,
+                        language = currentLanguage,
+                        cycleState = cycleState
+                    )
+                }
             }
 
             // 2. CIRCULAR CANVAS PROGRESS VISUALIZATION: TWO DIVINE HOURS CLOCK DIAL
-            item {
-                TwoDivineHoursClockDial(
-                    divineTime = divineTime,
-                    language = currentLanguage,
-                    lifeExpectancyYears = userProfile?.lifeExpectancyYears ?: 75
-                )
+            if (!lightSkin) {
+                item {
+                    TwoDivineHoursClockDial(
+                        divineTime = divineTime,
+                        language = currentLanguage,
+                        lifeExpectancyYears = userProfile?.lifeExpectancyYears ?: 75
+                    )
+                }
             }
 
             // 3. TIME BREAKDOWN CANVAS BAR CHART (Spent vs Remaining + Lifetime Allocation)
-            item {
-                DivineTimeBreakdownBarChart(
-                    divineTime = divineTime,
-                    language = currentLanguage
-                )
+            if (!lightSkin) {
+                item {
+                    DivineTimeBreakdownBarChart(
+                        divineTime = divineTime,
+                        language = currentLanguage
+                    )
+                }
             }
 
             // 4. THE CENTRAL DIVINE TIME COUNTER CARD
-            item {
-                DivineTimeMainCounterCard(
-                    divineTime = divineTime,
-                    language = currentLanguage,
-                    onEditBirthdate = {
-                        triggerSpiritualHaptic(context)
-                        viewModel.openProfileDialog()
-                    }
-                )
+            if (!lightSkin) {
+                item {
+                    DivineTimeMainCounterCard(
+                        divineTime = divineTime,
+                        language = currentLanguage,
+                        onEditBirthdate = {
+                            triggerSpiritualHaptic(context)
+                            viewModel.openProfileDialog()
+                        }
+                    )
+                }
             }
 
             // 5. ALADHAN API INTEGRATION: PRAYER TIMES & COUNTDOWN NOTIFICATION CARD
+            // — kept on both skins: it is the day's schedule, renamed on the
+            // light skin ("Next return: Morning Return").
             item {
                 PrayerCountdownNotificationCard(
                     prayerState = prayerState,
                     language = currentLanguage,
+                    lightSkin = lightSkin,
                     onOpenCityDialog = {
                         triggerSpiritualHaptic(context)
                         viewModel.openCityDialog()
@@ -543,12 +595,79 @@ fun DivineClockScreen(
                 )
             }
 
-            // 6. VISUAL REPRESENTATION: TWO DIVINE HOURS LIFESPAN MAP (Interactive Slider)
+            // 5b. INNER WEATHER — the daily check-in of the light skin.
+            if (lightSkin) {
+                item {
+                    InnerWeatherCard(
+                        viewModel = viewModel,
+                        journalMoodKey = todayJournal?.moodCheckIn,
+                        language = currentLanguage
+                    )
+                }
+            }
+
+            // 5c. EXPLORE THE TRADITION — the always-optional hub, both skins.
             item {
-                TwoDivineHoursLifeMap(
-                    userAgeYears = divineTime.earthAgeYears,
-                    language = currentLanguage
-                )
+                CelestialCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 8.dp)
+                        .testTag("explore_tradition_card"),
+                    backgroundColor = Midnight800.copy(alpha = 0.9f),
+                    borderColor = GoldPrimary.copy(alpha = 0.4f)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = AppStrings.exploreTitle(currentLanguage),
+                            fontFamily = CinzelFontFamily,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            color = GoldLight,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = AppStrings.exploreSubtitle(currentLanguage),
+                            fontSize = 11.5.sp,
+                            color = TextSecondary,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Button(
+                            onClick = {
+                                triggerSpiritualHaptic(context)
+                                viewModel.navigateTo(SaatanScreen.EXPLORE)
+                            },
+                            modifier = Modifier.testTag("explore_tradition_button"),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = GoldPrimary,
+                                contentColor = Midnight950
+                            ),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text(
+                                text = AppStrings.exploreUnlockBtn(currentLanguage),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.5.sp
+                            )
+                        }
+                    }
+                }
+            }
+
+            // 6. VISUAL REPRESENTATION: TWO DIVINE HOURS LIFESPAN MAP (Interactive Slider)
+            if (!lightSkin) {
+                item {
+                    TwoDivineHoursLifeMap(
+                        userAgeYears = divineTime.earthAgeYears,
+                        language = currentLanguage
+                    )
+                }
             }
 
             // Circular Visualizer Dial
@@ -570,6 +689,7 @@ fun DivineClockScreen(
             }
 
             // Earth Time vs Divine Time Comparative Breakdown
+            if (!lightSkin) {
             item {
                 CelestialCard(
                     modifier = Modifier
@@ -712,8 +832,10 @@ fun DivineClockScreen(
                     }
                 }
             }
+            }
 
             // Striking Impact Metric Banner: 1 divine second = 4.23 earth days
+            if (!lightSkin) {
             item {
                 CelestialCard(
                     modifier = Modifier
@@ -768,8 +890,10 @@ fun DivineClockScreen(
                     }
                 }
             }
+            }
 
             // Spiritual Reflection & Journal Call-to-Action
+            if (!lightSkin) {
             item {
                 CelestialCard(
                     modifier = Modifier
@@ -865,6 +989,7 @@ fun DivineClockScreen(
                     }
                 }
             }
+            }
         }
     }
 
@@ -914,9 +1039,10 @@ fun DivineClockScreen(
     // LE VIDE — while the prayer window is open, the whole screen becomes a
     // single word: "Va." The dismissal is per-prayer (remembered only for the
     // current window): the next Rendez-Vous offers the silence again.
+    // Not on the light skin: no "Va." overlay before the tradition is shown.
     val videKey = cycleState.windowPrayerKey
     var dismissedVideKey by remember { mutableStateOf<String?>(null) }
-    if (cycleState.inPrayerWindow && videKey.isNotEmpty() && dismissedVideKey != videKey) {
+    if (cycleState.inPrayerWindow && videKey.isNotEmpty() && dismissedVideKey != videKey && !lightSkin) {
         LeVideOverlay(
             language = currentLanguage,
             prayerFr = cycleState.windowPrayerNameFr,
@@ -927,10 +1053,10 @@ fun DivineClockScreen(
 
     // LA MINUTE PRÉCIEUSE — offered once, 10 to 45 minutes after the adhan
     // (the assise that follows the salam). Sixty silent seconds, then the
-    // question of the taste.
+    // question of the taste. Tradition skin only.
     var showPreciousMinute by remember { mutableStateOf(false) }
     LaunchedEffect(cycleState.offerPreciousMinute, cycleState.preciousMinutePrayerKey) {
-        if (cycleState.offerPreciousMinute) {
+        if (cycleState.offerPreciousMinute && !lightSkin) {
             showPreciousMinute = true
             viewModel.markPreciousMinuteShown(cycleState.preciousMinutePrayerKey)
         }
@@ -954,10 +1080,21 @@ fun DivineClockScreen(
 fun PrayerCountdownNotificationCard(
     prayerState: PrayerCountdownState,
     language: AppLanguage = AppLanguage.FR,
+    lightSkin: Boolean = false,
     onOpenCityDialog: () -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Light skin renames the five moments and hides the Hijri date, the
+    // Arabic name and the "divine waiting" line — the schedule itself is
+    // kept: it is what the rhythm is built on.
+    fun momentName(key: String): String =
+        if (lightSkin) {
+            AppStrings.lightReturnName(language, key)
+        } else {
+            AppStrings.prayerName(language, key)
+        }
+
     CelestialCard(
         modifier = modifier
             .fillMaxWidth()
@@ -1010,13 +1147,15 @@ fun PrayerCountdownNotificationCard(
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = prayerState.hijriDateFormatted,
-                        fontFamily = AmiriFontFamily,
-                        fontSize = 13.sp,
-                        color = TextGold
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    if (!lightSkin) {
+                        Text(
+                            text = prayerState.hijriDateFormatted,
+                            fontFamily = AmiriFontFamily,
+                            fontSize = 13.sp,
+                            color = TextGold
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                    }
                     IconButton(
                         onClick = onRefresh,
                         modifier = Modifier.size(28.dp)
@@ -1078,19 +1217,21 @@ fun PrayerCountdownNotificationCard(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = "${AppStrings.nextPrayerLabel(language)} : ${AppStrings.prayerName(language, prayerState.nextPrayerNameFr).uppercase()}",
+                                text = "${if (lightSkin) AppStrings.usNextReturnLabel(language) else AppStrings.nextPrayerLabel(language)} : ${momentName(prayerState.nextPrayerNameFr).uppercase()}",
                                 fontFamily = CinzelFontFamily,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 11.5.sp,
                                 letterSpacing = 0.8.sp,
                                 color = GoldLight
                             )
-                            Text(
-                                text = prayerState.nextPrayerNameAr,
-                                fontFamily = AmiriFontFamily,
-                                fontSize = 16.sp,
-                                color = TextGold
-                            )
+                            if (!lightSkin) {
+                                Text(
+                                    text = prayerState.nextPrayerNameAr,
+                                    fontFamily = AmiriFontFamily,
+                                    fontSize = 16.sp,
+                                    color = TextGold
+                                )
+                            }
                         }
 
                         Row(
@@ -1112,18 +1253,20 @@ fun PrayerCountdownNotificationCard(
                             )
                         }
 
-                        Text(
-                            text = AppStrings.divineWaitingLabel(
-                                language,
-                                DivineTimeCalculator.earthToDivineFormatted(
-                                    seconds = prayerState.secondsUntilNextPrayer.toDouble(),
-                                    lang = language
-                                )
-                            ),
-                            fontFamily = CinzelFontFamily,
-                            fontSize = 11.sp,
-                            color = GoldLight
-                        )
+                        if (!lightSkin) {
+                            Text(
+                                text = AppStrings.divineWaitingLabel(
+                                    language,
+                                    DivineTimeCalculator.earthToDivineFormatted(
+                                        seconds = prayerState.secondsUntilNextPrayer.toDouble(),
+                                        lang = language
+                                    )
+                                ),
+                                fontFamily = CinzelFontFamily,
+                                fontSize = 11.sp,
+                                color = GoldLight
+                            )
+                        }
                     }
                 }
             }
@@ -1156,7 +1299,7 @@ fun PrayerCountdownNotificationCard(
                                 fontSize = 14.sp
                             )
                             Text(
-                                text = AppStrings.prayerName(language, prayer.key),
+                                text = momentName(prayer.key),
                                 fontFamily = CinzelFontFamily,
                                 fontWeight = if (isNext) FontWeight.Bold else FontWeight.Medium,
                                 fontSize = 11.sp,

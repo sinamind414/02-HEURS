@@ -75,6 +75,15 @@ Chaque relecteur reçoit : ce dossier + `SCENARIOS_VOIX_DHAWQ.md` (les 30 script
 | 1 | Coran 22:47 lu comme base d'une « échelle symbolique de réflexion » : 1 jour divin ≈ 1 000 ans ⇒ 1 s divine ≈ 4,23 jours | Coran 22:47 — le verset répond à ceux qui demandaient de hâter le châtiment ; c'est une comparaison, **pas une unité de mesure** | ☐ cadrage appliqué |
 | 2 | L'app ne présente JAMAIS la conversion comme une mesure du temps auprès d'Allah | Décision de cadrage (revue externe 28/10/2026) : note permanente dans l'écran, 5 langues : « une illustration méditative, non une mesure de l'au-delà » | ☐ cadrage appliqué |
 
+### 3.5 Repositionnement US « Dhawq Presence » (ajouté le 29/10/2026 — package externe, non implémenté)
+
+| # | Question soulevée | Détail | Statut comité |
+|---|---|---|---|
+| 1 | Layer « Presence Rhythm » masquant l'islam par défaut | Noms universels (Morning Return…), pas d'arabe/Salat/wudu visibles, layer islamique optionnel progressif — tension avec l'identité تذوق العبادات (goûter LA prière) | ☐ à trancher |
+| 2 | Nouveaux hadiths proposés aux écrans US | Muslim (prostration) ✓ · Muslim 395 ✓ (déjà dans l'app) · Muslim « prayer is a light » ✓ · « coolness of my eyes » (Ahmad, authentifié par plusieurs savants dont al-Albani) — attribution complète exigée | ☐ à confirmer |
+| 3 | Présentation des études US (Murthy, Haidt, Case-Deaton, Putnam, NIH) avec disclaimer « corrélation ≠ causalité, pas un traitement » | Compatible avec la ligne du comité si les disclaimers restent toujours visibles | ☐ conforme |
+| 4 | « Eternal Perspective » (convertisseur 22:47 contemplatif, déverrouillé après 3-4 semaines) | Aligné avec le cadrage §3.4 | ☐ conforme |
+
 ---
 
 ## 4. Ce que le comité ne trouvera pas dans Dhawq

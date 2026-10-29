@@ -101,14 +101,17 @@ import com.example.data.model.PrayerCountdownState
 import com.example.data.model.PrayerTimeItem
 import com.example.ui.MainViewModel
 import com.example.ui.SaatanScreen
+import androidx.activity.compose.BackHandler
 import com.example.ui.components.BismillahHeader
 import com.example.ui.components.CelestialCard
 import com.example.ui.components.DivineCircularClock
 import com.example.ui.components.DivinePrayerMotivatorCard
 import com.example.ui.components.DivineTimeBreakdownBarChart
+import com.example.ui.components.GuidedPauseOverlay
 import com.example.ui.components.IslamicGoldenDivider
 import com.example.ui.components.LanguageSelectionDialog
 import com.example.ui.components.InnerWeatherCard
+import com.example.ui.components.LightReturnCards
 import com.example.ui.components.TwoDivineHoursClockDial
 import com.example.ui.components.TwoDivineHoursLifeMap
 import com.example.ui.components.triggerSpiritualHaptic
@@ -154,6 +157,9 @@ fun DivineClockScreen(
     // screen and renames the five moments (strategy §5).
     val tradition by viewModel.traditionLayer.collectAsState()
     val lightSkin = tradition.isLightSkin
+    // Slice 2b: the guided pause (Live Companion), opened from the return
+    // cards' "pause now" and walked through at the user's own pace.
+    var showGuidedPause by remember { mutableStateOf(false) }
     val textPalette = saatanTextPalette()
 
     // The app bar + pill rows are hoisted OUTSIDE the LazyColumn (audit P2):
@@ -527,8 +533,8 @@ fun DivineClockScreen(
             }
 
             // 1. LE GRAND MOTIVEUR DE PRIÈRE — the guilt-free light skin
-            // replaces it with the schedule + Inner Weather (slice 2 brings
-            // the five return cards).
+            // replaces it with the five return cards (slice 2a): one
+            // checkbox per moment, a "pause now" action, no guilt machine.
             if (!lightSkin) {
                 item {
                     DivinePrayerMotivatorCard(
@@ -537,6 +543,17 @@ fun DivineClockScreen(
                         todayJournal = todayJournal,
                         language = currentLanguage,
                         cycleState = cycleState
+                    )
+                }
+            }
+            if (lightSkin) {
+                item {
+                    LightReturnCards(
+                        viewModel = viewModel,
+                        todayJournal = todayJournal,
+                        nextMomentKey = prayerState.nextPrayerNameFr,
+                        language = currentLanguage,
+                        onPauseNow = { showGuidedPause = true }
                     )
                 }
             }
@@ -1050,6 +1067,18 @@ fun DivineClockScreen(
             prayerFr = cycleState.windowPrayerNameFr,
             prayerAr = cycleState.windowPrayerNameAr,
             onLater = { dismissedVideKey = videKey }
+        )
+    }
+
+    // GUIDED PAUSE — the Live Companion of the light skin (slice 2b): three
+    // secular steps closing on the post-pause Inner Weather. Back dismisses
+    // it without punishment: a skipped pause is simply a pause not taken.
+    if (lightSkin && showGuidedPause) {
+        BackHandler(enabled = true) { showGuidedPause = false }
+        GuidedPauseOverlay(
+            viewModel = viewModel,
+            language = currentLanguage,
+            onClose = { showGuidedPause = false }
         )
     }
 

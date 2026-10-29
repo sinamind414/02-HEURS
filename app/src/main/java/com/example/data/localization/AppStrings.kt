@@ -4432,5 +4432,205 @@ object AppStrings {
         AppLanguage.ID -> "Tradisi aslinya kini terlihat — nama dan sumbernya."
         AppLanguage.FR -> "La tradition originale est maintenant visible — noms et sources."
     }
+
+    // ── Slice 2a: the five return cards (light home) ──
+
+    fun lightReturnChecklistTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أشّر وقفاتك"
+        AppLanguage.EN -> "Mark your pauses"
+        AppLanguage.ES -> "Marca tus pausas"
+        AppLanguage.ID -> "Tandai jeda Anda"
+        AppLanguage.FR -> "Cochez vos pauses"
+    }
+
+    fun lightReturnChecklistNote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "بلا سلاسل ولا نقاط — أثر لطيف ليومك فقط، يبقى على جهازك."
+        AppLanguage.EN -> "No streaks, no score — just a gentle trace of your day, kept on your device."
+        AppLanguage.ES -> "Sin rachas ni puntuaciones — solo un registro amable de tu día, guardado en tu dispositivo."
+        AppLanguage.ID -> "Tanpa rentetan, tanpa skor — sekadar jejak hari Anda, tersimpan di perangkat."
+        AppLanguage.FR -> "Pas de séries, pas de note — juste une trace douce de votre journée, gardée sur votre appareil."
+    }
+
+    fun lightPauseNowBtn(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "خذ هذه الوقفة الآن"
+        AppLanguage.EN -> "Take this pause now"
+        AppLanguage.ES -> "Toma esta pausa ahora"
+        AppLanguage.ID -> "Ambil jeda ini sekarang"
+        AppLanguage.FR -> "Faites cette pause maintenant"
+    }
+
+    // ── Slice 2b: the guided pause (Live Companion) ──
+
+    fun guidedPauseTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "وقفة قصيرة"
+        AppLanguage.EN -> "A short pause"
+        AppLanguage.ES -> "Una pausa corta"
+        AppLanguage.ID -> "Jeda singkat"
+        AppLanguage.FR -> "Une courte pause"
+    }
+
+    fun guidedPauseBreatheTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "تنفّس"
+        AppLanguage.EN -> "Breathe"
+        AppLanguage.ES -> "Respira"
+        AppLanguage.ID -> "Bernapas"
+        AppLanguage.FR -> "Respirez"
+    }
+
+    fun guidedPauseBreatheBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اتبع الدائرة. ثلاثة أنفاس بطيئة — لا شيء آخر مطلوب."
+        AppLanguage.EN -> "Follow the circle. Three slow breaths — nothing else to do."
+        AppLanguage.ES -> "Sigue el círculo. Tres respiraciones lentas — nada más que hacer."
+        AppLanguage.ID -> "Ikuti lingkaran ini. Tiga tarikan napas lambat — tidak perlu yang lain."
+        AppLanguage.FR -> "Suivez le cercle. Trois respirations lentes — rien d'autre à faire."
+    }
+
+    fun guidedPausePresenceTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لاحظ"
+        AppLanguage.EN -> "Notice"
+        AppLanguage.ES -> "Observa"
+        AppLanguage.ID -> "Perhatikan"
+        AppLanguage.FR -> "Remarquez"
+    }
+
+    fun guidedPausePresenceBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "سمِّ ثلاثة أشياء يمكنك أن تلمسها أو تسمعها أو تراها. دَع اليوم ينتظر دقيقة."
+        AppLanguage.EN -> "Name three things you can touch, hear, or see. Let the day wait one minute."
+        AppLanguage.ES -> "Nombra tres cosas que puedas tocar, oír o ver. Deja que el día espere un minuto."
+        AppLanguage.ID -> "Sebutkan tiga hal yang bisa Anda sentuh, dengar, atau lihat. Biarkan hari menunggu satu menit."
+        AppLanguage.FR -> "Nommez trois choses que vous pouvez toucher, entendre ou voir. Laissez la journée attendre une minute."
+    }
+
+    fun guidedPauseIntentionTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "نية واحدة"
+        AppLanguage.EN -> "One intention"
+        AppLanguage.ES -> "Una intención"
+        AppLanguage.ID -> "Satu niat"
+        AppLanguage.FR -> "Une intention"
+    }
+
+    fun guidedPauseIntentionBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اختر شيئًا صغيرًا واحدًا يهم لبقية يومك. لا يحتاج إلى أن يكون كبيرًا."
+        AppLanguage.EN -> "Choose one small thing that matters for the rest of your day. It doesn't need to be big."
+        AppLanguage.ES -> "Elige una cosa pequeña que importe para el resto de tu día. No hace falta que sea grande."
+        AppLanguage.ID -> "Pilih satu hal kecil yang penting untuk sisa hari Anda. Tak perlu besar."
+        AppLanguage.FR -> "Choisissez une petite chose qui compte pour le reste de votre journée. Elle n'a pas besoin d'être grande."
+    }
+
+    fun guidedPauseFinishBtn(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إنهاء"
+        AppLanguage.EN -> "Finish"
+        AppLanguage.ES -> "Terminar"
+        AppLanguage.ID -> "Selesai"
+        AppLanguage.FR -> "Terminer"
+    }
+
+    fun guidedPauseSkipBtn(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "تخطّي"
+        AppLanguage.EN -> "Skip"
+        AppLanguage.ES -> "Omitir"
+        AppLanguage.ID -> "Lewati"
+        AppLanguage.FR -> "Passer"
+    }
+
+    // ── Slice 2c: gentle notifications (light skin) ──
+
+    fun gentleFajrNotifTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "عودة الصباح هنا"
+        AppLanguage.EN -> "Your Morning Return is here"
+        AppLanguage.ES -> "Llega tu Regreso de la mañana"
+        AppLanguage.ID -> "Kembali pagi tiba"
+        AppLanguage.FR -> "Votre Retour du matin est là"
+    }
+
+    fun gentleFajrNotifBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "دقيقة هادئة من الحضور قبل أن يبدأ اليوم."
+        AppLanguage.EN -> "One quiet minute of presence before the day begins."
+        AppLanguage.ES -> "Un minuto tranquilo de presencia antes de que empiece el día."
+        AppLanguage.ID -> "Satu menit tenang sebelum hari Anda dimulai."
+        AppLanguage.FR -> "Une minute de présence avant que la journée commence."
+    }
+
+    fun gentleDhuhrNotifTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "وقفة الظهيرة هنا"
+        AppLanguage.EN -> "Your Midday Pause is here"
+        AppLanguage.ES -> "Llega tu Pausa del mediodía"
+        AppLanguage.ID -> "Jeda siang tiba"
+        AppLanguage.FR -> "Votre Pause de midi est là"
+    }
+
+    fun gentleDhuhrNotifBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إعادة ضبط قصيرة، في وسط كل شيء."
+        AppLanguage.EN -> "A short reset, in the middle of everything."
+        AppLanguage.ES -> "Un reinicio breve, en medio de todo."
+        AppLanguage.ID -> "Penyetelan ulang singkat di tengah kesibukan."
+        AppLanguage.FR -> "Un court instant de repli, au milieu de tout."
+    }
+
+    fun gentleFridayNotifTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "وقفتك الأسبوعية هنا"
+        AppLanguage.EN -> "Your weekly pause is here"
+        AppLanguage.ES -> "Llega tu pausa semanal"
+        AppLanguage.ID -> "Jeda mingguanmu tiba"
+        AppLanguage.FR -> "Votre pause hebdomadaire est là"
+    }
+
+    fun gentleFridayNotifBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اليوم، نافذة سكينة أطول قليلًا."
+        AppLanguage.EN -> "Today, a slightly longer window of calm."
+        AppLanguage.ES -> "Hoy, una ventana de calma un poco más larga."
+        AppLanguage.ID -> "Hari ini, jeda ketenangan yang sedikit lebih panjang."
+        AppLanguage.FR -> "Aujourd'hui, une fenêtre de calme un peu plus longue."
+    }
+
+    fun gentleDailyNotifTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "دقيقة لنفسك"
+        AppLanguage.EN -> "A minute for yourself"
+        AppLanguage.ES -> "Un minuto para ti"
+        AppLanguage.ID -> "Satu menit untuk Anda"
+        AppLanguage.FR -> "Une minute pour vous"
+    }
+
+    fun gentleDailyNotifBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "يومك يمر. خذ دقيقة صادقة لتلاحظه."
+        AppLanguage.EN -> "Your day is moving. Take one honest minute to notice it."
+        AppLanguage.ES -> "Tu día avanza. Tómate un minuto sincero para notarlo."
+        AppLanguage.ID -> "Hari Anda berjalan. Luangkan satu menit jujur untuk menyadarinya."
+        AppLanguage.FR -> "Votre journée avance. Prenez une minute sincère pour la remarquer."
+    }
+
+    fun gentleChannelName(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إيقاع الحضور"
+        AppLanguage.EN -> "Presence Rhythm"
+        AppLanguage.ES -> "Ritmo de presencia"
+        AppLanguage.ID -> "Ritme Kehadiran"
+        AppLanguage.FR -> "Rythme de présence"
+    }
+
+    fun gentleChannelDescription(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "تذكيرات لطيفة لوقفاتك اليومية."
+        AppLanguage.EN -> "Gentle reminders for your daily pauses."
+        AppLanguage.ES -> "Recordatorios amables para tus pausas diarias."
+        AppLanguage.ID -> "Pengingat lembut untuk jeda harian Anda."
+        AppLanguage.FR -> "Des rappels doux pour vos pauses quotidiennes."
+    }
+
+    // ── Slice 2d: the light journal ──
+
+    fun lightJournalTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "يومك بإيقاعك"
+        AppLanguage.EN -> "YOUR DAY, AT YOUR PACE"
+        AppLanguage.ES -> "TU DÍA, A TU RITMO"
+        AppLanguage.ID -> "HARI ANDA, DENGAN RITME ANDA"
+        AppLanguage.FR -> "VOTRE JOURNÉE, À VOTRE RYTHME"
+    }
+
+    fun lightJournalQuote(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ما تفعله يوميًا أهم مما تفعله أحيانًا."
+        AppLanguage.EN -> "What you do daily matters more than what you do once in a while."
+        AppLanguage.ES -> "Lo que haces a diario importa más que lo que haces de vez en cuando."
+        AppLanguage.ID -> "Apa yang Anda lakukan setiap hari lebih berarti daripada sesekali."
+        AppLanguage.FR -> "Ce que vous faites chaque jour compte plus que ce que vous faites de temps en temps."
+    }
 }
 

@@ -162,6 +162,10 @@ fun SaatanAppContent(viewModel: MainViewModel) {
     val currentLanguage by viewModel.appLanguage.collectAsState()
     val isDayMode by viewModel.isDayMode.collectAsState()
     val splashVisible by viewModel.splashVisible.collectAsState()
+    // Presence Rhythm skin, carried into the screens that need honest
+    // re-skins (journal, challenges) without re-reading the profile there.
+    val traditionLayer by viewModel.traditionLayer.collectAsState()
+    val lightSkin = traditionLayer.isLightSkin
 
     // Handle system back button: return to main divine clock screen
     BackHandler(enabled = currentScreen != SaatanScreen.DIVINE_CLOCK) {
@@ -309,9 +313,9 @@ fun SaatanAppContent(viewModel: MainViewModel) {
                         SaatanScreen.LIVRE -> BookScreen(viewModel)
                         SaatanScreen.FATIHA -> FatihaScreen(viewModel)
                         SaatanScreen.CONVERTER -> TemporalConverterScreen(viewModel)
-                        SaatanScreen.JOURNAL -> DivineJournalScreen(viewModel)
+                        SaatanScreen.JOURNAL -> DivineJournalScreen(viewModel, lightSkin = lightSkin)
                         SaatanScreen.IMMERSIVE_LIFE -> LifeJourneyVisualizerScreen(viewModel)
-                        SaatanScreen.CHALLENGES -> ChallengesScreen(viewModel)
+                        SaatanScreen.CHALLENGES -> ChallengesScreen(viewModel, lightSkin = lightSkin)
                         SaatanScreen.SETTINGS_VERSES -> SettingsVersesScreen(viewModel)
                         SaatanScreen.EXPLORE -> ExploreTraditionScreen(viewModel)
                     }

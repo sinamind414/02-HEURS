@@ -81,6 +81,7 @@ import com.example.ui.theme.TextSecondary
 @Composable
 fun DivineJournalScreen(
     viewModel: MainViewModel,
+    lightSkin: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -108,7 +109,28 @@ fun DivineJournalScreen(
         contentPadding = PaddingValues(bottom = 96.dp)
     ) {
         item {
-            BismillahHeader()
+            if (lightSkin) {
+                // Light skin: no Bismillah calligraphy — a plain, secular
+                // title at the same place (slice 2d, hide-first).
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, bottom = 6.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = AppStrings.lightJournalTitle(language),
+                        fontFamily = CinzelFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 17.sp,
+                        letterSpacing = 1.5.sp,
+                        color = accentGold,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            } else {
+                BismillahHeader()
+            }
         }
 
         // Title and Today Divine Value
@@ -166,8 +188,9 @@ fun DivineJournalScreen(
             }
         }
 
-        // Divine Score Banner
-        item {
+        // Divine Score Banner — hidden on the light skin: the day is never
+        // graded there (strategy §5: no guilt machine, no stars for piety).
+        if (!lightSkin) item {
             val score = todayJournal?.divineScoreStars ?: 1
             CelestialCard(
                 modifier = Modifier
@@ -219,15 +242,21 @@ fun DivineJournalScreen(
         item {
             Column(modifier = Modifier.padding(start = 24.dp, top = 12.dp, bottom = 6.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Mosque,
-                        contentDescription = null,
-                        tint = GoldLight,
-                        modifier = Modifier.size(15.dp)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
+                    if (!lightSkin) {
+                        Icon(
+                            imageVector = Icons.Default.Mosque,
+                            contentDescription = null,
+                            tint = GoldLight,
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                    }
                     Text(
-                        text = AppStrings.prayerChecklistTitle(language),
+                        text = if (lightSkin) {
+                            AppStrings.lightReturnChecklistTitle(language)
+                        } else {
+                            AppStrings.prayerChecklistTitle(language)
+                        },
                         fontFamily = CinzelFontFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp,
@@ -255,8 +284,16 @@ fun DivineJournalScreen(
                     )
                     prayers.forEach { (key, done) ->
                         DeedCheckRow(
-                            title = AppStrings.prayerDeedLabel(language, key),
-                            subtitle = AppStrings.prayerDeedSubtitle(language, key),
+                            title = if (lightSkin) {
+                                AppStrings.lightReturnName(language, key)
+                            } else {
+                                AppStrings.prayerDeedLabel(language, key)
+                            },
+                            subtitle = if (lightSkin) {
+                                ""
+                            } else {
+                                AppStrings.prayerDeedSubtitle(language, key)
+                            },
                             isChecked = done,
                             isDayMode = isDayMode,
                             onCheck = {
@@ -269,8 +306,9 @@ fun DivineJournalScreen(
             }
         }
 
-        // High Hassanat Deeds
-        item {
+        // High Hassanat Deeds — tradition framing (Quran pages, sadaqa,
+        // dhikr): hidden whole on the light skin, hide-first (slice 2d).
+        if (!lightSkin) item {
             Column(modifier = Modifier.padding(start = 24.dp, top = 14.dp, bottom = 6.dp)) {
                 Text(
                     text = AppStrings.hassanatSectionTitle(language),
@@ -283,7 +321,7 @@ fun DivineJournalScreen(
             }
         }
 
-        item {
+        if (!lightSkin) item {
             CelestialCard(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -397,8 +435,9 @@ fun DivineJournalScreen(
             }
         }
 
-        // Interactive Tasbih Counter
-        item {
+        // Interactive Tasbih Counter — a dhikr practice: tradition layer
+        // only, hidden on the light skin.
+        if (!lightSkin) item {
             val count = todayJournal?.tasbihCountToday ?: 0
             CelestialCard(
                 modifier = Modifier
@@ -485,7 +524,11 @@ fun DivineJournalScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = AppStrings.doNotWasteQuote(language),
+                        text = if (lightSkin) {
+                            AppStrings.lightJournalQuote(language)
+                        } else {
+                            AppStrings.doNotWasteQuote(language)
+                        },
                         fontFamily = CinzelFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.5.sp,

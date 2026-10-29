@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import com.example.data.local.SaatanDatabase
 import com.example.data.model.AppLanguage
+import com.example.data.model.TraditionLayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -50,6 +51,11 @@ class PrayerReminderReceiver : BroadcastReceiver() {
                     return@launch
                 }
 
+                // Gentle voice on the light Presence Rhythm skin (slice 2c):
+                // the skin is already persisted, so the receiver needs no
+                // app-run to pick it up.
+                val lightSkin = TraditionLayer.fromKey(profile.traditionLayer).isLightSkin
+
                 val now = System.currentTimeMillis()
                 val zone = DivineNotificationHelper.cityZone(cache)
 
@@ -75,7 +81,12 @@ class PrayerReminderReceiver : BroadcastReceiver() {
                             DivineNotificationHelper.cancelPrayerReminder(appContext, kind)
                             return@launch
                         }
-                        DivineNotificationHelper.showPrayerNotification(appContext, kind, language)
+                        DivineNotificationHelper.showPrayerNotification(
+                            appContext,
+                            kind,
+                            language,
+                            lightSkin
+                        )
                         DivineNotificationHelper.schedulePrayerReminder(appContext, kind, nextAt)
                     }
                     // Weekly: next Friday, at the Jumu'ah hour (cached Dhuhr / 13:00).
@@ -85,7 +96,8 @@ class PrayerReminderReceiver : BroadcastReceiver() {
                         DivineNotificationHelper.showPrayerNotification(
                             appContext,
                             DivineNotificationHelper.KIND_FRIDAY,
-                            language
+                            language,
+                            lightSkin
                         )
                         DivineNotificationHelper.schedulePrayerReminder(
                             appContext,

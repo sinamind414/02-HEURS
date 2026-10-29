@@ -63,6 +63,7 @@ import com.example.ui.theme.TextSecondary
 @Composable
 fun ChallengesScreen(
     viewModel: MainViewModel,
+    lightSkin: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     // Collected as a StateFlow so the list refreshes as soon as the journal or
@@ -91,7 +92,12 @@ fun ChallengesScreen(
         contentPadding = PaddingValues(bottom = 96.dp)
     ) {
         item {
-            BismillahHeader()
+            if (lightSkin) {
+                // Light skin: no Bismillah calligraphy above the challenges.
+                Spacer(modifier = Modifier.height(16.dp))
+            } else {
+                BismillahHeader()
+            }
         }
 
         item {
@@ -147,15 +153,17 @@ fun ChallengesScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = AppStrings.hassanatUnlockedTitle(language),
-                            fontFamily = CinzelFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 11.5.sp,
-                            letterSpacing = 1.sp,
-                            color = GoldLight
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
+                        if (!lightSkin) {
+                            Text(
+                                text = AppStrings.hassanatUnlockedTitle(language),
+                                fontFamily = CinzelFontFamily,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 11.5.sp,
+                                letterSpacing = 1.sp,
+                                color = GoldLight
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                        }
                         Text(
                             text = AppStrings.challengesCompletedLabel(
                                 language, completedCount, challenges.size

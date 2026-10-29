@@ -187,4 +187,104 @@ class PresenceRhythmTest {
             )
         }
     }
+
+    // ── Slice 2: return cards, guided pause, gentle notifications, journal ──
+
+    @Test
+    fun slice2CopyIsCompleteInAllFiveLanguages() {
+        allLanguagesNotBlank({ AppStrings.lightReturnChecklistTitle(it) }, "lightReturnChecklistTitle")
+        allLanguagesNotBlank({ AppStrings.lightReturnChecklistNote(it) }, "lightReturnChecklistNote")
+        allLanguagesNotBlank({ AppStrings.lightPauseNowBtn(it) }, "lightPauseNowBtn")
+        allLanguagesNotBlank({ AppStrings.guidedPauseTitle(it) }, "guidedPauseTitle")
+        allLanguagesNotBlank({ AppStrings.guidedPauseBreatheTitle(it) }, "guidedPauseBreatheTitle")
+        allLanguagesNotBlank({ AppStrings.guidedPauseBreatheBody(it) }, "guidedPauseBreatheBody")
+        allLanguagesNotBlank({ AppStrings.guidedPausePresenceTitle(it) }, "guidedPausePresenceTitle")
+        allLanguagesNotBlank({ AppStrings.guidedPausePresenceBody(it) }, "guidedPausePresenceBody")
+        allLanguagesNotBlank({ AppStrings.guidedPauseIntentionTitle(it) }, "guidedPauseIntentionTitle")
+        allLanguagesNotBlank({ AppStrings.guidedPauseIntentionBody(it) }, "guidedPauseIntentionBody")
+        allLanguagesNotBlank({ AppStrings.guidedPauseFinishBtn(it) }, "guidedPauseFinishBtn")
+        allLanguagesNotBlank({ AppStrings.guidedPauseSkipBtn(it) }, "guidedPauseSkipBtn")
+        // The post-pause mood reuses the Inner Weather vocabulary: it must
+        // exist in every language too (it is written to moodAfterPause).
+        allLanguagesNotBlank({ AppStrings.innerWeatherTitle(it) }, "innerWeatherTitle")
+        allLanguagesNotBlank({ AppStrings.innerWeatherNote(it) }, "innerWeatherNote")
+        InnerWeather.entries.forEach { mood ->
+            allLanguagesNotBlank(
+                { AppStrings.innerWeatherLabel(it, mood.key) },
+                "innerWeatherLabel_${mood.key}"
+            )
+        }
+        allLanguagesNotBlank({ AppStrings.gentleFajrNotifTitle(it) }, "gentleFajrNotifTitle")
+        allLanguagesNotBlank({ AppStrings.gentleFajrNotifBody(it) }, "gentleFajrNotifBody")
+        allLanguagesNotBlank({ AppStrings.gentleDhuhrNotifTitle(it) }, "gentleDhuhrNotifTitle")
+        allLanguagesNotBlank({ AppStrings.gentleDhuhrNotifBody(it) }, "gentleDhuhrNotifBody")
+        allLanguagesNotBlank({ AppStrings.gentleFridayNotifTitle(it) }, "gentleFridayNotifTitle")
+        allLanguagesNotBlank({ AppStrings.gentleFridayNotifBody(it) }, "gentleFridayNotifBody")
+        allLanguagesNotBlank({ AppStrings.gentleDailyNotifTitle(it) }, "gentleDailyNotifTitle")
+        allLanguagesNotBlank({ AppStrings.gentleDailyNotifBody(it) }, "gentleDailyNotifBody")
+        allLanguagesNotBlank({ AppStrings.gentleChannelName(it) }, "gentleChannelName")
+        allLanguagesNotBlank({ AppStrings.gentleChannelDescription(it) }, "gentleChannelDescription")
+        allLanguagesNotBlank({ AppStrings.lightJournalTitle(it) }, "lightJournalTitle")
+        allLanguagesNotBlank({ AppStrings.lightJournalQuote(it) }, "lightJournalQuote")
+    }
+
+    /**
+     * The light-skin guarantee, extended to slice 2: the return cards, the
+     * guided pause, the gentle notifications and the light journal must
+     * never expose the tradition vocabulary in ANY language — including
+     * Arabic, where a missing translation would flash the original terms.
+     */
+    @Test
+    fun gentleAndGuidedPauseCopyNeverExposeTheTraditionVocabulary() {
+        val banned = listOf(
+            "fajr", "dhuhr", "asr", "maghrib", "isha", "salat", "salah",
+            "allah", "adhan", "wudu", "qibla", "pray", "prière", "oración",
+            "shalat",
+            // Arabic tradition terms (NB: "الظهر" absent — see the light
+            // names test above; "وقفة الظهيرة" does not contain it).
+            "صلاة", "الفجر", "المغرب", "العشاء", "الأذان", "الجمعة", "الوضوء", "القبلة"
+        )
+        val copies: List<Pair<String, (AppLanguage) -> String>> = listOf(
+            "pauseNow" to AppStrings::lightPauseNowBtn,
+            "checklistTitle" to AppStrings::lightReturnChecklistTitle,
+            "checklistNote" to AppStrings::lightReturnChecklistNote,
+            "guidedBreathe" to { lang ->
+                AppStrings.guidedPauseBreatheTitle(lang) + " " + AppStrings.guidedPauseBreatheBody(lang)
+            },
+            "guidedNotice" to { lang ->
+                AppStrings.guidedPausePresenceTitle(lang) + " " + AppStrings.guidedPausePresenceBody(lang)
+            },
+            "guidedIntention" to { lang ->
+                AppStrings.guidedPauseIntentionTitle(lang) + " " + AppStrings.guidedPauseIntentionBody(lang)
+            },
+            "gentleFajr" to { lang ->
+                AppStrings.gentleFajrNotifTitle(lang) + " " + AppStrings.gentleFajrNotifBody(lang)
+            },
+            "gentleDhuhr" to { lang ->
+                AppStrings.gentleDhuhrNotifTitle(lang) + " " + AppStrings.gentleDhuhrNotifBody(lang)
+            },
+            "gentleFriday" to { lang ->
+                AppStrings.gentleFridayNotifTitle(lang) + " " + AppStrings.gentleFridayNotifBody(lang)
+            },
+            "gentleDaily" to { lang ->
+                AppStrings.gentleDailyNotifTitle(lang) + " " + AppStrings.gentleDailyNotifBody(lang)
+            },
+            "gentleChannel" to { lang ->
+                AppStrings.gentleChannelName(lang) + " " + AppStrings.gentleChannelDescription(lang)
+            },
+            "lightJournalTitle" to AppStrings::lightJournalTitle,
+            "lightJournalQuote" to AppStrings::lightJournalQuote
+        )
+        AppLanguage.entries.forEach { lang ->
+            copies.forEach { (label, value) ->
+                val text = value(lang).lowercase()
+                banned.forEach { word ->
+                    assertFalse(
+                        "slice2 '$label' leaks '$word' (${lang.code}): $text",
+                        text.contains(word)
+                    )
+                }
+            }
+        }
+    }
 }

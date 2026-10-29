@@ -136,6 +136,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch { repository.updateMoodCheckIn(mood.key) }
     }
 
+    /** Inner Weather logged right after a guided pause (slice 2b). */
+    fun setMoodAfterPause(mood: InnerWeather) {
+        viewModelScope.launch { repository.updateMoodAfterPause(mood.key) }
+    }
+
     // Crisis support — reachable from every skin, one tap from the header.
     private val _showCrisisSupport = MutableStateFlow(false)
     val showCrisisSupport: StateFlow<Boolean> = _showCrisisSupport.asStateFlow()

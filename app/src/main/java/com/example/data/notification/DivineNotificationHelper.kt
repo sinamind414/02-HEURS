@@ -49,12 +49,25 @@ class DailyDivineReminderReceiver : BroadcastReceiver() {
                 val language = AppLanguage.fromCode(profile?.languageCode ?: AppLanguage.FR.code)
 
                 if (profile != null && profile.notificationsEnabled && profile.reminderSocialScroll) {
+                    // Light skin (slice 2c): the 13:00 reminder speaks the
+                    // gentle voice — no "divine time" arithmetic in the copy.
+                    val lightSkin = com.example.data.model.TraditionLayer
+                        .fromKey(profile.traditionLayer).isLightSkin
                     val divineMinutes = currentDivineMinutes(profile.birthTimestampMs, profile.lifeExpectancyYears)
                     DivineNotificationHelper.showNotification(
                         context = appContext,
-                        title = AppStrings.dailyReminderNotifTitle(language),
-                        message = AppStrings.dailyReminderNotifBody(language, divineMinutes),
-                        language = language
+                        title = if (lightSkin) {
+                            AppStrings.gentleDailyNotifTitle(language)
+                        } else {
+                            AppStrings.dailyReminderNotifTitle(language)
+                        },
+                        message = if (lightSkin) {
+                            AppStrings.gentleDailyNotifBody(language)
+                        } else {
+                            AppStrings.dailyReminderNotifBody(language, divineMinutes)
+                        },
+                        language = language,
+                        lightSkin = lightSkin
                     )
                     // Re-arm for the next day, using the freshly computed value.
                     DivineNotificationHelper.scheduleDailyReminder(appContext, divineMinutes, language)
@@ -80,14 +93,28 @@ object DivineNotificationHelper {
     private const val REQUEST_CODE = 1002
     private const val REMINDER_HOUR = 13
 
-    fun createNotificationChannel(context: Context, language: AppLanguage = AppLanguage.FR) {
+    fun createNotificationChannel(
+        context: Context,
+        language: AppLanguage = AppLanguage.FR,
+        lightSkin: Boolean = false
+    ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Re-creating a channel with the same ID updates its name/description:
+            // switching skins also switches the settings label honestly.
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                AppStrings.notificationChannelName(language),
+                if (lightSkin) {
+                    AppStrings.gentleChannelName(language)
+                } else {
+                    AppStrings.notificationChannelName(language)
+                },
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = AppStrings.notificationChannelDescription(language)
+                description = if (lightSkin) {
+                    AppStrings.gentleChannelDescription(language)
+                } else {
+                    AppStrings.notificationChannelDescription(language)
+                }
             }
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -100,9 +127,10 @@ object DivineNotificationHelper {
         title: String,
         message: String,
         language: AppLanguage = AppLanguage.FR,
-        notificationId: Int = NOTIFICATION_ID
+        notificationId: Int = NOTIFICATION_ID,
+        lightSkin: Boolean = false
     ) {
-        createNotificationChannel(context, language)
+        createNotificationChannel(context, language, lightSkin)
 
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -218,33 +246,64 @@ object DivineNotificationHelper {
      */
     const val TIMINGS_CACHE_MAX_AGE_MS = 7L * 24L * 60L * 60L * 1000L
 
-    /** Fires immediately (test button, alarm receiver) — ids differ per kind. */
+    /** Fires immediately (test button, alarm receiver) — ids differ per kind.
+     * On the light Presence Rhythm skin the copy switches to the gentle,
+     * tradition-free voices (slice 2c): same moments, same hours, no
+     * religious vocabulary. The 988 crisis copy is never touched by this. */
     fun showPrayerNotification(
         context: Context,
         kind: String,
-        language: AppLanguage
+        language: AppLanguage,
+        lightSkin: Boolean = false
     ) {
         when (kind) {
             KIND_FAJR -> showNotification(
                 context,
-                AppStrings.reminderFajrNotifTitle(language),
-                AppStrings.reminderFajrNotifBody(language),
+                if (lightSkin) {
+                    AppStrings.gentleFajrNotifTitle(language)
+                } else {
+                    AppStrings.reminderFajrNotifTitle(language)
+                },
+                if (lightSkin) {
+                    AppStrings.gentleFajrNotifBody(language)
+                } else {
+                    AppStrings.reminderFajrNotifBody(language)
+                },
                 language,
-                NOTIFICATION_ID_FAJR
+                NOTIFICATION_ID_FAJR,
+                lightSkin
             )
             KIND_DHUHR -> showNotification(
                 context,
-                AppStrings.reminderDhuhrNotifTitle(language),
-                AppStrings.reminderDhuhrNotifBody(language),
+                if (lightSkin) {
+                    AppStrings.gentleDhuhrNotifTitle(language)
+                } else {
+                    AppStrings.reminderDhuhrNotifTitle(language)
+                },
+                if (lightSkin) {
+                    AppStrings.gentleDhuhrNotifBody(language)
+                } else {
+                    AppStrings.reminderDhuhrNotifBody(language)
+                },
                 language,
-                NOTIFICATION_ID_DHUHR
+                NOTIFICATION_ID_DHUHR,
+                lightSkin
             )
             else -> showNotification(
                 context,
-                AppStrings.reminderFridayNotifTitle(language),
-                AppStrings.reminderFridayNotifBody(language),
+                if (lightSkin) {
+                    AppStrings.gentleFridayNotifTitle(language)
+                } else {
+                    AppStrings.reminderFridayNotifTitle(language)
+                },
+                if (lightSkin) {
+                    AppStrings.gentleFridayNotifBody(language)
+                } else {
+                    AppStrings.reminderFridayNotifBody(language)
+                },
                 language,
-                NOTIFICATION_ID_FRIDAY
+                NOTIFICATION_ID_FRIDAY,
+                lightSkin
             )
         }
     }

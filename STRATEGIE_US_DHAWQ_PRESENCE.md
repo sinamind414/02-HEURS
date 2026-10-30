@@ -1,7 +1,7 @@
 # Dhawq Presence — Package Stratégie US (v1, 2026-10-29)
 
 > **Source** : revue externe transmise le 29/10/2026 (« Complete Revised Package for the US Market » + suites 1-3).
-> **Statut** : document de stratégie produit — **slice 1 + slice 2 implémentées et vérifiées** (commits `8ee60ab`, `fe6c8fe`, `d937531`, branche `main`).
+> **Statut** : document de stratégie produit — **slice 1 + slice 2 + slice 3 (rapport hebdo) implémentées et vérifiées** (commits `8ee60ab`, `fe6c8fe`, `d937531`, `c42ec7a`, `8b688a1`, branche `main`).
 > **Décisions ouvertes** : voir §0. Validation théologique requise : voir COMITE_THEOLOGIQUE.md §3.5.
 
 ---
@@ -17,6 +17,17 @@
 - **Header light** : le sous-titre de marque suit la peau — « ذَوْق • PRESENCE, TASTED » en light, « ذَوْق • PRAYER, TASTED » conservé en tradition (vérifié émulateur sur les deux peaux).
 - **Journal light 2e passe** : Bismillah, titre « Divine Minutes », chip « divine second », score étoiles, Hassanat, placeholder « repentance » masqués/renommés (« Divine Minutes Journal » → « Presence Notes », question « How was your day, honestly? », note « One line about today — for your eyes only. »).
 - **Garde-fous tests** : `PresenceRhythmTest` 15 tests verts (75 au total, lint 0 erreur), liste bannie étendue à toute la copie slice 2 (pray/adhan/oración/shalat/الأذان…).
+
+**Slice 3 implémentée et poussée (`8b688a1`, 30/10/2026)** — le Weekly Presence Report (§8) en version light :
+- **Agrégat pur JVM** (`WeeklyReport.kt`) : semaine lundi→dimanche (ISO, lundi = clé « weekKey »), pauses comptées = somme honnête des 5 marqueurs **sans dénominateur** (pas de « 19/35 », pas de pourcentage — Serment #2), survit aux dates corrompues.
+- **Graph journalier** : 1 colonne par jour, 5 points (les 5 moments) + l'emoji du mood-after du jour ; initiales du jour en 1 lettre ×5 langues (FR/ID ont des lettres dupliquées — assumé, test relâché à longueur 7).
+- **Tendance Inner Weather** : lignes brutes « 🌤️ Calmer · 1 of 1 » — comptées, jamais notées ni comparées (nuance Serment #2 documentée dans le code).
+- **Insight non-jugeant** : le moment le plus tenu de la semaine (« Morning Return × 2 »), égalité → le plus tôt de la journée.
+- **Encadré « Why this can help »** : réutilise tel quel `exploreCardScienceBody` (Coran 13:28 + Surgeon General 2023/NIH/Harvard) + `exploreScienceDisclaimer` — aucune traduction dupliquée.
+- **Intention douce** : 4 chips + « Remembered for next week ✓ », persistée Room **v6→v7** (3 colonnes `weeklyIntention*` sur `user_profile`, migration ALTER TABLE) ; texte libre rappelé à son auteur seulement, retire naturellement lundi prochain (weekKey). **Vérifié en DB** : `weeklyIntentionText='Mornings, gently'`, `weekKey='2026-10-26'`.
+- **Entrées** : carte « YOUR WEEK, GENTLY » sur la home light seulement (écran absent de la peau traditionnelle), back-nav générique.
+- **Garde-fous tests** : 81 tests verts (6 nouveaux : agrégat, maths de lundi incl. fin d'année, tie-break, semaine vide, dates corrompues, complétude ×5 des 15 chaînes + vocabulaire banni étendu), lint 0 erreur.
+- **Émulateur vérifié** : migration sans crash, carte « Pauses kept this week: 6 » exacte (5+1), rapport complet exact (T=5 points/relation 🌤️ jeudi, « Calmer · 1 of 1 », « Morning Return » × 2), intention persistée, back-nav propre (captures `us3_*.png`).
 2. **Stack** : le package propose React Native/Flutter + Supabase = réécriture totale. **✅ TRANCHÉ le 29/10/2026 : PAS de réécriture** — l'app existe (Kotlin/Jetpack Compose natif, tests verts, 5 langues, lint vert). Le pivot se fait par **feature-flag `tradition_layer`** dans la codebase actuelle (Room `user_profile.traditionLayer`).
 3. **Nouveaux hadiths proposés** à valider par le comité (§4 ci-dessous). — Toujours en attente.
 4. **Monétisation** : freemium plus tard, jamais de paywall sur les 5 pauses de base. — Reconduit.
@@ -64,6 +75,7 @@
 - Today's Presence : 12 minutes · This week : 47 minutes of return
 - Bouton discret : **Explore the tradition →** (unlocks Quran, hadith, convertisseur, Arabic)
 - Weekly insight (small card) : « Your mood after pauses has been 23% calmer this week. »
+  > ⚠️ **Slice 3 (30/10/2026)** : le pourcentage a été **écarté volontairement** — contre-productif (« 23% de quoi ? ») et en tension avec le Serment #2 (moods comptés, jamais notés). Implémenté : lignes brutes « 🌤️ Calmer · 2 of 3 » + le moment le plus tenu. Mensuration « minutes » également écartée : les pauses ne sont pas chronométrées côté données.
 
 ---
 
@@ -153,6 +165,8 @@ Buttons : Save & continue · Skip (no guilt).
 ---
 
 ## 8. Weekly / Monthly Report
+
+> ✅ **La partie Weekly est implémentée** (slice 3, commit `8b688a1`, 30/10/2026) — détails en tête de document. Écart assumé : le titre est « Your week, gently » avec le compte honnête (pas de « 19/35 » ni de minutes), et la tendance est en comptes bruts, pas en %.
 
 **Weekly** (dimanche soir / lundi matin) : minutes de présence, returns complétés (honnête, ex. 19/35), tendance Inner Weather (« calmer after 7 out of 12 pauses »), un insight non-jugeant, graph simple mood before/after.
 Encadré « Why this can help » : études (NIH, Harvard) + Quran 13:28. Disclaimer visible. CTA : « Set a gentle intention for next week ».
@@ -340,7 +354,7 @@ Continue · Begin this pause · Finish this return · Skip for now · Keep it si
 
 **Live Companion (Midday)** : [Timer discret 0:00 / ~6 min] · [Grande zone texte/audio] · [Progress dots des micro-stations] · [Pause / End anytime]
 
-**Weekly Report** : [Titre: This week you returned 19 times] · [2 graphiques: minutes + mood before/after] · [Encadré science + 13:28] · [CTA: Gentle intention]
+**Weekly Report** : [Titre: This week you returned 19 times] · [2 graphiques: minutes + mood before/after] · [Encadré science + 13:28] · [CTA: Gentle intention] — ✅ **implémenté version light (slice 3)** : compte honnête sans dénominateur, 1 graph (5 points/jour + emoji), comptes bruts de mood, « why this can help » + disclaimer, chips d'intention.
 
 **Explore** : liste progressive avec cadenas, premier item déverrouillé : « Why five pauses? »
 

@@ -1,6 +1,7 @@
 package com.example.data.model
 
 import com.example.data.localization.AppStrings
+import com.example.data.local.DailyJournalEntity
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -225,6 +226,41 @@ class PresenceRhythmTest {
         allLanguagesNotBlank({ AppStrings.gentleChannelName(it) }, "gentleChannelName")
         allLanguagesNotBlank({ AppStrings.gentleChannelDescription(it) }, "gentleChannelDescription")
         allLanguagesNotBlank({ AppStrings.lightHeaderSubtitle(it) }, "lightHeaderSubtitle")
+        // Slice 3: the weekly presence report.
+        allLanguagesNotBlank({ AppStrings.weeklyCardTitle(it) }, "weeklyCardTitle")
+        allLanguagesNotBlank({ AppStrings.weeklyCardSubtitle(it) }, "weeklyCardSubtitle")
+        allLanguagesNotBlank({ AppStrings.weeklyTrendIntro(it) }, "weeklyTrendIntro")
+        allLanguagesNotBlank({ AppStrings.weeklyInsightIntro(it) }, "weeklyInsightIntro")
+        allLanguagesNotBlank({ AppStrings.weeklyNoData(it) }, "weeklyNoData")
+        allLanguagesNotBlank({ AppStrings.weeklyWhyTitle(it) }, "weeklyWhyTitle")
+        allLanguagesNotBlank({ AppStrings.weeklyIntentionPrompt(it) }, "weeklyIntentionPrompt")
+        allLanguagesNotBlank({ AppStrings.weeklyIntentionChip1(it) }, "weeklyIntentionChip1")
+        allLanguagesNotBlank({ AppStrings.weeklyIntentionChip2(it) }, "weeklyIntentionChip2")
+        allLanguagesNotBlank({ AppStrings.weeklyIntentionChip3(it) }, "weeklyIntentionChip3")
+        allLanguagesNotBlank({ AppStrings.weeklyIntentionChip4(it) }, "weeklyIntentionChip4")
+        allLanguagesNotBlank({ AppStrings.weeklyIntentionSaved(it) }, "weeklyIntentionSaved")
+        AppLanguage.entries.forEach { lang ->
+            val kept = AppStrings.weeklyKeptLine(lang, 3)
+            assertTrue("weeklyKeptLine must inject the count (${lang.code}): $kept", kept.contains("3"))
+            val initials = AppStrings.weeklyDayInitials(lang)
+            assertTrue(
+                "weeklyDayInitials must have 7 letters (${lang.code}): $initials",
+                initials.length == 7
+            )
+            InnerWeather.entries.forEach { mood ->
+                val line = AppStrings.weeklyMoodCountLine(lang, mood, 2, 5)
+                assertTrue(
+                    "weeklyMoodCountLine must embed label+counts (${lang.code}/${mood.key}): $line",
+                    line.contains("2") && line.contains("5") &&
+                        line.contains(AppStrings.innerWeatherLabel(lang, mood.key))
+                )
+            }
+            val insight = AppStrings.weeklyInsightLine(lang, "Morning Return", 3)
+            assertTrue(
+                "weeklyInsightLine must inject the count (${lang.code}): $insight",
+                insight.contains("3") && insight.contains("Morning Return")
+            )
+        }
         allLanguagesNotBlank({ AppStrings.lightJournalTitle(it) }, "lightJournalTitle")
         allLanguagesNotBlank({ AppStrings.lightJournalQuote(it) }, "lightJournalQuote")
         allLanguagesNotBlank({ AppStrings.lightJournalQuestion(it) }, "lightJournalQuestion")
@@ -279,7 +315,23 @@ class PresenceRhythmTest {
             "lightJournalQuote" to AppStrings::lightJournalQuote,
             "lightJournalQuestion" to AppStrings::lightJournalQuestion,
             "lightJournalNote" to AppStrings::lightJournalNotePlaceholder,
-            "lightHeaderSubtitle" to AppStrings::lightHeaderSubtitle
+            "lightHeaderSubtitle" to AppStrings::lightHeaderSubtitle,
+            "weeklyCard" to { lang ->
+                AppStrings.weeklyCardTitle(lang) + " " + AppStrings.weeklyCardSubtitle(lang)
+            },
+            "weeklyKept" to { lang -> AppStrings.weeklyKeptLine(lang, 4) },
+            "weeklyTrendIntro" to AppStrings::weeklyTrendIntro,
+            "weeklyInsightIntro" to AppStrings::weeklyInsightIntro,
+            "weeklyNoData" to AppStrings::weeklyNoData,
+            "weeklyWhy" to AppStrings::weeklyWhyTitle,
+            "weeklyIntention" to { lang ->
+                AppStrings.weeklyIntentionPrompt(lang) + " " +
+                    AppStrings.weeklyIntentionChip1(lang) + " " +
+                    AppStrings.weeklyIntentionChip2(lang) + " " +
+                    AppStrings.weeklyIntentionChip3(lang) + " " +
+                    AppStrings.weeklyIntentionChip4(lang) + " " +
+                    AppStrings.weeklyIntentionSaved(lang)
+            }
         )
         AppLanguage.entries.forEach { lang ->
             copies.forEach { (label, value) ->
@@ -292,5 +344,106 @@ class PresenceRhythmTest {
                 }
             }
         }
+    }
+
+    // ── Weekly Presence Report (slice 3): pure aggregation ──
+
+    private fun journalRow(
+        iso: String,
+        marks: List<Boolean> = listOf(false, false, false, false, false),
+        mood: String = "",
+        note: String = ""
+    ) = DailyJournalEntity(
+        dateIso = iso,
+        fajrDone = marks.getOrElse(0) { false },
+        dhuhrDone = marks.getOrElse(1) { false },
+        asrDone = marks.getOrElse(2) { false },
+        maghribDone = marks.getOrElse(3) { false },
+        ishaDone = marks.getOrElse(4) { false },
+        dailyNote = note,
+        moodAfterPause = mood
+    )
+
+    @Test
+    fun weeklyReportCountsOnlyTheCurrentWeek() {
+        val report = WeeklyReport.build(
+            recentJournals = listOf(
+                journalRow("2026-10-20", listOf(true, true, true, true, true), "grounded"),
+                journalRow("2026-10-27", listOf(true, true, false, false, false), "calmer", "one line"),
+                journalRow("2026-11-03", listOf(true, false, false, false, false))
+            ),
+            todayIso = "2026-10-30" // Friday of the week Mon 26/10 – Sun 01/11
+        )
+        assertEquals("2026-10-26", report.mondayIso)
+        assertEquals("2026-11-01", report.sundayIso)
+        assertEquals(7, report.days.size)
+        assertEquals(2, report.pausesKept)
+        assertTrue(report.hasAnyData)
+        // The Tuesday row sits at index 1 with its two first marks.
+        val tuesday = report.days.first { it.dateIso == "2026-10-27" }
+        assertEquals(1, tuesday.dayIndexFromMonday)
+        assertEquals(listOf(true, true, false, false, false), tuesday.momentMarks)
+        assertEquals(InnerWeather.CALMER, tuesday.moodAfter)
+        assertTrue(tuesday.hasNote)
+    }
+
+    @Test
+    fun weeklyMondayMathHandlesSundayAndYearEnd() {
+        assertEquals("2026-10-26", WeeklyReport.currentWeekMondayIso("2026-11-01")) // Sunday
+        assertEquals("2026-12-28", WeeklyReport.currentWeekMondayIso("2027-01-02")) // Saturday, next year
+        assertEquals("2026-12-28", WeeklyReport.currentWeekMondayIso("2027-01-03")) // Sunday, next year
+    }
+
+    @Test
+    fun weeklyReportCountsMoodsWithoutScoringThem() {
+        val report = WeeklyReport.build(
+            recentJournals = listOf(
+                journalRow("2026-10-26", mood = "calmer"),
+                journalRow("2026-10-28", mood = "calmer"),
+                journalRow("2026-10-29", mood = "anxious"),
+                journalRow("2026-10-30", mood = "weird") // unknown key → ignored
+            ),
+            todayIso = "2026-10-30"
+        )
+        assertEquals(2, report.moodAfterCounts[InnerWeather.CALMER])
+        assertEquals(1, report.moodAfterCounts[InnerWeather.ANXIOUS])
+        assertEquals(3, report.moodAfterTotal)
+        assertNull(report.moodAfterCounts[InnerWeather.GROUNDED])
+    }
+
+    @Test
+    fun weeklyReportTopMomentPrefersTheEarliestOnTies() {
+        val report = WeeklyReport.build(
+            recentJournals = listOf(
+                journalRow("2026-10-26", listOf(true, true, false, false, false)),
+                journalRow("2026-10-28", listOf(true, false, false, false, false))
+            ),
+            todayIso = "2026-10-30"
+        )
+        assertEquals(3, report.pausesKept)
+        assertEquals("fajr", report.topMomentKey)
+        assertEquals(2, report.topMomentCount)
+    }
+
+    @Test
+    fun weeklyReportEmptyWeekIsSafeAndNeverJudges() {
+        val report = WeeklyReport.build(emptyList(), todayIso = "2026-10-30")
+        assertEquals(0, report.pausesKept)
+        assertEquals(0, report.moodAfterTotal)
+        assertFalse(report.hasAnyData)
+        assertNull(report.topMomentKey)
+        assertEquals(7, report.days.size)
+        assertTrue(report.days.all { day -> day.momentMarks.none { it } && day.moodAfter == null })
+    }
+
+    @Test
+    fun weeklyReportSurvivesGarbageDates() {
+        val report = WeeklyReport.build(
+            recentJournals = listOf(journalRow("not-a-date")),
+            todayIso = "also bad"
+        )
+        assertEquals(7, report.days.size)
+        assertTrue(report.mondayIso.isNotBlank())
+        assertFalse(report.hasAnyData)
     }
 }

@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         UserProfileEntity::class,
         PrayerTimingsCacheEntity::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = true
 )
 abstract class SaatanDatabase : RoomDatabase() {
@@ -24,6 +24,26 @@ abstract class SaatanDatabase : RoomDatabase() {
 
         @Volatile
         private var INSTANCE: SaatanDatabase? = null
+
+        /**
+         * v6 -> v7
+         *  * Weekly Presence Report (slice 3, 30/10/2026): holds the gentle
+         *    intention set from the weekly report, keyed to the week it was
+         *    made in. Stored raw and echoed back only — never scored.
+         */
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE user_profile ADD COLUMN weeklyIntentionText TEXT NOT NULL DEFAULT ''"
+                )
+                db.execSQL(
+                    "ALTER TABLE user_profile ADD COLUMN weeklyIntentionWeekKey TEXT NOT NULL DEFAULT ''"
+                )
+                db.execSQL(
+                    "ALTER TABLE user_profile ADD COLUMN weeklyIntentionAtMs INTEGER NOT NULL DEFAULT 0"
+                )
+            }
+        }
 
         /**
          * v5 -> v6
@@ -148,7 +168,7 @@ abstract class SaatanDatabase : RoomDatabase() {
                     SaatanDatabase::class.java,
                     DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                     .build()
                     .also { INSTANCE = it }
             }

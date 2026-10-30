@@ -1,6 +1,7 @@
 package com.example.data.localization
 
 import com.example.data.model.AppLanguage
+import com.example.data.model.InnerWeather
 import java.util.Locale
 
 /**
@@ -4625,6 +4626,138 @@ object AppStrings {
         AppLanguage.ES -> "ذَوْق • PRESENCIA, SABOREADA"
         AppLanguage.ID -> "ذَوْق • KEHADIRAN YANG DIRASAKAN"
         AppLanguage.FR -> "ذَوْق • LA PRÉSENCE GOÛTÉE"
+    }
+
+    // ── Slice 3: the weekly presence report ──
+
+    fun weeklyCardTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أسبوعك بلطف"
+        AppLanguage.EN -> "YOUR WEEK, GENTLY"
+        AppLanguage.ES -> "TU SEMANA, CON SUAVIDAD"
+        AppLanguage.ID -> "PEKANMU, DENGAN LEMBUT"
+        AppLanguage.FR -> "VOTRE SEMAINE, EN DOUCEUR"
+    }
+
+    fun weeklyCardSubtitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "نظرة صادقة صغيرة — بلا حكم."
+        AppLanguage.EN -> "A small, honest look back — no judgment."
+        AppLanguage.ES -> "Una mirada pequeña y honesta — sin juicios."
+        AppLanguage.ID -> "Sekilas, jujur — tanpa menghakimi."
+        AppLanguage.FR -> "Un petit retour honnête — aucun jugement."
+    }
+
+    fun weeklyKeptLine(lang: AppLanguage, kept: Int): String = when (lang) {
+        AppLanguage.AR -> "الوقفات التي عشت هذا الأسبوع: $kept"
+        AppLanguage.EN -> "Pauses kept this week: $kept"
+        AppLanguage.ES -> "Pausas vividas esta semana: $kept"
+        AppLanguage.ID -> "Jeda yang dijalani pekan ini: $kept"
+        AppLanguage.FR -> "Pauses vécues cette semaine : $kept"
+    }
+
+    fun weeklyDayInitials(lang: AppLanguage): String = when (lang) {
+        // Monday … Sunday, one letter per day column of the graph.
+        AppLanguage.AR -> "إثأخجسح"
+        AppLanguage.EN -> "MTWTFSS"
+        AppLanguage.ES -> "LMXJVSD"
+        AppLanguage.ID -> "SRKJJSM"
+        AppLanguage.FR -> "LMMJVSD"
+    }
+
+    fun weeklyTrendIntro(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "كيف تحرّك الجوّ بعد وقفاتك"
+        AppLanguage.EN -> "How the weather moved after your pauses"
+        AppLanguage.ES -> "Cómo se movió tu clima tras tus pausas"
+        AppLanguage.ID -> "Bagaimana suasana bergeser setelah jeda"
+        AppLanguage.FR -> "Comment le climat a bougé après vos pauses"
+    }
+
+    fun weeklyMoodCountLine(lang: AppLanguage, mood: InnerWeather, count: Int, total: Int): String =
+        when (lang) {
+            AppLanguage.AR -> "${innerWeatherLabel(AppLanguage.AR, mood.key)} · $count من $total"
+            AppLanguage.ES -> "${innerWeatherLabel(AppLanguage.ES, mood.key)} · $count de $total"
+            AppLanguage.ID -> "${innerWeatherLabel(AppLanguage.ID, mood.key)} · $count dari $total"
+            AppLanguage.EN -> "${innerWeatherLabel(AppLanguage.EN, mood.key)} · $count of $total"
+            AppLanguage.FR -> "${innerWeatherLabel(AppLanguage.FR, mood.key)} · $count sur $total"
+        }
+
+    fun weeklyInsightIntro(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "نمط صغير — يُعَدّ ولا يُنطق بحكم"
+        AppLanguage.EN -> "One small pattern — counted, never scored"
+        AppLanguage.ES -> "Un pequeño patrón — contado, nunca puntuado"
+        AppLanguage.ID -> "Satu pola kecil — dihitung, tidak dinilai"
+        AppLanguage.FR -> "Un petit motif — compté, jamais noté"
+    }
+
+    fun weeklyInsightLine(lang: AppLanguage, momentLabel: String, count: Int): String = when (lang) {
+        AppLanguage.AR -> "« $momentLabel » × $count"
+        AppLanguage.ES -> "« $momentLabel » × $count"
+        AppLanguage.ID -> "« $momentLabel » × $count"
+        AppLanguage.EN -> "« $momentLabel » × $count"
+        AppLanguage.FR -> "« $momentLabel » × $count"
+    }
+
+    fun weeklyNoData(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أيام قليلة حتى الآن — لا بأس. الإيقاع ينتظر."
+        AppLanguage.EN -> "Not many days yet — that's okay. The rhythm waits."
+        AppLanguage.ES -> "Aún no hay muchos días — está bien. El ritmo espera."
+        AppLanguage.ID -> "Belum banyak hari — tidak apa-apa. Ritmenya menunggu."
+        AppLanguage.FR -> "Peu de jours pour l'instant — c'est très bien ainsi. Le rythme patiente."
+    }
+
+    fun weeklyWhyTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "لماذا قد يساعد هذا"
+        AppLanguage.EN -> "Why this can help"
+        AppLanguage.ES -> "Por qué esto puede ayudar"
+        AppLanguage.ID -> "Mengapa ini bisa membantu"
+        AppLanguage.FR -> "Pourquoi cela peut aider"
+    }
+
+    fun weeklyIntentionPrompt(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "نيّة لطيفة للأسبوع القادم"
+        AppLanguage.EN -> "Set a gentle intention for next week"
+        AppLanguage.ES -> "Elige una intención amable para la próxima semana"
+        AppLanguage.ID -> "Tetapkan niat lembut untuk pekan depan"
+        AppLanguage.FR -> "Choisissez une intention douce pour la semaine prochaine"
+    }
+
+    fun weeklyIntentionChip1(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "صباحات هادئة"
+        AppLanguage.EN -> "Mornings, gently"
+        AppLanguage.ES -> "Mañanas, en calma"
+        AppLanguage.ID -> "Pagi dengan lembut"
+        AppLanguage.FR -> "Des matins, en douceur"
+    }
+
+    fun weeklyIntentionChip2(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "وقفة منتصف اليوم"
+        AppLanguage.EN -> "One midday pause"
+        AppLanguage.ES -> "Una pausa al mediodía"
+        AppLanguage.ID -> "Satu jeda siang"
+        AppLanguage.FR -> "Une pause à midi"
+    }
+
+    fun weeklyIntentionChip3(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "اللطف مع نفسي"
+        AppLanguage.EN -> "Kindness to myself"
+        AppLanguage.ES -> "Amabilidad conmigo"
+        AppLanguage.ID -> "Lembut pada diri sendiri"
+        AppLanguage.FR -> "De la douceur pour moi"
+    }
+
+    fun weeklyIntentionChip4(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "الحضور بلا ضغط"
+        AppLanguage.EN -> "Presence over pressure"
+        AppLanguage.ES -> "Presencia sin presión"
+        AppLanguage.ID -> "Hadir tanpa tekanan"
+        AppLanguage.FR -> "La présence, sans pression"
+    }
+
+    fun weeklyIntentionSaved(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "محفوظة للأسبوع القادم ✓"
+        AppLanguage.EN -> "Remembered for next week ✓"
+        AppLanguage.ES -> "Recordada para la próxima semana ✓"
+        AppLanguage.ID -> "Diingat untuk pekan depan ✓"
+        AppLanguage.FR -> "Retenue pour la semaine prochaine ✓"
     }
 
     // ── Slice 2d: the light journal ──

@@ -98,6 +98,22 @@ class SaatanRepository(private val dao: DailyJournalDao) {
     }
 
     /**
+     * Holds the user's gentle intention for [weekKey] (the ISO Monday of the
+     * report week, slice 3). Raw text echoed back to its author only — never
+     * scored, compared or synced (Serment #2).
+     */
+    suspend fun saveWeeklyIntention(text: String, weekKey: String) {
+        val current = dao.getUserProfile().firstOrNull() ?: UserProfileEntity()
+        dao.saveUserProfile(
+            current.copy(
+                weeklyIntentionText = text,
+                weeklyIntentionWeekKey = weekKey,
+                weeklyIntentionAtMs = System.currentTimeMillis()
+            )
+        )
+    }
+
+    /**
      * Updates the notification preferences. Only the given flags are written so
      * that a single toggle does not clobber the others.
      */

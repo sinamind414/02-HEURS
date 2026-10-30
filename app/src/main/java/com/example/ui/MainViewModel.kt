@@ -47,7 +47,8 @@ enum class SaatanScreen {
     IMMERSIVE_LIFE,
     CHALLENGES,
     SETTINGS_VERSES,
-    EXPLORE
+    EXPLORE,
+    WEEKLY_REPORT
 }
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -139,6 +140,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /** Inner Weather logged right after a guided pause (slice 2b). */
     fun setMoodAfterPause(mood: InnerWeather) {
         viewModelScope.launch { repository.updateMoodAfterPause(mood.key) }
+    }
+
+    /**
+     * The gentle intention set from the weekly report (slice 3). [weekKey] is
+     * the report week's ISO Monday: next Monday the report rolls over and the
+     * old intention quietly retires — no streak, no reminder nagging about it.
+     */
+    fun setWeeklyIntention(text: String, weekKey: String) {
+        viewModelScope.launch { repository.saveWeeklyIntention(text, weekKey) }
     }
 
     // Crisis support — reachable from every skin, one tap from the header.

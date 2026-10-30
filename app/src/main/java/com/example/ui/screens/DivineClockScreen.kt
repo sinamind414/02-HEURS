@@ -152,6 +152,7 @@ fun DivineClockScreen(
     val showLanguageDialog by viewModel.showLanguageDialog.collectAsState()
     val isDayMode by viewModel.isDayMode.collectAsState()
     val todayJournal by viewModel.todayJournal.collectAsState()
+    val recentJournals by viewModel.recentJournals.collectAsState()
     val cycleState by viewModel.cycleState.collectAsState()
     // Presence Rhythm skin: "off" hides the theological chrome of the home
     // screen and renames the five moments (strategy §5).
@@ -626,6 +627,21 @@ fun DivineClockScreen(
                         viewModel = viewModel,
                         journalMoodKey = todayJournal?.moodCheckIn,
                         language = currentLanguage
+                    )
+                }
+            }
+
+            // 5b2. WEEKLY PRESENCE REPORT — the light skin's small honest
+            // look back (slice 3), one tap away from the home.
+            if (lightSkin) {
+                item {
+                    WeeklyReportCard(
+                        journals = recentJournals,
+                        language = currentLanguage,
+                        onOpen = {
+                            triggerSpiritualHaptic(context)
+                            viewModel.navigateTo(SaatanScreen.WEEKLY_REPORT)
+                        }
                     )
                 }
             }

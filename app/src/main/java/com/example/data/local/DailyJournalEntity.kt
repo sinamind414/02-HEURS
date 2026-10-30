@@ -64,5 +64,14 @@ data class UserProfileEntity(
     /** Daily rhythm chosen at onboarding: [com.example.data.model.UsRhythm] key. */
     val usRhythm: String = "beginner",
     /** [com.example.data.model.TraditionLayer] key — "off" = light skin. */
-    val traditionLayer: String = "off"
+    val traditionLayer: String = "off",
+    /**
+     * The gentle intention for the week (slice 3 report). A free, personal
+     * line held ON DEVICE: it is only ever echoed back to the user, never
+     * scored, synced or pushed (Serment #2).
+     */
+    val weeklyIntentionText: String = "",
+    /** ISO date of the week's Monday this intention was made in. */
+    val weeklyIntentionWeekKey: String = "",
+    val weeklyIntentionAtMs: Long = 0
 )

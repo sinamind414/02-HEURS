@@ -1,7 +1,7 @@
 # Dhawq Presence — Package Stratégie US (v1, 2026-10-29)
 
 > **Source** : revue externe transmise le 29/10/2026 (« Complete Revised Package for the US Market » + suites 1-3).
-> **Statut** : document de stratégie produit — **slice 1 + slice 2 + slice 3 (rapport hebdo) implémentées et vérifiées** (commits `8ee60ab`, `fe6c8fe`, `d937531`, `c42ec7a`, `8b688a1`, branche `main`).
+> **Statut** : document de stratégie produit — **slice 1 + slice 2 + slice 3 (rapport hebdo) + slice 4 (cadence des notifications, §9) implémentées et vérifiées** (commits `8ee60ab`, `fe6c8fe`, `d937531`, `c42ec7a`, `8b688a1`, `ef41472`, branche `main`).
 > **Décisions ouvertes** : voir §0. Validation théologique requise : voir COMITE_THEOLOGIQUE.md §3.5.
 
 ---
@@ -176,6 +176,8 @@ Encadré « Why this can help » : études (NIH, Harvard) + Quran 13:28. Disclai
 ---
 
 ## 9. Notifications push (ton empathique)
+
+> ✅ **Implémenté** (slice 4, commit `ef41472`, 30/10/2026) : bouton « Not now » sur chaque rappel (sortie facile, ne fait rien d'autre — la chaîne re-arme comme avant), fréquence réduite silencieusement après 3 jours sans usage de ce moment (jamais annoncée, jamais comptée — Serment #2), nudge hebdomadaire dimanche soir pour le rapport (light skin seulement, uniquement si la semaine contient des données, ouvre directement le rapport), max 3–5/jour par design (Fajr + Dhuhr + compagnon 13h + vendredi + hebdo = ≤5). Les copies « After 3 days » / « Inactive 48h » du tableau restent des candidats pour une slice ultérieure (nécessitent le suivi d'usage).
 
 Règles : max 3–5/jour selon le rythme · jamais « You missed Fajr » · sortie facile « Not now » toujours · fréquence réduite si skips répétés.
 

@@ -239,6 +239,10 @@ class PresenceRhythmTest {
         allLanguagesNotBlank({ AppStrings.weeklyIntentionChip3(it) }, "weeklyIntentionChip3")
         allLanguagesNotBlank({ AppStrings.weeklyIntentionChip4(it) }, "weeklyIntentionChip4")
         allLanguagesNotBlank({ AppStrings.weeklyIntentionSaved(it) }, "weeklyIntentionSaved")
+        // Slice 4: §9 cadence — the easy exit + the weekly report nudge.
+        allLanguagesNotBlank({ AppStrings.notifNotNow(it) }, "notifNotNow")
+        allLanguagesNotBlank({ AppStrings.weeklyNotifTitle(it) }, "weeklyNotifTitle")
+        allLanguagesNotBlank({ AppStrings.weeklyNotifBody(it) }, "weeklyNotifBody")
         AppLanguage.entries.forEach { lang ->
             val kept = AppStrings.weeklyKeptLine(lang, 3)
             assertTrue("weeklyKeptLine must inject the count (${lang.code}): $kept", kept.contains("3"))
@@ -331,6 +335,10 @@ class PresenceRhythmTest {
                     AppStrings.weeklyIntentionChip3(lang) + " " +
                     AppStrings.weeklyIntentionChip4(lang) + " " +
                     AppStrings.weeklyIntentionSaved(lang)
+            },
+            "notifNotNow" to AppStrings::notifNotNow,
+            "weeklyNotif" to { lang ->
+                AppStrings.weeklyNotifTitle(lang) + " " + AppStrings.weeklyNotifBody(lang)
             }
         )
         AppLanguage.entries.forEach { lang ->

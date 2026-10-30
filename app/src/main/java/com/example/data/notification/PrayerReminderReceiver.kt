@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import com.example.data.local.SaatanDatabase
 import com.example.data.model.AppLanguage
+import com.example.data.model.NotificationCadence
 import com.example.data.model.TraditionLayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -81,16 +82,27 @@ class PrayerReminderReceiver : BroadcastReceiver() {
                             DivineNotificationHelper.cancelPrayerReminder(appContext, kind)
                             return@launch
                         }
-                        DivineNotificationHelper.showPrayerNotification(
-                            appContext,
-                            kind,
-                            language,
-                            lightSkin
+                        // §9 "fréquence réduite si skips répétés" (slice 4):
+                        // three quiet days for this moment = today's reminder
+                        // steps aside — silently, re-arming as usual. Nothing
+                        // is said, nothing is scored (Serment #2).
+                        val reminderUsedLately = NotificationCadence.shouldShowDailyReminder(
+                            journals = runCatching { dao.recentJournalsOnce() }.getOrDefault(emptyList()),
+                            kind = kind,
+                            todayIso = NotificationCadence.todayIso()
                         )
+                        if (reminderUsedLately) {
+                            DivineNotificationHelper.showPrayerNotification(
+                                appContext,
+                                kind,
+                                language,
+                                lightSkin
+                            )
+                        }
                         DivineNotificationHelper.schedulePrayerReminder(appContext, kind, nextAt)
                     }
                     // Weekly: next Friday, at the Jumu'ah hour (cached Dhuhr / 13:00).
-                    else -> {
+                    DivineNotificationHelper.KIND_FRIDAY -> {
                         val nextAt = DivineNotificationHelper.nextFridayTrigger(zone, cache?.dhuhr, now)
                         if (nextAt == null) return@launch
                         DivineNotificationHelper.showPrayerNotification(
@@ -102,6 +114,25 @@ class PrayerReminderReceiver : BroadcastReceiver() {
                         DivineNotificationHelper.schedulePrayerReminder(
                             appContext,
                             DivineNotificationHelper.KIND_FRIDAY,
+                            nextAt
+                        )
+                    }
+                    // §9 (slice 4): Sunday-evening weekly report nudge. Light
+                    // skin only, and only when the week holds data — a silent
+                    // week is never nudged. Re-arms for next Sunday either way.
+                    DivineNotificationHelper.KIND_WEEKLY_REPORT -> {
+                        val nextAt = NotificationCadence.nextSundayEveningTrigger(now, zone)
+                        if (nextAt == null) return@launch
+                        val weekHasData = lightSkin && NotificationCadence.weekHasAnyData(
+                            journals = runCatching { dao.recentJournalsOnce() }.getOrDefault(emptyList()),
+                            todayIso = NotificationCadence.todayIso()
+                        )
+                        if (weekHasData) {
+                            DivineNotificationHelper.showWeeklyReportNotification(appContext, language)
+                        }
+                        DivineNotificationHelper.schedulePrayerReminder(
+                            appContext,
+                            DivineNotificationHelper.KIND_WEEKLY_REPORT,
                             nextAt
                         )
                     }

@@ -16,6 +16,8 @@ import com.example.data.calculator.DivineTimeCalculator
 import com.example.data.local.SaatanDatabase
 import com.example.data.localization.AppStrings
 import com.example.data.model.AppLanguage
+import com.example.data.model.NotificationCadence
+import com.example.data.model.TraditionLayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -128,17 +130,35 @@ object DivineNotificationHelper {
         message: String,
         language: AppLanguage = AppLanguage.FR,
         notificationId: Int = NOTIFICATION_ID,
-        lightSkin: Boolean = false
+        lightSkin: Boolean = false,
+        openWeeklyReport: Boolean = false
     ) {
         createNotificationChannel(context, language, lightSkin)
 
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            if (openWeeklyReport) {
+                putExtra(EXTRA_OPEN_WEEKLY_REPORT, true)
+            }
         }
         val pendingIntent = PendingIntent.getActivity(
             context,
             0,
             intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // §9 "sortie facile « Not now » toujours": every reminder carries the
+        // action. It only dismisses — no snooze trick, no state change, the
+        // alarm chain re-arms exactly as before.
+        val notNowIntent = Intent(context, NotNowReceiver::class.java).apply {
+            action = ACTION_NOT_NOW
+            putExtra(EXTRA_NOT_NOW_NOTIFICATION_ID, notificationId)
+        }
+        val notNowPendingIntent = PendingIntent.getBroadcast(
+            context,
+            notificationId,
+            notNowIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -151,6 +171,7 @@ object DivineNotificationHelper {
             .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
+            .addAction(0, AppStrings.notifNotNow(language), notNowPendingIntent)
             .setAutoCancel(true)
 
         try {
@@ -231,13 +252,28 @@ object DivineNotificationHelper {
     const val KIND_DHUHR = "dhuhr"
     const val KIND_FRIDAY = "friday"
 
+    /**
+     * §9 (slice 4): the Sunday-evening weekly report nudge. Light skin only —
+     * the report itself only exists on the Presence Rhythm home.
+     */
+    const val KIND_WEEKLY_REPORT = "weekly_report"
+
+    /** MainActivity extra: jump straight to the weekly report screen. */
+    const val EXTRA_OPEN_WEEKLY_REPORT = "open_weekly_report"
+
+    /** §9: the easy exit — dismisses the reminder, nothing else. */
+    const val ACTION_NOT_NOW = "com.dhawq.app.action.NOT_NOW"
+    const val EXTRA_NOT_NOW_NOTIFICATION_ID = "extra_not_now_notification_id"
+
     const val NOTIFICATION_ID_FAJR = 1011
     const val NOTIFICATION_ID_DHUHR = 1012
     const val NOTIFICATION_ID_FRIDAY = 1013
+    const val NOTIFICATION_ID_WEEKLY_REPORT = 1014
 
     private const val REQUEST_CODE_FAJR = 1111
     private const val REQUEST_CODE_DHUHR = 1112
     private const val REQUEST_CODE_FRIDAY = 1113
+    private const val REQUEST_CODE_WEEKLY_REPORT = 1114
 
     /**
      * How long a timings snapshot stays a valid re-arm basis. Beyond it the
@@ -308,6 +344,27 @@ object DivineNotificationHelper {
         }
     }
 
+    /**
+     * The Sunday-evening weekly report nudge (§9 / slice 4): light skin only,
+     * and only when the week actually holds data — a silent week stays
+     * silent, "small data" is never nudged into existence. Tapping the
+     * notification opens the report screen directly.
+     */
+    fun showWeeklyReportNotification(
+        context: Context,
+        language: AppLanguage
+    ) {
+        showNotification(
+            context = context,
+            title = AppStrings.weeklyNotifTitle(language),
+            message = AppStrings.weeklyNotifBody(language),
+            language = language,
+            notificationId = NOTIFICATION_ID_WEEKLY_REPORT,
+            lightSkin = true,
+            openWeeklyReport = true
+        )
+    }
+
     fun schedulePrayerReminder(context: Context, kind: String, triggerAtMillis: Long) {
         if (triggerAtMillis <= 0L) return
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
@@ -344,6 +401,7 @@ object DivineNotificationHelper {
     private fun requestCodeFor(kind: String): Int = when (kind) {
         KIND_FAJR -> REQUEST_CODE_FAJR
         KIND_DHUHR -> REQUEST_CODE_DHUHR
+        KIND_WEEKLY_REPORT -> REQUEST_CODE_WEEKLY_REPORT
         else -> REQUEST_CODE_FRIDAY
     }
 
@@ -382,6 +440,17 @@ object DivineNotificationHelper {
             schedulePrayerReminder(context, KIND_FRIDAY, fridayAt)
         } else {
             cancelPrayerReminder(context, KIND_FRIDAY)
+        }
+
+        // §9 (slice 4): the weekly report nudge. Light skin only — the
+        // tradition home has no report — and re-armed every reconciliation
+        // (profile change, boot, fresh timings), self-re-arming on fire.
+        val weeklyReportAt = NotificationCadence.nextSundayEveningTrigger(now, zone)
+        val lightSkin = TraditionLayer.fromKey(profile.traditionLayer).isLightSkin
+        if (masterOn && lightSkin && weeklyReportAt != null) {
+            schedulePrayerReminder(context, KIND_WEEKLY_REPORT, weeklyReportAt)
+        } else {
+            cancelPrayerReminder(context, KIND_WEEKLY_REPORT)
         }
     }
 

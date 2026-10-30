@@ -14,6 +14,14 @@ interface DailyJournalDao {
     @Query("SELECT * FROM daily_journal ORDER BY dateIso DESC LIMIT 30")
     fun getRecentJournals(): Flow<List<DailyJournalEntity>>
 
+    /**
+     * One-shot read for the alarm receivers (§9 cadence, slice 4): a receiver
+     * runs without the app and cannot collect flows — it needs the last 30
+     * rows once, synchronously.
+     */
+    @Query("SELECT * FROM daily_journal ORDER BY dateIso DESC LIMIT 30")
+    suspend fun recentJournalsOnce(): List<DailyJournalEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdateJournal(entry: DailyJournalEntity)
 

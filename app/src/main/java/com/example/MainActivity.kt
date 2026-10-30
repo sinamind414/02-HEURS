@@ -112,6 +112,16 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        // §9 (slice 4): the Sunday-evening weekly report nudge deep-links
+        // into the report screen, past the light home.
+        if (intent?.getBooleanExtra(
+                com.example.data.notification.DivineNotificationHelper.EXTRA_OPEN_WEEKLY_REPORT,
+                false
+            ) == true
+        ) {
+            viewModel.navigateTo(SaatanScreen.WEEKLY_REPORT)
+        }
+
         setContent {
             val isDayMode by viewModel.isDayMode.collectAsState()
             val language by viewModel.appLanguage.collectAsState()

@@ -4616,6 +4616,36 @@ object AppStrings {
         AppLanguage.FR -> "Des rappels doux pour vos pauses quotidiennes."
     }
 
+    // ── Slice 4: §9 notification cadence ──
+    // The always-visible easy exit and the weekly report nudge. No guilt
+    // copy anywhere: nothing is ever "missed", only offered.
+
+    /** §9: "sortie facile « Not now » toujours" — on every reminder. */
+    fun notifNotNow(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ليس الآن"
+        AppLanguage.EN -> "Not now"
+        AppLanguage.ES -> "Ahora no"
+        AppLanguage.ID -> "Nanti saja"
+        AppLanguage.FR -> "Pas maintenant"
+    }
+
+    /** §9 table, Weekly row: the report announcement (slice 3 companion). */
+    fun weeklyNotifTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "تقرير حضورك جاهز"
+        AppLanguage.EN -> "Your Presence Report is ready"
+        AppLanguage.ES -> "Tu informe de presencia está listo"
+        AppLanguage.ID -> "Laporan kehadiranmu sudah siap"
+        AppLanguage.FR -> "Votre rapport de présence est prêt"
+    }
+
+    fun weeklyNotifBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "بيانات قليلة، بلا حكم — وقفات الأسبوع، محصاة بصدق."
+        AppLanguage.EN -> "Small data, no judgment — this week's returns, honestly counted."
+        AppLanguage.ES -> "Pocos datos, sin juicios — las pausas de la semana, contadas con honestidad."
+        AppLanguage.ID -> "Sedikit data, tanpa menghakimi — jeda pekan ini, dihitung dengan jujur."
+        AppLanguage.FR -> "Petites données, aucun jugement — les pauses de la semaine, comptées honnêtement."
+    }
+
     // ── Slice 2: the light home header ──
     // The brand mark ذَوْق (« to taste ») stays; what is tasted changes with
     // the skin: presence, never prayer vocabulary.

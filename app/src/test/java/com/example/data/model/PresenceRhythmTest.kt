@@ -243,6 +243,31 @@ class PresenceRhythmTest {
         allLanguagesNotBlank({ AppStrings.notifNotNow(it) }, "notifNotNow")
         allLanguagesNotBlank({ AppStrings.weeklyNotifTitle(it) }, "weeklyNotifTitle")
         allLanguagesNotBlank({ AppStrings.weeklyNotifBody(it) }, "weeklyNotifBody")
+        // Slice 5: the monthly Presence Legacy.
+        allLanguagesNotBlank({ AppStrings.monthlyCardTitle(it) }, "monthlyCardTitle")
+        allLanguagesNotBlank({ AppStrings.monthlyCardSubtitle(it) }, "monthlyCardSubtitle")
+        allLanguagesNotBlank({ AppStrings.monthlyLegacyTitle(it) }, "monthlyLegacyTitle")
+        allLanguagesNotBlank({ AppStrings.monthlyLegacyBody(it) }, "monthlyLegacyBody")
+        AppLanguage.entries.forEach { lang ->
+            assertTrue(
+                "monthlyLegacyLocked injects the week count (${lang.code})",
+                AppStrings.monthlyLegacyLocked(lang, 2).contains("2")
+            )
+        }
+        allLanguagesNotBlank({ AppStrings.monthlyLegacyUnlock(it) }, "monthlyLegacyUnlock")
+        AppLanguage.entries.forEach { lang ->
+            assertTrue(
+                "monthlyWeekLine injects week + count (${lang.code})",
+                AppStrings.monthlyWeekLine(lang, 3, 5).let { line -> line.contains("3") && line.contains("5") }
+            )
+        }
+        AppLanguage.entries.forEach { lang ->
+            assertTrue(
+                "monthlyTotalLine injects the count (${lang.code})",
+                AppStrings.monthlyTotalLine(lang, 7).contains("7")
+            )
+        }
+        allLanguagesNotBlank({ AppStrings.monthlyNoData(it) }, "monthlyNoData")
         AppLanguage.entries.forEach { lang ->
             val kept = AppStrings.weeklyKeptLine(lang, 3)
             assertTrue("weeklyKeptLine must inject the count (${lang.code}): $kept", kept.contains("3"))
@@ -339,6 +364,16 @@ class PresenceRhythmTest {
             "notifNotNow" to AppStrings::notifNotNow,
             "weeklyNotif" to { lang ->
                 AppStrings.weeklyNotifTitle(lang) + " " + AppStrings.weeklyNotifBody(lang)
+            },
+            "monthlyCard" to { lang ->
+                AppStrings.monthlyCardTitle(lang) + " " + AppStrings.monthlyCardSubtitle(lang)
+            },
+            "monthlyLegacy" to { lang ->
+                AppStrings.monthlyLegacyTitle(lang) + " " +
+                    AppStrings.monthlyLegacyBody(lang) + " " +
+                    AppStrings.monthlyLegacyUnlock(lang) + " " +
+                    AppStrings.monthlyTotalLine(lang, 4) + " " +
+                    AppStrings.monthlyNoData(lang)
             }
         )
         AppLanguage.entries.forEach { lang ->

@@ -646,6 +646,20 @@ fun DivineClockScreen(
                 }
             }
 
+            // 5b3. MONTHLY PRESENCE LEGACY (slice 5) — the longer look back.
+            if (lightSkin) {
+                item {
+                    MonthlyReportCard(
+                        journals = recentJournals,
+                        language = currentLanguage,
+                        onOpen = {
+                            triggerSpiritualHaptic(context)
+                            viewModel.navigateTo(SaatanScreen.MONTHLY_REPORT)
+                        }
+                    )
+                }
+            }
+
             // 5c. EXPLORE THE TRADITION — the always-optional hub, both skins.
             item {
                 CelestialCard(

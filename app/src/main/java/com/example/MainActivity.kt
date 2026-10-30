@@ -64,6 +64,7 @@ import com.example.ui.screens.SettingsVersesScreen
 import com.example.ui.screens.TemporalConverterScreen
 import com.example.ui.screens.UsOnboardingScreen
 import com.example.ui.screens.WeeklyReportScreen
+import com.example.ui.screens.MonthlyReportScreen
 import com.example.ui.theme.CinzelFontFamily
 import com.example.ui.theme.DawnCream900
 import com.example.ui.theme.DawnGoldPrimary
@@ -330,6 +331,7 @@ fun SaatanAppContent(viewModel: MainViewModel) {
                         SaatanScreen.SETTINGS_VERSES -> SettingsVersesScreen(viewModel)
                         SaatanScreen.EXPLORE -> ExploreTraditionScreen(viewModel)
                         SaatanScreen.WEEKLY_REPORT -> WeeklyReportScreen(viewModel)
+                        SaatanScreen.MONTHLY_REPORT -> MonthlyReportScreen(viewModel)
                     }
                 }
             }

@@ -48,7 +48,8 @@ enum class SaatanScreen {
     CHALLENGES,
     SETTINGS_VERSES,
     EXPLORE,
-    WEEKLY_REPORT
+    WEEKLY_REPORT,
+    MONTHLY_REPORT
 }
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {

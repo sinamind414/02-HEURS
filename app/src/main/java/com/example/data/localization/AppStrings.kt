@@ -4646,6 +4646,83 @@ object AppStrings {
         AppLanguage.FR -> "Petites données, aucun jugement — les pauses de la semaine, comptées honnêtement."
     }
 
+    // ── Slice 5: the monthly Presence Legacy ──
+    // A longer look back (up to four weeks) and the quiet unlock of the
+    // Eternal Perspective after three to four weeks of returning. Counts
+    // only — never scored, compared or streaked (Serment #2).
+
+    fun monthlyCardTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "شهرك، في أثر"
+        AppLanguage.EN -> "YOUR MONTH, GENTLY"
+        AppLanguage.ES -> "TU MES, CON SUAVIDAD"
+        AppLanguage.ID -> "BULANMU, DENGAN LEMBUT"
+        AppLanguage.FR -> "VOTRE MOIS, EN DOUCEUR"
+    }
+
+    fun monthlyCardSubtitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "نظرة أطول — بلا حكم."
+        AppLanguage.EN -> "A longer look back — no judgment."
+        AppLanguage.ES -> "Una mirada más larga — sin juicios."
+        AppLanguage.ID -> "Sekilas lebih panjang — tanpa menghakimi."
+        AppLanguage.FR -> "Un retour plus long — aucun jugement."
+    }
+
+    fun monthlyLegacyTitle(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "إرثُ الحضور"
+        AppLanguage.EN -> "Your Presence Legacy"
+        AppLanguage.ES -> "Tu legado de presencia"
+        AppLanguage.ID -> "Warisan kehadiranmu"
+        AppLanguage.FR -> "Votre héritage de présence"
+    }
+
+    fun monthlyLegacyBody(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "ثلاثة إلى أربعة أسابيع من العودة فتحت منظورًا أعمق: تحويل 22:47 إلى contemplation."
+        AppLanguage.EN -> "Three to four weeks of returning opened a deeper view: 22:47, turned into contemplation."
+        AppLanguage.ES -> "Tres o cuatro semanas de volver abrieron una vista más profunda: 22:47, convertido en contemplación."
+        AppLanguage.ID -> "Tiga hingga empat pekan kembali membuka pandangan yang lebih dalam: 22:47, diubah menjadi kontemplasi."
+        AppLanguage.FR -> "Trois à quatre semaines de retour ont ouvert une vue plus profonde : 22:47, devenu contemplation."
+    }
+
+    fun monthlyLegacyLocked(lang: AppLanguage, weeks: Int): String = when (lang) {
+        AppLanguage.AR -> "المنظور الأعمق يفتح بعد 3 أسابيع من العودة (حتى الآن: $weeks)."
+        AppLanguage.EN -> "The deeper view opens after 3 weeks of returning (so far: $weeks)."
+        AppLanguage.ES -> "La vista más profunda se abre tras 3 semanas de volver (hasta ahora: $weeks)."
+        AppLanguage.ID -> "Pandangan yang lebih dalam terbuka setelah 3 pekan kembali (sejauh ini: $weeks)."
+        AppLanguage.FR -> "La vue plus profonde s'ouvre après 3 semaines de retour (jusqu'ici : $weeks)."
+    }
+
+    fun monthlyLegacyUnlock(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "افتح المنظور الأعمق"
+        AppLanguage.EN -> "Open the deeper view"
+        AppLanguage.ES -> "Abrir la vista más profunda"
+        AppLanguage.ID -> "Buka pandangan yang lebih dalam"
+        AppLanguage.FR -> "Ouvrir la vue plus profonde"
+    }
+
+    fun monthlyWeekLine(lang: AppLanguage, weekIndex: Int, kept: Int): String = when (lang) {
+        AppLanguage.AR -> "أسبوع $weekIndex · $kept وقفة"
+        AppLanguage.EN -> "Week $weekIndex · $kept pauses"
+        AppLanguage.ES -> "Semana $weekIndex · $kept pausas"
+        AppLanguage.ID -> "Pekan $weekIndex · $kept jeda"
+        AppLanguage.FR -> "Semaine $weekIndex · $kept pauses"
+    }
+
+    fun monthlyTotalLine(lang: AppLanguage, kept: Int): String = when (lang) {
+        AppLanguage.AR -> "وقفات هذا الشهر: $kept"
+        AppLanguage.EN -> "Pauses this month: $kept"
+        AppLanguage.ES -> "Pausas este mes: $kept"
+        AppLanguage.ID -> "Jeda bulan ini: $kept"
+        AppLanguage.FR -> "Pauses ce mois-ci : $kept"
+    }
+
+    fun monthlyNoData(lang: AppLanguage): String = when (lang) {
+        AppLanguage.AR -> "أيام قليلة — الإيقاع ينتظر. عُد week بعد week."
+        AppLanguage.EN -> "Not many days yet — the rhythm waits. Return week by week."
+        AppLanguage.ES -> "Aún no hay muchos días — el ritmo espera. Vuelve semana a semana."
+        AppLanguage.ID -> "Belum banyak hari — ritmenya menunggu. Kembali pekan demi pekan."
+        AppLanguage.FR -> "Peu de jours pour l'instant — le rythme patiente. Revenez semaine après semaine."
+    }
+
     // ── Slice 2: the light home header ──
     // The brand mark ذَوْق (« to taste ») stays; what is tasted changes with
     // the skin: presence, never prayer vocabulary.

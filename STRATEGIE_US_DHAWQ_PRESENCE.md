@@ -1,7 +1,7 @@
 # Dhawq Presence — Package Stratégie US (v1, 2026-10-29)
 
 > **Source** : revue externe transmise le 29/10/2026 (« Complete Revised Package for the US Market » + suites 1-3).
-> **Statut** : document de stratégie produit — **slice 1 + slice 2 + slice 3 (rapport hebdo) + slice 4 (cadence des notifications, §9) implémentées et vérifiées** (commits `8ee60ab`, `fe6c8fe`, `d937531`, `c42ec7a`, `8b688a1`, `ef41472`, branche `main`).
+> **Statut** : document de stratégie produit — **slice 1 + slice 2 + slice 3 (rapport hebdo) + slice 4 (cadence des notifications, §9) + slice 5 (Presence Legacy mensuelle, §8) implémentées et vérifiées** (commits `8ee60ab`, `fe6c8fe`, `d937531`, `c42ec7a`, `8b688a1`, `ef41472`, `0f64265`, branche `main`).
 > **Décisions ouvertes** : voir §0. Validation théologique requise : voir COMITE_THEOLOGIQUE.md §3.5.
 
 ---
@@ -171,7 +171,7 @@ Buttons : Save & continue · Skip (no guilt).
 **Weekly** (dimanche soir / lundi matin) : minutes de présence, returns complétés (honnête, ex. 19/35), tendance Inner Weather (« calmer after 7 out of 12 pauses »), un insight non-jugeant, graph simple mood before/after.
 Encadré « Why this can help » : études (NIH, Harvard) + Quran 13:28. Disclaimer visible. CTA : « Set a gentle intention for next week ».
 
-**Monthly** : « Your Presence Legacy » — option d'activer Eternal Perspective après 3–4 semaines d'usage.
+**Monthly** : « Your Presence Legacy » — option d'activer Eternal Perspective après 3–4 semaines d'usage. ✅ **Implémenté** (slice 5, commit `0f64265`, 30/10/2026) : jusqu'à 4 semaines de pauses gardées + Inner Weather, déverrouillage du convertisseur contemplatif (22:47) après 3 semaines de retour, carte « YOUR MONTH, GENTLY » sur la home light.
 
 ---
 
